@@ -3,11 +3,15 @@
 # IMPORTANT: this function splits file to many queries using ;
 # => DO NOT USE with any query that the ; is not placed at the end
 
+import os
 import mysql.connector
 from mysql.connector import Error
 
 
-def exe_queries(filePath):
+def exe_queries(__file__, fileName):
+    # get filePath:
+    filePath = os.path.join(os.path.dirname(__file__), fileName)
+
     # Database connection details
     host = "localhost"
     user = "root"

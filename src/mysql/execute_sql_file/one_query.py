@@ -1,9 +1,13 @@
 # note: execute 1 query, return rows
+import os
 import mysql.connector
 from mysql.connector import Error
 
 
-def exe_one_query(filePath):
+def exe_one_query(__file__, fileName):
+    # get filePath:
+    filePath = os.path.join(os.path.dirname(__file__), fileName)
+
     # Database connection details
     host = "localhost"
     user = "root"

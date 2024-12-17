@@ -2,24 +2,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from src.routes.service1 import service1
 from src.routes.service2 import service2
-from src.utils.execute_sql_file.many_queries import exe_queries
-from src.utils.execute_sql_file.one_query import exe_one_query
-
-
-import os
-
-
-# Function to fetch message from MySQL
-def fetch_hello_message():
-    return exe_one_query(os.path.join(os.path.dirname(__file__), "fetch_hello.sql"))[0][
-        0
-    ]
-
-
-def db_exist():
-    return exe_one_query(
-        os.path.join(os.path.dirname(__file__), "does_test_db_db_exist.sql")
-    )[0][0]
+from src.mysql.execute_sql_file.one_query import exe_one_query
+from src.mysql.setup_db import setup_db_on_mysql
 
 
 app = Flask(__name__, static_folder="static", static_url_path="")
@@ -28,10 +12,7 @@ app = Flask(__name__, static_folder="static", static_url_path="")
 CORS(app)
 
 # Call the setup_mysql function to create/rebuild the database
-if not db_exist():
-    print("test_db not exist, creating database...")
-    exe_queries(os.path.join(os.path.dirname(__file__), "setup.sql"))
-
+setup_db_on_mysql()
 
 # Register blueprints for API services
 app.register_blueprint(service1, url_prefix="/api/service1")
@@ -53,8 +34,7 @@ def favicon():
 # Serve the message from MySQL on the index route
 @app.route("/mysql")
 def mysql():
-    message = fetch_hello_message()  # Fetch message from DB
-    return jsonify(message=message)  # Return the message as JSON
+    return jsonify(exe_one_query(__file__, "fetch_hello.sql")[0][0])
 
 
 @app.route("/")
@@ -68,5 +48,6 @@ def catch_all(any):
     return app.send_static_file("index.html")
 
 
+# start the app:
 if __name__ == "__main__":
     app.run(debug=False)
