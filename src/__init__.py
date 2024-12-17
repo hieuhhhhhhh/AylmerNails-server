@@ -52,7 +52,7 @@ def create_app():
     CORS(app)
 
     # Call the setup_mysql function to create/rebuild the database
-    exeSqlFileNoReturn()  # This ensures the DB is created before serving the app
+    exeSqlFileNoReturn("setup.sql")  # This ensures the DB is created before serving the app
 
     # Register blueprints for API services
     app.register_blueprint(service1, url_prefix='/api/service1')
