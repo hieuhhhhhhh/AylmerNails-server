@@ -1,5 +1,4 @@
-# IMPORTANT: this function splits file to many queries using ;
-# => DO NOT USE with any query that the ; is not placed at the end
+# note: execute many queries sequentially, no log-prints, no return
 
 import mysql.connector
 from mysql.connector import Error
@@ -11,52 +10,34 @@ def exe_queries(filePath):
     user = "root"
     password = "123Arcus."
     database = "test_db"
-    results = []  # List to store results of SELECT queries
 
     try:
+        print(f"\033[94mExecuting SQL: \033[0m{filePath}")
+
         # Establishing connection to MySQL server (without specifying database for setup)
         connection = mysql.connector.connect(host=host, user=user, password=password)
 
         if connection.is_connected():
             cursor = connection.cursor()
 
-            # Attempt to use default database
+            # Attempt to use the specified database
             try:
                 cursor.execute(f"USE {database};")
             except Error:
                 pass
 
+            # Read all queries from the file
             with open(filePath, "r") as file:
-                queries = file.read().split(";")
+                queries = file.read()
 
-                for query in queries:
-                    query = query.strip()
-                    if query:  # Skip empty queries
-                        try:
-                            cursor.execute(query)  # Execute the query
+            # Execute the entire block of queries at once
+            try:
+                for result in cursor.execute(queries, multi=True):
+                    pass
+            except Error as e:
+                print(f"Error: {e}")
 
-                            # fetch the results
-                            results = cursor.fetchall()
-
-                            # Fetch and print rows affected
-                            print(f"Rows involved: {cursor.rowcount}")
-
-                            # Fetch the last inserted ID for INSERT queries
-                            if cursor.lastrowid:
-                                print(f"Last inserted ID: {cursor.lastrowid}")
-
-                            # Check for warnings after each query
-                            cursor.execute("SHOW WARNINGS")
-                            warnings = cursor.fetchall()
-                            if warnings:
-                                print("Warnings:")
-                                for warning in warnings:
-                                    print(f"  - {warning[2]}")
-
-                        except Error as e:
-                            print(f"Error: {e}")
-
-            connection.commit()  # Commit the transaction after executing the queries
+            connection.commit()  # Commit the transaction after executing all queries
 
     except Error as e:
         print(f"Error: {e}")
@@ -65,5 +46,4 @@ def exe_queries(filePath):
         if connection.is_connected():
             cursor.close()
             connection.close()
-
-    return results  # Return the accumulated results
+        print()

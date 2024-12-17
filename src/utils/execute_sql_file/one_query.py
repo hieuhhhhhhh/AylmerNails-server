@@ -1,3 +1,4 @@
+# note: execute 1 query, return rows
 import mysql.connector
 from mysql.connector import Error
 
@@ -11,6 +12,8 @@ def exe_one_query(filePath):
     results = []  # List to store results of SELECT queries
 
     try:
+        print(f"\033[94mExecuting SQL: \033[0m{filePath}")
+
         # Establishing connection to MySQL server (without specifying database for setup)
         connection = mysql.connector.connect(host=host, user=user, password=password)
 
@@ -25,6 +28,7 @@ def exe_one_query(filePath):
 
             with open(filePath, "r") as file:
                 query = file.read().strip()
+
                 cursor.execute(query)  # Execute the query
 
                 # fetch the results
@@ -54,5 +58,6 @@ def exe_one_query(filePath):
         if connection.is_connected():
             cursor.close()
             connection.close()
+        print()
 
     return results  # Return the accumulated results

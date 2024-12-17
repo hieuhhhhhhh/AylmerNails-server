@@ -2,8 +2,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from src.routes.service1 import service1
 from src.routes.service2 import service2
-from utils.execute_sql_file.many_queries import exe_queries
-from utils.execute_sql_file.one_query import exe_one_query
+from src.utils.execute_sql_file.many_queries import exe_queries
+from src.utils.execute_sql_file.one_query import exe_one_query
 
 
 import os
@@ -55,7 +55,7 @@ def index():
 
 # Catch-all route for Vue Router fallback
 @app.route("/<any>", methods=["GET"])
-def catch_all():
+def catch_all(any):
     return app.send_static_file("index.html")
 
 
