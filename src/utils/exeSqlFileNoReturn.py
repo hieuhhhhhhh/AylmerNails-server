@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 
-def exeSqlFileNoReturn(file_name):
+def exeSqlFileNoReturn(filePath):
     # Database connection details
     host = 'localhost'
     user = 'root'
@@ -18,7 +18,7 @@ def exeSqlFileNoReturn(file_name):
         if connection.is_connected():
             cursor = connection.cursor()
 
-            with open(file_name, 'r') as file:
+            with open(filePath, 'r') as file:
                 setup_script = file.read()
                 queries = setup_script.split(';')
 
@@ -54,7 +54,8 @@ def exeSqlFileNoReturn(file_name):
             connection.commit()  # Commit the transaction after executing the queries
 
     except Error as e:
-        print(f"Error({file_name}): {e}")
+        print(f"Error: {e}")
+        print(f"Error at: {filePath}")
 
     finally:
         if connection.is_connected():

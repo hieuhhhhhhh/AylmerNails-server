@@ -4,9 +4,8 @@ import mysql.connector
 from mysql.connector import Error
 from .routes.service1 import service1
 from .routes.service2 import service2
-
-# Import the setup function from testMySQL.py
-from exeSqlFileNoReturn import exeSqlFileNoReturn
+from src.utils.exeSqlFileNoReturn import exeSqlFileNoReturn
+import os
 
 # Function to fetch message from MySQL
 def fetch_hello_message():
@@ -52,7 +51,7 @@ def create_app():
     CORS(app)
 
     # Call the setup_mysql function to create/rebuild the database
-    exeSqlFileNoReturn("setup.sql")  # This ensures the DB is created before serving the app
+    exeSqlFileNoReturn(os.path.join(os.path.dirname(__file__), "setup.sql")) 
 
     # Register blueprints for API services
     app.register_blueprint(service1, url_prefix='/api/service1')
