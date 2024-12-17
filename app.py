@@ -16,13 +16,22 @@ def fetch_hello_message():
     ]
 
 
+def db_exist():
+    return exe_one_query(
+        os.path.join(os.path.dirname(__file__), "does_test_db_db_exist.sql")
+    )[0][0]
+
+
 app = Flask(__name__, static_folder="static", static_url_path="")
 
 # Enable CORS for all routes
 CORS(app)
 
 # Call the setup_mysql function to create/rebuild the database
-exe_queries(os.path.join(os.path.dirname(__file__), "setup.sql"))
+if not db_exist():
+    print("test_db not exist, creating database...")
+    exe_queries(os.path.join(os.path.dirname(__file__), "setup.sql"))
+
 
 # Register blueprints for API services
 app.register_blueprint(service1, url_prefix="/api/service1")
