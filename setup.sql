@@ -8,7 +8,7 @@ CREATE DATABASE test_db;
 USE test_db;
 
 -- Create the table if it does not exist
-CREATE TABLE IF NOT EXISTS hello_table (
+CREATE TABLE hello_table(
     id INT AUTO_INCREMENT PRIMARY KEY,
     message VARCHAR(255)
 );
