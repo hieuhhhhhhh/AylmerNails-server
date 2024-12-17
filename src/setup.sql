@@ -14,4 +14,7 @@ CREATE TABLE IF NOT EXISTS hello_table (
 );
 
 -- Insert a sample row into the table
-INSERT INTO hello_table (message) VALUES ('Hello from MySQL');
+INSERT INTO
+    hello_table (message)
+VALUES
+    ('Hello from MySQL');

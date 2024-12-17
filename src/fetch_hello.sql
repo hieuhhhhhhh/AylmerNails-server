@@ -1,1 +1,6 @@
-SELECT message FROM hello_table WHERE id = 1
+SELECT
+    message
+FROM
+    hello_table
+WHERE
+    id = 1
