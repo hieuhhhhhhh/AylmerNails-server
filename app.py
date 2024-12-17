@@ -2,13 +2,16 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from src.routes.service1 import service1
 from src.routes.service2 import service2
-from src.utils.exe_sql_file import exe_sql_file
+from utils.execute_sql_file.many_queries import exe_queries
+from utils.execute_sql_file.one_query import exe_one_query
+
+
 import os
 
 
 # Function to fetch message from MySQL
 def fetch_hello_message():
-    return exe_sql_file(os.path.join(os.path.dirname(__file__), "fetch_hello.sql"))[0][
+    return exe_one_query(os.path.join(os.path.dirname(__file__), "fetch_hello.sql"))[0][
         0
     ]
 
@@ -19,7 +22,7 @@ app = Flask(__name__, static_folder="static", static_url_path="")
 CORS(app)
 
 # Call the setup_mysql function to create/rebuild the database
-exe_sql_file(os.path.join(os.path.dirname(__file__), "setup.sql"))
+exe_queries(os.path.join(os.path.dirname(__file__), "setup.sql"))
 
 # Register blueprints for API services
 app.register_blueprint(service1, url_prefix="/api/service1")

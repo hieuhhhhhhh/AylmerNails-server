@@ -1,8 +1,11 @@
+# IMPORTANT: this function splits file to many queries using ;
+# => DO NOT USE with any query that the ; is not placed at the end
+
 import mysql.connector
 from mysql.connector import Error
 
 
-def exe_sql_file(filePath):
+def exe_queries(filePath):
     # Database connection details
     host = "localhost"
     user = "root"
@@ -51,14 +54,12 @@ def exe_sql_file(filePath):
                                     print(f"  - {warning[2]}")
 
                         except Error as e:
-                            print(f"Error executing query: {query}")
-                            print(f"Error message: {e}")
+                            print(f"Error: {e}")
 
             connection.commit()  # Commit the transaction after executing the queries
 
     except Error as e:
         print(f"Error: {e}")
-        print(f"Error at: {filePath}")
 
     finally:
         if connection.is_connected():
