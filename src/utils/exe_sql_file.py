@@ -1,11 +1,13 @@
 import mysql.connector
 from mysql.connector import Error
 
-def exeSqlFileNoReturn(filePath):
+def exe_sql_file(filePath):
     # Database connection details
     host = 'localhost'
     user = 'root'
     password = '123Arcus.'
+
+    results = []  # List to store results of SELECT queries
 
     try:
         # Establishing connection to MySQL server (without specifying database for setup)
@@ -19,8 +21,7 @@ def exeSqlFileNoReturn(filePath):
             cursor = connection.cursor()
 
             with open(filePath, 'r') as file:
-                setup_script = file.read()
-                queries = setup_script.split(';')
+                queries = file.read().split(';')
 
                 for query in queries:
                     query = query.strip()
@@ -38,10 +39,9 @@ def exeSqlFileNoReturn(filePath):
                         if query.strip().lower().startswith('select'):
                             result = cursor.fetchall()
                             if result:
-                                for row in result:
-                                    print(row)  # Print each row returned by the SELECT query
+                                results.append(result)  # Append the result to the list
                             else:
-                                print("No results found.")
+                                print("No rows returned.")
                         
                         # Check for warnings after each query
                         cursor.execute("SHOW WARNINGS")
@@ -61,3 +61,5 @@ def exeSqlFileNoReturn(filePath):
         if connection.is_connected():
             cursor.close()
             connection.close()
+    
+    return results  # Return the accumulated results

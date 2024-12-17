@@ -4,7 +4,7 @@ import mysql.connector
 from mysql.connector import Error
 from .routes.service1 import service1
 from .routes.service2 import service2
-from src.utils.exeSqlFileNoReturn import exeSqlFileNoReturn
+from src.utils.exe_sql_file import exe_sql_file
 import os
 
 # Function to fetch message from MySQL
@@ -51,7 +51,7 @@ def create_app():
     CORS(app)
 
     # Call the setup_mysql function to create/rebuild the database
-    exeSqlFileNoReturn(os.path.join(os.path.dirname(__file__), "setup.sql")) 
+    exe_sql_file(os.path.join(os.path.dirname(__file__), "setup.sql")) 
 
     # Register blueprints for API services
     app.register_blueprint(service1, url_prefix='/api/service1')
