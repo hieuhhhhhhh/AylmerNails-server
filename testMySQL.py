@@ -3,14 +3,12 @@ from mysql.connector import Error
 
 def setup_mysql():
     # Database connection details
-    host = 'localhost'  
-    user = 'root'       
-    password = '123Arcus.'  
-    database_name = 'test_db'
-    table_name = 'hello_table'
+    host = 'localhost'
+    user = 'root'
+    password = '123Arcus.'
 
     try:
-        # Establishing connection
+        # Establishing connection to MySQL server (without specifying database for setup)
         connection = mysql.connector.connect(
             host=host,
             user=user,
@@ -19,20 +17,18 @@ def setup_mysql():
 
         if connection.is_connected():
             cursor = connection.cursor()
-            cursor.execute(f"DROP DATABASE IF EXISTS {database_name}")
-            cursor.execute(f"CREATE DATABASE {database_name}")
-            cursor.execute(f"USE {database_name}")
 
-            # Create table and insert a row
-            cursor.execute(f"""
-            CREATE TABLE IF NOT EXISTS {table_name} (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                message VARCHAR(255)
-            )
-            """)
-            cursor.execute(f"INSERT INTO {table_name} (message) VALUES ('Hello from MySQL')")
-            connection.commit()
-            print(f"Database and table setup completed.")
+            with open('setup.sql', 'r') as file:
+                setup_script = file.read()
+                queries = setup_script.split(';')
+
+                for query in queries:
+                    query = query.strip()
+                    if query:  # Skip empty queries
+                        cursor.execute(query)                   
+                        print(f"Rows affected: {cursor.rowcount}")
+
+            connection.commit()  # Commit the transaction after executing the queries
 
     except Error as e:
         print(f"Error: {e}")
@@ -41,3 +37,6 @@ def setup_mysql():
         if connection.is_connected():
             cursor.close()
             connection.close()
+
+if __name__ == '__main__':
+    setup_mysql()

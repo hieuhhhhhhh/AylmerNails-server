@@ -69,11 +69,15 @@ def create_app():
         return app.send_static_file('favicon.ico')
     
     # Serve the message from MySQL on the index route
-    @app.route('/')
-    def index():
+    @app.route('/mysql')
+    def mysql():
         message = fetch_hello_message()  # Fetch message from DB
         return jsonify(message=message)  # Return the message as JSON
 
+    @app.route('/')
+    def index():
+        return app.send_static_file('index.html')
+    
     # Catch-all route for Vue Router fallback
     @app.route('/<path>', methods=['GET'])
     def catch_all(path):
