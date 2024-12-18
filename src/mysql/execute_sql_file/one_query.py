@@ -16,7 +16,7 @@ def exe_one_query(__file__, fileName):
     results = []  # List to store results of SELECT queries
 
     try:
-        print(f"\033[94mExecuting SQL: \033[0m{filePath}")
+        print(f"Executing: {fileName}")
 
         # Establishing connection to MySQL server (without specifying database for setup)
         connection = mysql.connector.connect(host=host, user=user, password=password)

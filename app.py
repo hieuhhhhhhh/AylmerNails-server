@@ -4,7 +4,10 @@ from src.routes.service1 import service1
 from src.routes.service2 import service2
 from src.mysql.execute_sql_file.one_query import exe_one_query
 from src.mysql.setup_db import setup_db_on_mysql
-
+from src.mysql.sql_with_args.insert_with_args import (
+    insert_message_to_db,
+    create_sp_insert_msg,
+)
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 
@@ -13,6 +16,8 @@ CORS(app)
 
 # Call the setup_mysql function to create/rebuild the database
 setup_db_on_mysql()
+create_sp_insert_msg()
+insert_message_to_db("Hello from 1st Insert SP call")
 
 # Register blueprints for API services
 app.register_blueprint(service1, url_prefix="/api/service1")

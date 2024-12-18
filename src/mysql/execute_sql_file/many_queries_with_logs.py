@@ -19,7 +19,7 @@ def exe_queries(__file__, fileName):
     database = "test_db"
 
     try:
-        print(f"\033[94mExecuting SQL: \033[0m{filePath}")
+        print(f"Executing: {fileName}")
 
         # Establishing connection to MySQL server (without specifying database for setup)
         connection = mysql.connector.connect(host=host, user=user, password=password)
