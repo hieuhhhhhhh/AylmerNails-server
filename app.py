@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from src.routes.service1 import service1
 from src.routes.service2 import service2
@@ -39,7 +39,21 @@ def favicon():
 # Serve the message from MySQL on the index route
 @app.route("/mysql")
 def mysql():
-    return jsonify(exe_one_query(__file__, "fetch_hello.sql")[0][0])
+    return jsonify(exe_one_query(__file__, "read_all_hello_table.sql"))
+
+
+# Serve the message from MySQL on the index route
+@app.route("/insert_hello_table", methods=["POST"])
+def insert_hello_table():
+    data = request.get_json()  # Get JSON data from the request body
+    msg = data.get("message")  # Get the 'message' from JSON
+    if msg:
+        try:
+            insert_message_to_db(msg)
+            return jsonify({"message": "INSERT successfully"}), 201  # Created
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500  # Internal Server Error
+    return jsonify({"error": "No message provided"}), 400  # Bad Request
 
 
 @app.route("/")

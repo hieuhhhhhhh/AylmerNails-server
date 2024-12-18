@@ -57,6 +57,7 @@ def exe_one_query(__file__, fileName):
 
     except Error as e:
         print(f"Error: {e}")
+        raise
 
     finally:
         if connection.is_connected():

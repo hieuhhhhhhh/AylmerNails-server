@@ -29,12 +29,8 @@ def insert_message_to_db(message):
         # Commit changes
         connection.commit()
 
-        # Return success
-        return {"status": "success"}
-
-    except mysql.connector.Error as err:
-        return {"status": "error", "error": str(err)}
-
+    except mysql.connector.Error:
+        raise
     finally:
         # Cleanup
         if connection.is_connected():
