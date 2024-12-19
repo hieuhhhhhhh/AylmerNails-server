@@ -1,3 +1,4 @@
+from flask import jsonify
 from src.mysql.execute_sql_file.many_queries import exe_queries
 from src.mysql.call_sp import call_sp
 
@@ -9,7 +10,13 @@ def create_sp_insert_msg():
 
 
 def insert_message_to_db(message):
-    print("\033[94m" + "insert_message_to_db" + "\033[0m")
+    try:
+        print("\033[94m" + "insert_message_to_db" + "\033[0m")
+        if not message:
+            return jsonify({"error": "No message provided"}), 400  # Bad Request
 
-    # Call the stored procedure
-    call_sp("sp_process_message", message)
+        # Call the stored procedure
+        call_sp("sp_process_message", message)
+        return jsonify({"message": "INSERT successfully"}), 201  # Created
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Internal Server Error
