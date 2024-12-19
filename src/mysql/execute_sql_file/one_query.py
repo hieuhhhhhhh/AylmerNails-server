@@ -2,31 +2,27 @@
 import os
 import mysql.connector
 from mysql.connector import Error
+from src.mysql.get_db_config import DATABASE_CONFIG
 
 
 def exe_one_query(__file__, fileName):
     # get filePath:
     filePath = os.path.join(os.path.dirname(__file__), fileName)
 
-    # Database connection details
-    host = "localhost"
-    user = "root"
-    password = "123Arcus."
-    database = "test_db"
-    results = []  # List to store results of SELECT queries
+    results = []  # placeholder for table returned from mysql server
 
     try:
         print(f"Executing: {fileName}")
 
         # Establishing connection to MySQL server (without specifying database for setup)
-        connection = mysql.connector.connect(host=host, user=user, password=password)
+        connection = mysql.connector.connect(**DATABASE_CONFIG)
 
         if connection.is_connected():
             cursor = connection.cursor()
 
             # Attempt to use default database
             try:
-                cursor.execute(f"USE {database};")
+                cursor.execute(f"USE {DATABASE_CONFIG["database"]};")
             except Error:
                 pass
 
