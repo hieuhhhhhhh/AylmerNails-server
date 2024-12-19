@@ -18,6 +18,7 @@ DB_CONFIG = {
 
 
 def insert_message_to_db(message):
+    print("\033[94m" + "insert_message_to_db" + "\033[0m")
     try:
         # Connect to the database
         connection = mysql.connector.connect(**DB_CONFIG)

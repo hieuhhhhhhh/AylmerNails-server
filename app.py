@@ -1,13 +1,11 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_cors import CORS
 from src.routes.service1 import service1
 from src.routes.service2 import service2
-from src.mysql.execute_sql_file.one_query import exe_one_query
+from src.routes.authentication import auth_routes
+
 from src.mysql.setup_db import setup_db_on_mysql
-from src.mysql.sql_with_args.insert_with_args import (
-    insert_message_to_db,
-    create_sp_insert_msg,
-)
+
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 
@@ -16,12 +14,11 @@ CORS(app)
 
 # Call the setup_mysql function to create/rebuild the database
 setup_db_on_mysql()
-create_sp_insert_msg()
-insert_message_to_db("Hello from 1st Insert SP call")
 
 # Register blueprints for API services
 app.register_blueprint(service1, url_prefix="/api/service1")
 app.register_blueprint(service2, url_prefix="/api/service2")
+app.register_blueprint(auth_routes, url_prefix="/api/authentication")
 
 
 # Example API route
@@ -34,26 +31,6 @@ def api():
 @app.route("/favicon.ico")
 def favicon():
     return app.send_static_file("favicon.ico")
-
-
-# Serve the message from MySQL on the index route
-@app.route("/mysql")
-def mysql():
-    return jsonify(exe_one_query(__file__, "read_all_hello_table.sql"))
-
-
-# Serve the message from MySQL on the index route
-@app.route("/insert_hello_table", methods=["POST"])
-def insert_hello_table():
-    data = request.get_json()  # Get JSON data from the request body
-    msg = data.get("message")  # Get the 'message' from JSON
-    if msg:
-        try:
-            insert_message_to_db(msg)
-            return jsonify({"message": "INSERT successfully"}), 201  # Created
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500  # Internal Server Error
-    return jsonify({"error": "No message provided"}), 400  # Bad Request
 
 
 @app.route("/")
