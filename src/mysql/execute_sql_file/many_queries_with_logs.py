@@ -6,7 +6,7 @@
 import os
 import mysql.connector
 from mysql.connector import Error
-from src.mysql.get_db_config import DATABASE_CONFIG
+from src.mysql.db_config import DATABASE_CONFIG
 
 
 def exe_queries(__file__, fileName):

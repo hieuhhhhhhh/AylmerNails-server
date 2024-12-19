@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from .hello_table_test.insert_with_args import (
+from .hello_table_test.sp_insert_msg import (
     insert_message_to_db,
     create_sp_insert_msg,
 )

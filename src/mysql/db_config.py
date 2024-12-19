@@ -1,4 +1,4 @@
-# config.py
+# used when connect db
 DATABASE_CONFIG = {
     "host": "localhost",
     "user": "root",
