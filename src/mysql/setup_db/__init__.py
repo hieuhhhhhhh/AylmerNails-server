@@ -12,6 +12,13 @@ from src.routes.authentication.sms_verification.sp_store_code import (
 from src.routes.authentication.sms_verification.sp_verify_code import (
     create_sp_verify_code,
 )
+from src.routes.authentication.new_auth.sp_get_new_pw import create_sp_get_new_pw
+from src.routes.authentication.new_auth.sp_new_auth import (
+    create_sp_new_auth,
+)
+from src.routes.authentication.sign_up.sp_is_phonenum_avail import (
+    create_sp_is_phonenum_avail,
+)
 
 
 # create required database if not exists
@@ -32,7 +39,12 @@ def setup_db_on_mysql():
 
 # build/update procedures:
 def create_procedures():
+
+    # from authentication routes
     create_sp_insert_msg()
     create_sp_sign_up()
     create_sp_store_code()
     create_sp_verify_code()
+    create_sp_get_new_pw()
+    create_sp_new_auth()
+    create_sp_is_phonenum_avail()

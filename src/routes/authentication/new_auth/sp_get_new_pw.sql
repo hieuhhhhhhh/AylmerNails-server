@@ -1,0 +1,13 @@
+DROP PROCEDURE IF EXISTS sp_get_new_pw;
+
+CREATE PROCEDURE sp_get_new_pw(IN _phone_number VARCHAR(15))
+BEGIN
+    -- Select the new password
+    SELECT new_password
+    FROM sms_verify_codes
+    WHERE phone_number = _phone_number;
+
+    -- Delete the row after selecting it (one-time use)
+    DELETE FROM sms_verify_codes
+    WHERE phone_number = _phone_number;
+END;

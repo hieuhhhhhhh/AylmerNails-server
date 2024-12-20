@@ -1,24 +1,28 @@
 DROP PROCEDURE IF EXISTS sp_store_code;
 
 CREATE PROCEDURE sp_store_code (
-    IN p_phone_number VARCHAR(15),
-    IN p_code VARCHAR(4),
-    IN p_attempts_left INT
+    IN _phone_number VARCHAR(15),
+    IN _new_password VARCHAR(60),
+    IN _code VARCHAR(4),
+    IN _attempts_left INT
 )
 BEGIN
     INSERT INTO sms_verify_codes (
         phone_number,
+        new_password,
         code,
         attempts_left,
         created_at
     )
     VALUES (
-        p_phone_number,
-        p_code,
-        p_attempts_left,
+        _phone_number,
+        _new_password, 
+        _code,
+        _attempts_left,
         UNIX_TIMESTAMP()
     )
     ON DUPLICATE KEY UPDATE
+        new_password = VALUES(new_password), 
         code = VALUES(code),
         attempts_left = VALUES(attempts_left),
         created_at = VALUES(created_at);
