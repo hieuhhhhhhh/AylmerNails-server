@@ -4,6 +4,7 @@ from .hello_table_test.read_all_hello_table import read_all_hello_table
 from .sms_verification.sp_verify_code import verify_code
 from .sign_up.request_signup import request_signup
 from .sign_up.verify_signup import verify_signup
+import traceback
 
 # create blueprint (group of routes)
 authentication = Blueprint("authentication", __name__)
@@ -50,8 +51,18 @@ def verify_sign_up():
 
         return verify_signup(phone_num, code)
     except Exception as e:
+        error_details = traceback.format_exc()
         # return unexpected error
-        return jsonify({"error": str(e), "message": "An unknown error occurred"}), 500
+        return (
+            jsonify(
+                {
+                    "error": str(e),
+                    "details": error_details,
+                    "message": "An unknown error occurred",
+                }
+            ),
+            500,
+        )
 
 
 @authentication.route("/verify_sms_code", methods=["POST"])

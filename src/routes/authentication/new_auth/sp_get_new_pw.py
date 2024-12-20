@@ -9,4 +9,5 @@ def create_sp_get_new_pw():
 
 
 def get_new_password(phone_number):
-    return call_sp("sp_get_new_pw", phone_number)[0][0]
+    result = call_sp("sp_get_new_pw", phone_number)
+    return result[0][0] if result else None

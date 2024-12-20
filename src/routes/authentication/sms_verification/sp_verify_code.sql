@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_verify_code(
     IN code VARCHAR(4),
     IN lifespan INT
 )
-sp: BEGIN
+sp:BEGIN
     -- Placeholders for data from table
     DECLARE _code VARCHAR(4);
     DECLARE _attempts_left INT;
@@ -52,6 +52,4 @@ sp: BEGIN
     -- If everything is valid, return success and delete the record
     SELECT TRUE AS success, 'Verification successful.' AS msg;
 
-    -- Delete the record when success (one time code)
-    DELETE FROM sms_verify_codes WHERE phone_number = phonenum;
 END;
