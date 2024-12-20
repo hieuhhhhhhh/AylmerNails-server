@@ -6,8 +6,10 @@ from src.routes.authentication.hello_table_test.sp_insert_msg import (
 from src.routes.authentication.sign_up.sp_sign_up import (
     create_sp_sign_up,
 )
-from src.routes.authentication.sms_verify.send_code_by_sms import (
+from routes.authentication.sms_verification.sp_store_code import (
     create_sp_store_code,
+)
+from routes.authentication.sms_verification.sp_verify_code import (
     create_sp_verify_code,
 )
 

@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from .hello_table_test.sp_insert_msg import insert_message_to_db
 from .hello_table_test.read_all_hello_table import read_all_hello_table
 from .sign_up.sp_sign_up import insert_new_authentication
-from .sms_verify.send_code_by_sms import send_code_by_sms
+from .sms_verification.sp_store_code import send_code_by_sms
 
 # create blueprint (group of routes)
 authentication = Blueprint("authentication", __name__)
