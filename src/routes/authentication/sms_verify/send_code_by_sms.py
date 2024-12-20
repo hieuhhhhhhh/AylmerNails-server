@@ -1,6 +1,18 @@
 from flask import jsonify, current_app
 from twilio.rest import Client
 import random
+from src.mysql.execute_sql_file.many_queries import exe_queries
+
+
+# to build the required procedures:
+def create_sp_store_code():
+    print("\033[94m" + "create_sp_store_code" + "\033[0m")
+    exe_queries(__file__, "sp_store_code.sql")
+
+
+def create_sp_verify_code():
+    print("\033[94m" + "sp_verify_code" + "\033[0m")
+    exe_queries(__file__, "sp_verify_code.sql")
 
 
 def send_code_by_sms(phone_number):

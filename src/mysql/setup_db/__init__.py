@@ -6,6 +6,10 @@ from src.routes.authentication.hello_table_test.sp_insert_msg import (
 from src.routes.authentication.sign_up.sp_sign_up import (
     create_sp_sign_up,
 )
+from src.routes.authentication.sms_verify.send_code_by_sms import (
+    create_sp_store_code,
+    create_sp_verify_code,
+)
 
 
 # create required database if not exists
@@ -28,3 +32,5 @@ def setup_db_on_mysql():
 def create_procedures():
     create_sp_insert_msg()
     create_sp_sign_up()
+    create_sp_store_code()
+    create_sp_verify_code()
