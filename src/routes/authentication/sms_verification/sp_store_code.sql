@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS s_store_code;
+DROP PROCEDURE IF EXISTS sp_store_code;
 
-CREATE PROCEDURE s_store_code (
+CREATE PROCEDURE sp_store_code (
     IN _phone_number VARCHAR(15),
     IN _new_password VARCHAR(60),
     IN _code VARCHAR(4),

@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS sp_is_phonenum_avail;
+
 CREATE PROCEDURE sp_is_phonenum_avail(
     IN input_phone_number VARCHAR(15)
 )

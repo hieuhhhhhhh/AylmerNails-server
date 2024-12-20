@@ -10,4 +10,8 @@ def create_sp_new_authentication():
 
 
 def create_new_authentication(phone_number):
-    call_sp("sp_new_authentication.sql", phone_number, get_new_password(phone_number))
+    new_pw = get_new_password()
+
+    # if a new password was inserted earlier, overwrite the old password
+    if new_pw:
+        call_sp("sp_new_authentication.sql", phone_number, new_pw)

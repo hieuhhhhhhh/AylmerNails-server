@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS sp_get_new_pw;
+
 CREATE PROCEDURE sp_get_new_pw(IN _phone_number VARCHAR(15))
 BEGIN
     SELECT new_password

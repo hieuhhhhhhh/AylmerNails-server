@@ -8,5 +8,5 @@ BEGIN
     INSERT INTO authentication (phone_number, hashed_password, created_at)
     VALUES (_phone_number, _hashed_password, UNIX_TIMESTAMP())
     ON DUPLICATE KEY UPDATE 
-        hashed_password = _hashed_password, 
+        hashed_password = _hashed_password;
 END;
