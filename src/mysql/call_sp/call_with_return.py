@@ -2,18 +2,18 @@ import mysql.connector
 from src.mysql.db_config import DATABASE_CONFIG
 
 
-def call_sp(sp_name, *params):
+def call_sp(sp_name, OUT_count, *params):
     print(f"Calling procedure: {sp_name}")
     try:
+        # placeholder for results:
+        results = []
+
         # Connect to the database
         connection = mysql.connector.connect(**DATABASE_CONFIG)
         cursor = connection.cursor()
 
         # Call the stored procedure with dynamic parameters
         cursor.callproc(sp_name, params)
-
-        # Fetch the OUT parameters (library will populate them)
-        cursor.fetchall()
 
         # Commit changes (if necessary)
         connection.commit()
