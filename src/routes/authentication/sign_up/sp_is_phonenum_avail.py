@@ -9,4 +9,4 @@ def create_sp_is_phonenum_avail():
 
 
 def phonenum_is_avail(phone_number):
-    return call_sp("sp_is_phonenum_avail.sql", phone_number)[0][0]
+    return call_sp("sp_is_phonenum_avail", phone_number)[0][0]

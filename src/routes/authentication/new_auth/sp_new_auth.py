@@ -14,4 +14,4 @@ def create_new_auth(phone_number):
 
     # if a new password was inserted earlier, overwrite the old password
     if new_pw:
-        call_sp("sp_new_auth.sql", phone_number, new_pw)
+        call_sp("sp_new_auth", phone_number, new_pw)

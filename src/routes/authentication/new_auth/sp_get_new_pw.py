@@ -9,4 +9,4 @@ def create_sp_get_new_pw():
 
 
 def get_new_password(phone_number):
-    return call_sp("sp_get_new_pw.sql", phone_number)[0][0]
+    return call_sp("sp_get_new_pw", phone_number)[0][0]
