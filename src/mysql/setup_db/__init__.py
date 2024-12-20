@@ -14,7 +14,7 @@ def setup_db_on_mysql():
     # if the db already exists, skip setup:
     db_exist = exe_one_query(__file__, "does_db_exist.sql")[0][0]
     if not db_exist:
-        print("test_db not exist, creating database...")
+        print("aylmer_nails not exist, creating database...")
         exe_queries(__file__, "setup_db.sql")
 
     # build/update procedures:

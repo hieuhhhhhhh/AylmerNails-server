@@ -6,7 +6,7 @@ SELECT
             FROM
                 INFORMATION_SCHEMA.SCHEMATA
             WHERE
-                SCHEMA_NAME = 'test_db'
+                SCHEMA_NAME = 'aylmer_nails'
         ) THEN 1
         ELSE 0
     END;

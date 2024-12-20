@@ -1,8 +1,8 @@
 -- Create the new database
-CREATE DATABASE test_db;
+CREATE DATABASE aylmer_nails;
 
 -- Use the newly created database
-USE test_db;
+USE aylmer_nails;
 
 -- Create table
 CREATE TABLE hello_table(
