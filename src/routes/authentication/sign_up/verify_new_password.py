@@ -7,3 +7,7 @@ def verify_new_password(phone_num, code):
 
     # check if verification code is correct
     success, msg = verify_code(phone_num, code)
+
+    status = 200 if success else 400
+
+    return jsonify({"message": msg}), status

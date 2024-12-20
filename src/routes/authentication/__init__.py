@@ -3,6 +3,7 @@ from .hello_table_test.sp_insert_msg import insert_message_to_db
 from .hello_table_test.read_all_hello_table import read_all_hello_table
 from .sms_verification.sp_verify_code import verify_code
 from .sign_up.request_signup import request_signup
+from .sign_up.verify_new_password import verify_new_password
 
 # create blueprint (group of routes)
 authentication = Blueprint("authentication", __name__)
@@ -47,7 +48,7 @@ def verify_sign_up():
         phone_num = data.get("phone_num")
         code = data.get("code")
 
-        return verify_sign_up(phone_num, code)
+        return verify_new_password(phone_num, code)
     except Exception as e:
         # return unexpected error
         return jsonify({"error": str(e), "message": "An unknown error occurred"}), 500
