@@ -4,7 +4,7 @@ from src.mysql.execute_sql_file.many_queries import exe_queries
 from src.mysql.call_sp import call_sp
 
 
-# build the procedure:
+# to build the required procedures:
 def create_sp_sign_up():
     print("\033[94m" + "create_sp_sign_up" + "\033[0m")
     exe_queries(__file__, "sp_sign_up.sql")

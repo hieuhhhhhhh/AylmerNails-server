@@ -17,7 +17,6 @@ def exe_queries(__file__, fileName):
         print(f"Executing: {fileName}")
 
         # Establishing connection to MySQL server (without specifying database for setup)
-        # Establishing connection to MySQL server (without specifying database for setup)
         connection = mysql.connector.connect(
             host=CONFIG["host"], user=CONFIG["user"], password=CONFIG["password"]
         )
