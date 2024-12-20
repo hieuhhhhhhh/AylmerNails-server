@@ -4,14 +4,14 @@ from .sp_get_new_pw import get_new_password
 
 
 # to build the required procedures:
-def create_sp_new_authentication():
-    print("\033[94m" + "create_sp_new_authentication" + "\033[0m")
-    exe_queries(__file__, "sp_new_authentication.sql")
+def create_sp_new_auth():
+    print("\033[94m" + "create_sp_new_auth" + "\033[0m")
+    exe_queries(__file__, "sp_new_auth.sql")
 
 
-def create_new_authentication(phone_number):
+def create_new_auth(phone_number):
     new_pw = get_new_password()
 
     # if a new password was inserted earlier, overwrite the old password
     if new_pw:
-        call_sp("sp_new_authentication.sql", phone_number, new_pw)
+        call_sp("sp_new_auth.sql", phone_number, new_pw)

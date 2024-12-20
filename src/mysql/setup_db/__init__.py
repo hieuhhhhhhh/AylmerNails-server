@@ -13,8 +13,8 @@ from src.routes.authentication.sms_verification.sp_verify_code import (
     create_sp_verify_code,
 )
 from src.routes.authentication.new_auth.sp_get_new_pw import create_sp_get_new_pw
-from src.routes.authentication.new_auth.sp_new_authentication import (
-    create_sp_new_authentication,
+from src.routes.authentication.new_auth.sp_new_auth import (
+    create_sp_new_auth,
 )
 from src.routes.authentication.sign_up.sp_is_phonenum_avail import (
     create_sp_is_phonenum_avail,
@@ -46,5 +46,5 @@ def create_procedures():
     create_sp_store_code()
     create_sp_verify_code()
     create_sp_get_new_pw()
-    create_sp_new_authentication()
+    create_sp_new_auth()
     create_sp_is_phonenum_avail()
