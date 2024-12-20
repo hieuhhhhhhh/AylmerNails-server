@@ -10,7 +10,7 @@ def create_sp_new_auth():
 
 
 def create_new_auth(phone_number):
-    new_pw = get_new_password()
+    new_pw = get_new_password(phone_number)
 
     # if a new password was inserted earlier, overwrite the old password
     if new_pw:

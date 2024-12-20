@@ -33,7 +33,7 @@ def send_code_by_sms(phone_number, new_password=None):
             to=phone_number,
         )
 
-        # Store code in db to verify in next request
+        # Store code in db to verify in the second request
         call_sp("sp_store_code", phone_number, new_password, code, 3)
 
         return (
