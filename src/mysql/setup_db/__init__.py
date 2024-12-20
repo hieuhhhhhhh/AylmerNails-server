@@ -18,7 +18,7 @@ def setup_db_on_mysql():
         print("aylmer_nails not exist, creating database...")
         exe_one_query(__file__, "create_db.sql")
         # create required tables
-        create_tables
+        create_tables()
 
     # build/update procedures:
     create_procedures()

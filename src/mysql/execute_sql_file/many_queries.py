@@ -35,7 +35,7 @@ def exe_queries(__file__, fileName):
                 for result in cursor.execute(queries, multi=True):
                     pass
             except Error as e:
-                print(f"Error: {e}")
+                raise
 
             connection.commit()  # Commit the transaction after executing all queries
 
