@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from .hello_table_test.sp_insert_msg import insert_message_to_db
 from .hello_table_test.read_all_hello_table import read_all_hello_table
 from .sign_up.sp_sign_up import insert_new_authentication
+from .sms_verify.send_code_by_sms import send_code_by_sms
 
 # create blueprint (group of routes)
 authentication = Blueprint("authentication", __name__)
@@ -34,3 +35,8 @@ def sign_up():
 
     # process request
     return insert_new_authentication(phone_num, password)
+
+
+@authentication.route("/text_me")
+def text_me():
+    send_code_by_sms()
