@@ -15,12 +15,12 @@ CODE_LIFETIME = 300
 
 def verify_code(phone_number, code):
     try:
-        # placeholders for response from procedure
-        success = False
-        msg = ""
+        # Verify code in db to verify in next request (return a table)
+        results = call_sp("sp_verify_code", phone_number, code, CODE_LIFETIME)
 
-        # Store code in db to verify in next request
-        call_sp("sp_verify_code", phone_number, code, CODE_LIFETIME, success, msg)
+        # read the table:
+        success = results[0][0]
+        msg = results[0][1]
 
         if success:
             return (

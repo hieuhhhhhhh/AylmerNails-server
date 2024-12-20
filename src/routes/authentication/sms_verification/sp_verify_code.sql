@@ -3,12 +3,10 @@ DROP PROCEDURE IF EXISTS sp_verify_code;
 CREATE PROCEDURE sp_verify_code(
     IN phonenum VARCHAR(15),
     IN code VARCHAR(4),
-    IN lifespan INT, 
-    OUT success BOOLEAN,
-    OUT msg VARCHAR(255)
+    IN lifespan INT
 )
 sp: BEGIN
-    -- placeholders for data from table
+    -- Placeholders for data from table
     DECLARE _code VARCHAR(4);
     DECLARE _attempts_left INT;
     DECLARE _created_at BIGINT;
@@ -25,37 +23,36 @@ sp: BEGIN
 
     -- If the phone number doesn't exist or other failure conditions
     IF _code IS NULL THEN
-        SET success = FALSE;
-        SET msg = 'Code not found.';
+        -- Return the failure result set
+        SELECT FALSE AS success, 'Code not found.' AS msg;
         LEAVE sp;
     END IF;
 
     -- Check if the code is correct
     IF _code != code THEN
-        SET success = FALSE;
-        SET msg = 'Incorrect code.';
+        -- Return the failure result set
+        SELECT FALSE AS success, 'Incorrect code.' AS msg;
         LEAVE sp;
     END IF;
 
     -- Check if there are no remaining attempts
     IF _attempts_left < 0 THEN
-        SET success = FALSE;
-        SET msg = 'No attempts left for this code.';
+        -- Return the failure result set
+        SELECT FALSE AS success, 'No attempts left for this code.' AS msg;
         LEAVE sp;
     END IF;
 
     -- Check if the code has expired (using the created_at time + lifespan)
     IF (UNIX_TIMESTAMP() - _created_at) > lifespan THEN
-        SET success = FALSE;
-        SET msg = 'Code has expired.';
+        -- Return the failure result set
+        SELECT FALSE AS success, 'Code has expired.' AS msg;
         LEAVE sp;
     END IF;
 
     -- If everything is valid, return success and delete the record
-    SET success = TRUE;
-    SET msg = 'Verification successful.';
+    SELECT TRUE AS success, 'Verification successful.' AS msg;
 
-    -- Delete the record from the table after successful verification
+    -- Optionally, delete the record from the table after successful verification
     DELETE FROM sms_verify_codes WHERE phone_number = phonenum;
 
 END;
