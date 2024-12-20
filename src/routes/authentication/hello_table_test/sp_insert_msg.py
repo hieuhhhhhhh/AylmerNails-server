@@ -17,6 +17,6 @@ def insert_message_to_db(message):
 
         # Call the stored procedure
         call_sp("sp_process_message", message)
-        return jsonify({"message": "INSERT successfully"}), 201  # Created
+        return jsonify({"message": "INSERT successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Internal Server Error
