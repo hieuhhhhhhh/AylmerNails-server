@@ -3,7 +3,7 @@ from src.mysql.execute_sql_file.one_query import exe_one_query
 from src.routes.authentication.hello_table_test.sp_insert_msg import (
     create_sp_insert_msg,
 )
-from routes.authentication.sign_up.sp_sign_up import (
+from src.routes.authentication.sign_up.sp_sign_up import (
     create_sp_sign_up,
 )
 
@@ -17,8 +17,11 @@ def setup_db_on_mysql():
         print("test_db not exist, creating database...")
         exe_queries(__file__, "setup_db.sql")
 
+    # build/update procedures:
+    create_procedures()
 
-# build all required procedures:
+
+# build/update procedures:
 def create_procedures():
     create_sp_insert_msg()
     create_sp_sign_up()

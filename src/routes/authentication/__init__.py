@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from .hello_table_test.sp_insert_msg import insert_message_to_db
 from .hello_table_test.read_all_hello_table import read_all_hello_table
-
+from .sign_up.sp_sign_up import insert_new_authentication
 
 # create blueprint (group of routes)
 authentication = Blueprint("authentication", __name__)
@@ -22,3 +22,15 @@ def iht():
 def mysql():
     print("\033[94m" + "read_all_hello_table" + "\033[0m")
     return read_all_hello_table()
+
+
+# add routes
+@authentication.route("/sign_up", methods=["POST"])
+def sign_up():
+    # read json from request
+    data = request.get_json()
+    phone_num = data.get("phone_num")
+    password = data.get("password")
+
+    # process request
+    return insert_new_authentication(phone_num, password)

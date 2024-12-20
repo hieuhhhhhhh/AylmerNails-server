@@ -1,12 +1,12 @@
-DROP PROCEDURE IF EXISTS insert_authentication;
+DROP PROCEDURE IF EXISTS sp_sign_up;
 
-CREATE PROCEDURE insert_authentication(
+CREATE PROCEDURE sp_sign_up(
     IN phone_num VARCHAR(15),
     IN hashed_password VARCHAR(60)
-) BEGIN -- Insert a new record into the authentication table
+) BEGIN
 INSERT INTO
-    authentication (phone_number, hashed_password)
+    authentication (phone_number, hashed_password, created_at)
 VALUES
-    (phone_num, hashed_password);
+    (phone_num, hashed_password, UNIX_TIMESTAMP());
 
-END
+END;

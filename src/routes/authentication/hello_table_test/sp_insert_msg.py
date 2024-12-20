@@ -13,10 +13,10 @@ def insert_message_to_db(message):
     try:
         print("\033[94m" + "insert_message_to_db" + "\033[0m")
         if not message:
-            return jsonify({"error": "No message provided"}), 400  # Bad Request
+            return jsonify({"message": "No message provided"}), 400  # Bad Request
 
         # Call the stored procedure
-        call_sp("sp_process_message", message)
+        call_sp("sp_insert_msg", message)
         return jsonify({"message": "INSERT successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Internal Server Error

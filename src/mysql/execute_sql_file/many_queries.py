@@ -2,7 +2,7 @@
 import os
 import mysql.connector
 from mysql.connector import Error
-from src.mysql.db_config import DATABASE_CONFIG
+from src.mysql.db_config import DATABASE_CONFIG as CONFIG
 
 
 def exe_queries(__file__, fileName):
@@ -13,14 +13,16 @@ def exe_queries(__file__, fileName):
         print(f"Executing: {fileName}")
 
         # Establishing connection to MySQL server (without specifying database for setup)
-        connection = mysql.connector.connect(**DATABASE_CONFIG)
-
+        # Establishing connection to MySQL server (without specifying database for setup)
+        connection = mysql.connector.connect(
+            host=CONFIG["host"], user=CONFIG["user"], password=CONFIG["password"]
+        )
         if connection.is_connected():
             cursor = connection.cursor()
 
             # Attempt to use the specified database
             try:
-                cursor.execute(f"USE {DATABASE_CONFIG["database"]};")
+                cursor.execute(f"USE {CONFIG["database"]};")
             except Error:
                 pass
 

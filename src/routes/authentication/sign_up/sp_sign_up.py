@@ -17,7 +17,14 @@ def insert_new_authentication(phone_num, password):
         # Check if phone number or password is missing
         if not (phone_num and password):
             return (
-                jsonify({"error": "No phone number or password provided"}),
+                jsonify({"message": "No phone number or password provided"}),
+                400,
+            )  # Bad Request
+
+        # Validate password length (at least 6 characters)
+        if len(password) < 6:
+            return (
+                jsonify({"message": "Password must be at least 6 characters long"}),
                 400,
             )  # Bad Request
 
@@ -30,8 +37,16 @@ def insert_new_authentication(phone_num, password):
         call_sp("sp_sign_up", phone_num, hashed)
 
         return (
-            jsonify({"message": "INSERT new authentication successfully"}),
+            jsonify({"message": "Sign up successfully"}),
             201,
         )
     except Exception as e:
-        return jsonify({"error": str(e)}), 500  # Internal Server Error
+        # prepare default message:
+        msg = "An error occurred, please try different credentitals"
+
+        # overwrite message in specific cases:
+        if "1062" in str(e):
+            msg = "The phone number has already been used"
+
+        # return code 500 Internal Server Error
+        return jsonify({"error": str(e), "message": msg}), 500

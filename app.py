@@ -2,13 +2,11 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from src.routes.authentication import authentication
 
-from src.mysql.setup_db import setup_db_on_mysql, create_procedures
+from src.mysql.setup_db import setup_db_on_mysql
 
 # create the database if not exists
 setup_db_on_mysql()
 
-# re-create required stored procedures
-create_procedures()
 
 # initialize flask app
 app = Flask(__name__, static_folder="static", static_url_path="")
