@@ -11,7 +11,7 @@ def create_sp_store_code():
     exe_queries(__file__, "sp_store_code.sql")
 
 
-def send_code_by_sms(phone_number):
+def send_code_by_sms(phone_number, hashed_pw):
     try:
         # get env variables
         TWILIO_SID = current_app.config["TWILIO_SID"]
@@ -34,7 +34,7 @@ def send_code_by_sms(phone_number):
         )
 
         # Store code in db to verify in next request
-        call_sp("sp_store_code", phone_number, code, 3)
+        call_sp("sp_store_code", phone_number, hashed_pw, code, 3)
 
         return (
             jsonify({"message": f"Code sent to :{phone_number}"}),
