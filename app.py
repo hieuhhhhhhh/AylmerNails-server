@@ -1,15 +1,20 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from src.routes.authentication import authentication
-
 from src.mysql.setup_db import setup_db_on_mysql
+from dotenv import load_dotenv
+import os
 
 # create the database if not exists
 setup_db_on_mysql()
 
-
 # initialize flask app
 app = Flask(__name__, static_folder="static", static_url_path="")
+
+# Load env variables to the app
+load_dotenv()
+app.config["TWILIO_SID"] = os.getenv("TWILIO_SID")
+app.config["TWILIO_TOKEN"] = os.getenv("TWILIO_TOKEN")
 
 # Enable CORS for all routes
 CORS(app)

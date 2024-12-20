@@ -1,15 +1,16 @@
-from flask import jsonify
+from flask import jsonify, current_app
 from twilio.rest import Client
 import random
 
 
 def send_code_by_sms(phone_number):
     try:
-        twilio_sid = "AC29bb3bbf530c66dcee6f1c200bbf8bf0"
-        twilio_token = "55a1d9b921ed0ec3f2bb73482a2ae9aa"
+        # get env variables
+        TWILIO_SID = current_app.config["TWILIO_SID"]
+        TWILIO_TOKEN = current_app.config["TWILIO_TOKEN"]
 
         # Initialize the Twilio client
-        client = Client(twilio_sid, twilio_token)
+        client = Client(TWILIO_SID, TWILIO_TOKEN)
 
         # generate and store code in db
         code = random.randint(100, 999)
