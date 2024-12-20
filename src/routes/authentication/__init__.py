@@ -37,6 +37,10 @@ def sign_up():
     return insert_new_authentication(phone_num, password)
 
 
-@authentication.route("/text_me")
+@authentication.route("/verify_phone_number_by_sms", methods=["POST"])
 def text_me():
-    send_code_by_sms()
+    # read json from request
+    data = request.get_json()
+    phone_num = data.get("phone_num")
+
+    return send_code_by_sms(phone_num)
