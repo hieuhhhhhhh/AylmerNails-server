@@ -9,15 +9,29 @@ def create_sp_verify_code():
     exe_queries(__file__, "sp_verify_code.sql")
 
 
+# Init lifetime of code (in sec)
+CODE_LIFETIME = 300
+
+
 def verify_code(phone_number, code):
     try:
-        # Store code in db to verify in next request
-        call_sp("sp_verify_code", phone_number, code, 300)
+        # placeholders for response from procedure
+        success = False
+        msg = ""
 
-        return (
-            jsonify({"message": ""}),
-            200,
-        )
+        # Store code in db to verify in next request
+        call_sp("sp_verify_code", phone_number, code, CODE_LIFETIME, success, msg)
+
+        if success:
+            return (
+                jsonify({"message": msg}),
+                200,
+            )
+        else:
+            return (
+                jsonify({"message": msg}),
+                400,
+            )
     except Exception as e:
         # prepare default message:
         msg = "An error occurred, please try again"

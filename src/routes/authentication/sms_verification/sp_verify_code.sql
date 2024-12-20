@@ -8,15 +8,15 @@ CREATE PROCEDURE sp_verify_code(
     OUT msg VARCHAR(255)
 )
 sp: BEGIN
-    -- Decrement the attempts left
-    UPDATE sms_verify_codes
-    SET attempts_left = attempts_left - 1
-    WHERE phone_number = phonenum;
-
     -- placeholders for data from table
     DECLARE _code VARCHAR(4);
     DECLARE _attempts_left INT;
     DECLARE _created_at BIGINT;
+
+    -- Decrement the attempts left
+    UPDATE sms_verify_codes
+    SET attempts_left = attempts_left - 1
+    WHERE phone_number = phonenum;
 
     -- Get the current timestamp and record details
     SELECT code, attempts_left, created_at INTO _code, _attempts_left, _created_at
