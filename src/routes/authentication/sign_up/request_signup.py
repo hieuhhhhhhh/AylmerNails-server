@@ -5,7 +5,7 @@ from ..sms_verification.sp_store_code import send_code_by_sms
 
 
 def request_signup(phone_num, password):
-    print("\033[94m" + "process_credentials_input" + "\033[0m")
+    print("\033[94m" + "request_signup" + "\033[0m")
 
     # Check if phone number or password is missing
     if not (phone_num and password):

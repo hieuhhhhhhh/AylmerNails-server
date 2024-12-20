@@ -1,4 +1,3 @@
-from flask import jsonify
 from src.mysql.execute_sql_file.many_queries import exe_queries
 from src.mysql.call_sp import call_sp
 
@@ -14,27 +13,12 @@ CODE_LIFETIME = 300
 
 
 def verify_code(phone_number, code):
-    try:
-        # Verify code in db to verify in next request (return a table)
-        results = call_sp("sp_verify_code", phone_number, code, CODE_LIFETIME)
+    # Verify code in db to verify in next request (return a table)
+    results = call_sp("sp_verify_code", phone_number, code, CODE_LIFETIME)
 
-        # read the table:
-        success = results[0][0]
-        msg = results[0][1]
+    # read the table:
+    success = results[0][0]
+    msg = results[0][1]
 
-        if success:
-            return (
-                jsonify({"message": msg}),
-                200,
-            )
-        else:
-            return (
-                jsonify({"message": msg}),
-                400,
-            )
-    except Exception as e:
-        # prepare default message:
-        msg = "An error occurred, please try again"
-
-        # return code 500 Internal Server Error
-        return jsonify({"error": str(e), "message": msg}), 500
+    # Return the message and status code as a tuple
+    return success, msg

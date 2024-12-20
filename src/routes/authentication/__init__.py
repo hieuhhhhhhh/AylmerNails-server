@@ -1,7 +1,6 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from .hello_table_test.sp_insert_msg import insert_message_to_db
 from .hello_table_test.read_all_hello_table import read_all_hello_table
-from .sign_up.sp_sign_up import insert_new_authentication
 from .sms_verification.sp_verify_code import verify_code
 from .sign_up.request_signup import request_signup
 
@@ -28,22 +27,30 @@ def mysql():
 
 @authentication.route("/request_sign_up", methods=["POST"])
 def request_sign_up():
-    # read json from request
-    data = request.get_json()
-    phone_num = data.get("phone_num")
-    password = data.get("password")
+    try:
+        # read json from request
+        data = request.get_json()
+        phone_num = data.get("phone_num")
+        password = data.get("password")
 
-    return request_signup(phone_num, password)
+        return request_signup(phone_num, password)
+    except Exception as e:
+        # return unexpected error
+        return jsonify({"error": str(e), "message": "An unknown error occurred"}), 500
 
 
 @authentication.route("/verify_sign_up", methods=["POST"])
 def verify_sign_up():
-    # read json from request
-    data = request.get_json()
-    phone_num = data.get("phone_num")
-    code = data.get("code")
+    try:
+        # read json from request
+        data = request.get_json()
+        phone_num = data.get("phone_num")
+        code = data.get("code")
 
-    return verify_code(phone_num, code)
+        return verify_sign_up(phone_num, code)
+    except Exception as e:
+        # return unexpected error
+        return jsonify({"error": str(e), "message": "An unknown error occurred"}), 500
 
 
 @authentication.route("/verify_sms_code", methods=["POST"])
