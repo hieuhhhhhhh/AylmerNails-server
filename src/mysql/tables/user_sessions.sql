@@ -3,6 +3,7 @@ CREATE TABLE user_sessions (
     session_salt INT NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     created_at BIGINT NOT NULL,
+    expiry INT NOT NULL,
     remember_me BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES authentication (user_id)
 );

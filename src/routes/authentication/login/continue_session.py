@@ -11,7 +11,7 @@ def continue_session(token):
     session_id, session_salt = hashids.decode(token)
 
     # Process the retrieved data
-    res = call_sp("sp_continue_session", session_id, session_salt, 24 * 60 * 60)
+    res = call_sp("sp_continue_session", session_id, session_salt)
 
     # The procedure should return new salt
     if len(res):

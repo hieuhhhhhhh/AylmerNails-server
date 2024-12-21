@@ -2,18 +2,18 @@ DROP PROCEDURE IF EXISTS sp_continue_session;
 
 CREATE PROCEDURE sp_continue_session(
     IN _session_id INT UNSIGNED,
-    IN _session_salt INT,
-    IN _expiry BIGINT
+    IN _session_salt INT
 )
 sp:BEGIN
     DECLARE user_id_ INT DEFAULT NULL;
     DECLARE session_salt_ INT DEFAULT NULL;
     DECLARE created_at_ BIGINT;
     DECLARE remember_me_ BOOLEAN;
+    DECLARE expiry_ INT;
 
     -- Fetch needed data from table
-    SELECT user_id, session_salt, created_at, remember_me
-    INTO user_id_, session_salt_, created_at_, remember_me_
+    SELECT user_id, session_salt, created_at, expiry, remember_me
+    INTO user_id_, session_salt_, created_at_, expiry_, remember_me_
     FROM user_sessions
     WHERE id = _session_id
     LIMIT 1;
@@ -24,7 +24,7 @@ sp:BEGIN
     END IF;
 
     -- If session is expired and remember_me is not on, exit procedure
-    IF (UNIX_TIMESTAMP() - created_at_) > _expiry AND NOT remember_me_ THEN
+    IF UNIX_TIMESTAMP() > (created_at_ + expiry_) AND NOT remember_me_ THEN
         LEAVE sp;
     END IF;
     
