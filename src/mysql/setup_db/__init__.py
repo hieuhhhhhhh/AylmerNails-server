@@ -16,6 +16,7 @@ from src.routes.authentication.sign_up.sql import (
 from src.routes.authentication.login.sql import (
     create_sp_add_session,
     create_sp_get_stored_pw,
+    create_sp_continue_session,
 )
 
 
@@ -46,3 +47,4 @@ def create_procedures():
     create_sp_is_phonenum_avail()
     create_sp_add_session()
     create_sp_get_stored_pw()
+    create_sp_continue_session()

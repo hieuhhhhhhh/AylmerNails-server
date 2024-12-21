@@ -1,6 +1,10 @@
 {
     "files.exclude": {
       "**/__pycache__": true
-    }
+    },
+    "[sql]": {
+    "editor.defaultFormatter": null
+}
+
 }
   
