@@ -3,9 +3,6 @@ from .tables import create_tables
 from src.routes.authentication.hello_table_test.sp_insert_msg import (
     create_sp_insert_msg,
 )
-from src.routes.authentication.sign_up.sp_sign_up import (
-    create_sp_sign_up,
-)
 from src.routes.authentication.sms_verification.sp_store_code import (
     create_sp_store_code,
 )
@@ -42,7 +39,6 @@ def create_procedures():
 
     # from authentication routes
     create_sp_insert_msg()
-    create_sp_sign_up()
     create_sp_store_code()
     create_sp_verify_code()
     create_sp_get_new_pw()

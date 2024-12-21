@@ -14,6 +14,6 @@ def verify_signup(phone_num, code):
         create_new_auth(phone_num)
 
     # prepare response status
-    status = 200 if success else 400
+    status = 201 if success else 400
 
     return jsonify({"message": msg}), status

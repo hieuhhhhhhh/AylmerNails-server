@@ -55,13 +55,3 @@ def verify_sign_up():
     # catch unexpected error
     except Exception as e:
         return unexpected_error_response(e)
-
-
-@authentication.route("/verify_sms_code", methods=["POST"])
-def verify_sms_code():
-    # read json from request
-    data = request.get_json()
-    phone_num = data.get("phone_num")
-    code = data.get("code")
-
-    return verify_code(phone_num, code)
