@@ -4,7 +4,8 @@ CREATE PROCEDURE sp_store_code (
     IN _phone_number VARCHAR(15),
     IN _new_password VARCHAR(60),
     IN _code VARCHAR(4),
-    IN _attempts_left INT
+    IN _attempts_left INT,
+    IN _expiry INT
 )
 BEGIN
     INSERT INTO sms_verify_codes (
@@ -12,18 +13,21 @@ BEGIN
         new_password,
         code,
         attempts_left,
-        created_at
+        created_at,
+        expiry
     )
     VALUES (
         _phone_number,
         _new_password, 
         _code,
         _attempts_left,
-        UNIX_TIMESTAMP()
+        UNIX_TIMESTAMP(),
+        _expiry
     )
     ON DUPLICATE KEY UPDATE
         new_password = VALUES(new_password), 
         code = VALUES(code),
         attempts_left = VALUES(attempts_left),
-        created_at = VALUES(created_at);
+        created_at = VALUES(created_at),
+        expiry = VALUES(expiry);
 END;

@@ -3,6 +3,10 @@ from twilio.rest import Client
 import random
 from src.mysql.call_sp import call_sp
 
+# Init lifetime of code (in sec)
+CODE_EXPIRY = 300
+ATTEMPTS_COUNT = 3
+
 
 def generate_code(phone_number, new_password=None):
     try:
@@ -27,7 +31,14 @@ def generate_code(phone_number, new_password=None):
         )
 
         # Store code in db to verify in the second request
-        call_sp("sp_store_code", phone_number, new_password, code, 3)
+        call_sp(
+            "sp_store_code",
+            phone_number,
+            new_password,
+            code,
+            ATTEMPTS_COUNT,
+            CODE_EXPIRY,
+        )
 
         return (
             jsonify({"message": f"Code sent to :{phone_number}"}),

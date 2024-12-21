@@ -2,14 +2,14 @@ DROP PROCEDURE IF EXISTS sp_verify_code;
 
 CREATE PROCEDURE sp_verify_code(
     IN _phone_number VARCHAR(15),
-    IN _code VARCHAR(4),
-    IN _lifespan INT
+    IN _code VARCHAR(4)
 )
 sp:BEGIN
     -- Placeholders for data from table
     DECLARE code_ VARCHAR(4);
     DECLARE attempts_left_ INT;
     DECLARE created_at_ BIGINT;
+    DECLARE expiry_ INT;
     DECLARE new_password_ VARCHAR(60);
 
     -- Decrement the attempts left
@@ -18,7 +18,8 @@ sp:BEGIN
     WHERE phone_number = _phone_number;
 
     -- Get the current timestamp and record details
-    SELECT new_password, code, attempts_left, created_at INTO new_password_, code_, attempts_left_, created_at_
+    SELECT new_password, code, attempts_left, created_at, expiry
+    INTO new_password_, code_, attempts_left_, created_at_, expiry_
     FROM sms_verify_codes
     WHERE phone_number = _phone_number;
 
@@ -29,8 +30,8 @@ sp:BEGIN
         LEAVE sp;
     END IF;
 
-    -- Check if the code has expired (using the created_at time + _lifespan)
-    IF (UNIX_TIMESTAMP() - created_at_) > _lifespan THEN
+    -- Check if the code has expired 
+    IF UNIX_TIMESTAMP() > (created_at_ + expiry_) THEN
         -- Return the failure result set
         SELECT FALSE AS success, 'Code has expired, please request a new code' AS msg;
         LEAVE sp;
