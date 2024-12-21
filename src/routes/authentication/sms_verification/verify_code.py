@@ -1,12 +1,4 @@
-from src.mysql.execute_sql_file.many_queries import exe_queries
 from src.mysql.call_sp import call_sp
-
-
-# to build required procedure
-def create_sp_verify_code():
-    print("\033[94m" + "sp_verify_code" + "\033[0m")
-    exe_queries(__file__, "sp_verify_code.sql")
-
 
 # Init lifetime of code (in sec)
 CODE_LIFETIME = 300

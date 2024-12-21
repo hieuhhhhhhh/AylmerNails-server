@@ -1,7 +1,11 @@
 from flask import jsonify
 import bcrypt  # Import bcrypt for password hashing
-from .sp_is_phonenum_avail import phonenum_is_avail
-from ..sms_verification.sp_store_code import send_code_by_sms
+from ..sms_verification.generate_code import generate_code
+from src.mysql.call_sp import call_sp
+
+
+def phonenum_is_avail(phone_number):
+    return call_sp("sp_is_phonenum_avail", phone_number)[0][0]
 
 
 def request_signup(phone_num, password):
@@ -32,4 +36,4 @@ def request_signup(phone_num, password):
     hashed = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
     # generate and send a verification code to phone num
-    return send_code_by_sms(phone_num, hashed)
+    return generate_code(phone_num, hashed)

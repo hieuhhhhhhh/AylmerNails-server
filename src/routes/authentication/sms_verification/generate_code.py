@@ -1,17 +1,10 @@
 from flask import jsonify, current_app
 from twilio.rest import Client
 import random
-from src.mysql.execute_sql_file.many_queries import exe_queries
 from src.mysql.call_sp import call_sp
 
 
-# to build the required procedures:
-def create_sp_store_code():
-    print("\033[94m" + "create_sp_store_code" + "\033[0m")
-    exe_queries(__file__, "sp_store_code.sql")
-
-
-def send_code_by_sms(phone_number, new_password=None):
+def generate_code(phone_number, new_password=None):
     try:
         # get env variables
         TWILIO_SID = current_app.config["TWILIO_SID"]

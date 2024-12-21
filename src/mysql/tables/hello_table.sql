@@ -1,0 +1,4 @@
+CREATE TABLE hello_table (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    message VARCHAR(255)
+);
