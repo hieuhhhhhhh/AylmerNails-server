@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 from .hello_table_test.sp_insert_msg import insert_message_to_db
 from .hello_table_test.read_all_hello_table import read_all_hello_table
-from .sms_verification.sp_verify_code import verify_code
 from .sign_up.request_signup import request_signup
 from .sign_up.verify_signup import verify_signup
 from ..helpers.unexpected_error_response import unexpected_error_response

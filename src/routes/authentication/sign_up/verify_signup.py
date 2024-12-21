@@ -1,6 +1,6 @@
-from ..sms_verification.sp_verify_code import verify_code
+from ..sms_verification.verify_code import verify_code
 from flask import jsonify
-from ..new_auth.sp_new_auth import create_new_auth
+from ..new_auth.create_new_auth import create_new_auth
 
 
 def verify_signup(phone_num, code):
