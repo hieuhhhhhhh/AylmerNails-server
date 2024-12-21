@@ -16,6 +16,12 @@ from src.routes.authentication.new_auth.sp_new_auth import (
 from src.routes.authentication.sign_up.sp_is_phonenum_avail import (
     create_sp_is_phonenum_avail,
 )
+from src.routes.authentication.login.sp_add_session import (
+    create_sp_add_session,
+)
+from src.routes.authentication.login.sp_get_stored_pw import (
+    create_sp_get_stored_pw,
+)
 
 
 # create required database if not exists
@@ -44,3 +50,5 @@ def create_procedures():
     create_sp_get_new_pw()
     create_sp_new_auth()
     create_sp_is_phonenum_avail()
+    create_sp_add_session()
+    create_sp_get_stored_pw()
