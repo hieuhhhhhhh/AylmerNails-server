@@ -1,6 +1,6 @@
 DROP PROCEDURE IF EXISTS sp_add_session;
 
-CREATE PROCEDURE sp_add_session(IN _user_id INT)
+CREATE PROCEDURE sp_add_session(IN _user_id INT UNSIGNED )
 BEGIN
     DECLARE session_salt_ INT;
     

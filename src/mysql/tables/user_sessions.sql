@@ -1,7 +1,7 @@
 CREATE TABLE user_sessions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     session_salt INT NOT NULL,
-    user_id INT NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
     created_at BIGINT NOT NULL,
     remember_me BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES authentication (user_id)
