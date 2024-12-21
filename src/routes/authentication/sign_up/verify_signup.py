@@ -1,6 +1,5 @@
 from ..sms_verification.verify_code import verify_code
 from flask import jsonify
-from ..new_auth.create_new_auth import create_new_auth
 
 
 def verify_signup(phone_num, code):
@@ -8,10 +7,6 @@ def verify_signup(phone_num, code):
 
     # check if verification code is correct
     success, msg = verify_code(phone_num, code)
-
-    # create new authentication if successful verification
-    if success:
-        create_new_auth(phone_num)
 
     # prepare response status
     status = 201 if success else 400
