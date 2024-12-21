@@ -1,5 +1,5 @@
 from src.mysql.execute_sql_file.one_query import exe_one_query
-from .tables import create_tables
+from ..tables import create_tables
 from src.routes.authentication.hello_table_test.sp_insert_msg import (
     create_sp_insert_msg,
 )
@@ -7,11 +7,11 @@ from src.routes.authentication.sms_verification.sql import (
     create_sp_store_code,
     create_sp_verify_code,
 )
-from src.routes.authentication.new_auth.sql import (
+from src.routes.authentication.sign_up.sql import (
+    create_sp_is_phonenum_avail,
     create_sp_new_auth,
-    create_sp_get_new_pw,
 )
-from src.routes.authentication.sign_up.sql import create_sp_is_phonenum_avail
+
 
 from src.routes.authentication.login.sql import (
     create_sp_add_session,
@@ -42,7 +42,6 @@ def create_procedures():
     create_sp_insert_msg()
     create_sp_store_code()
     create_sp_verify_code()
-    create_sp_get_new_pw()
     create_sp_new_auth()
     create_sp_is_phonenum_avail()
     create_sp_add_session()
