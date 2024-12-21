@@ -3,7 +3,6 @@ from src.mysql.call_sp import call_sp
 from .get_stored_pw import get_stored_pw
 import bcrypt
 from hashids import Hashids
-import random
 
 
 # handle credentials from client side:
@@ -20,11 +19,10 @@ def request_login(phone_number, password):
     # Validate the entered password against the stored hash
     if hashed and bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8")):
         # Generate session ID and salt
-        session_id = call_sp("sp_add_session", user_id)[0][0]
-        random_salt = random.randint(0, 999999)
+        session_id, session_salt = call_sp("sp_add_session", user_id)[0]
 
         # Encode session ID and salt to generate token
-        token = hashids.encode(session_id, random_salt)
+        token = hashids.encode(session_id, session_salt)
         return jsonify({"token": token}), 200
 
     # Invalid credentials
