@@ -1,8 +1,13 @@
 from flask import jsonify, current_app
 from src.mysql.call_sp import call_sp
-from .get_stored_pw import get_stored_pw
 import bcrypt
 from hashids import Hashids
+
+
+# return a tuple: user_id, password
+def get_stored_pw(phone_number):
+    res = call_sp("sp_get_stored_pw", phone_number)
+    return (res[0][0], res[0][1]) if res else (None, None)
 
 
 # handle credentials from client side:
