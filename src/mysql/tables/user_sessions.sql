@@ -4,6 +4,7 @@ CREATE TABLE user_sessions (
     user_id INT UNSIGNED NOT NULL,
     created_at BIGINT NOT NULL,
     remember_me BOOLEAN DEFAULT FALSE,
+    suspended BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES authentication (user_id)
 );
 
