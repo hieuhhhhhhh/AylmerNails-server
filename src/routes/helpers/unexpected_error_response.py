@@ -3,6 +3,7 @@ import traceback
 
 
 def unexpected_error_response(exception):
+    print(traceback.format_exc())
     return (
         jsonify(
             {
