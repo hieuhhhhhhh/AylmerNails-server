@@ -15,6 +15,7 @@ app = Flask(__name__, static_folder="static", static_url_path="")
 load_dotenv()
 app.config["TWILIO_SID"] = os.getenv("TWILIO_SID")
 app.config["TWILIO_TOKEN"] = os.getenv("TWILIO_TOKEN")
+app.config["TOKEN_SALT"] = os.getenv("TOKEN_SALT")
 
 # Enable CORS for all routes
 CORS(app)
