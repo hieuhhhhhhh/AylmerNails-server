@@ -11,16 +11,18 @@ def continue_session(token):
     session_id, session_salt = hashids.decode(token)
 
     # Process the retrieved data
-    res = call_sp("sp_continue_session", session_id, session_salt)
+    status, user_id, new_salt = call_sp("sp_process_token", session_id, session_salt)[0]
 
-    # The procedure should return new salt
-    if len(res):
-        # Encode session ID and new salt to generate new token
-        session_id, session_salt = res[0]
-        token = hashids.encode(session_id, session_salt)
+    # if token is valid but need refreshing
+    if status == 205:
+        # Encode session ID with new salt to generate new token
+        token = hashids.encode(session_id, new_salt)
 
-        return jsonify({"token": token}), 200
+        return jsonify({"new_token": token}), status
 
-    # if the token is invalid return client the refreshed token
-    else:
-        return jsonify({"message": "Invalid token"}), 404
+    # if token is valid
+    if status == 200:
+        return jsonify({"user_id": user_id}), status
+
+    # if the token is invalid
+    return jsonify({"message": "Invalid token"}), status

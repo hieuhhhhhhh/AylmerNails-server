@@ -3,14 +3,14 @@ DROP PROCEDURE IF EXISTS sp_validate_salt;
 CREATE PROCEDURE sp_validate_salt(
     IN _session_id INT UNSIGNED,
     IN _session_salt INT,
-    OUT _is_valid BOOLEAN,
+    OUT _is_valid BOOLEAN
 )
 sp:BEGIN
-    -- default status
-    SET _is_valid = FALSE;
-
     -- init variables
     DECLARE session_salt_ INT DEFAULT NULL;
+
+    -- default status
+    SET _is_valid = FALSE;
 
     -- validate if it is new salt that hasnot been confirmed
     SELECT session_salt
