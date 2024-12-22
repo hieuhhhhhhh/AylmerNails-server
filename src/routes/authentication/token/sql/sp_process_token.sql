@@ -6,52 +6,46 @@ CREATE PROCEDURE sp_process_token(
 )
 sp:BEGIN
     -- placeholders for output
-    DECLARE http_status_ SMALLINT DEFAULT 401;
     DECLARE user_id_ INT DEFAULT NULL;
-    DECLARE session_salt_ INT DEFAULT NULL;
+    DECLARE new_salt INT DEFAULT NULL;
 
     -- other variables
-    DECLARE remember_me_ BOOLEAN DEFAULT NULL;
+    DECLARE remember_me_ BOOLEAN ;
     DECLARE created_at_ BIGINT;
     DECLARE expiry_ INT;
 
+    -- validate salt and session existance
+    DECLARE is_valid BOOLEAN;
+    CALL sp_validate_salt(_session_id, _session_salt, is_valid)
+
+    -- session not found or salt is not valid
+    IF NOT is_valid THEN
+        SELECT 401;
+        LEAVE sp;
+    END IF;
+
     -- Fetch data from sessions table
-    SELECT user_id, session_salt, created_at, expiry, remember_me
-    INTO user_id_, session_salt_, created_at_, expiry_, remember_me_
+    SELECT user_id, created_at, expiry, remember_me
+    INTO user_id_, created_at_, expiry_, remember_me_
     FROM user_sessions
-    WHERE id = _session_id
-    LIMIT 1;
+    WHERE id = _session_id;
 
-    -- If session is found, start validating token
-    IF user_id_ IS NOT NULL THEN
-        -- If session is expired
-        IF UNIX_TIMESTAMP() < (created_at_ + expiry_) THEN
-            IF remember_me_ THEN
-                -- Check if the provided salt matches the stored salt
-                IF session_salt_ = _session_salt THEN
-                    -- generate a new salt
-                    CALL sp_generate_salt(_session_id, session_salt_);
-                    
-                    -- Return the session_id and updated session_salt
-                    SELECT _session_id, session_salt_;
-                ELSE
-                    -- validate if it is new salt that hasnot been confirmed
-                    SET session_salt_ = fn_get_unconfirmed_salt(_session_id);
+    -- if session is expired 
+    IF UNIX_TIMESTAMP() > (created_at_ + expiry_) THEN
+        -- if remember_me is turned on, generate a new salt and reset birth time (refresh this session)
+        IF remember_me THEN 
+            CALL sp_generate_salt(_session_id, new_salt);
 
-                    -- if it is a new salt overwrite that on this table
-                    IF session_salt_ = _session_salt THEN
-                        -- Update the new salt and birth time of the session (refresh session)
-                        CALL sp_confirm_salt(_session_id, _session_salt);
-                    ELSE
-                        -- Salt doesn't match (security risk): delete all active sessions of this user
-                        CALL sp_log_out_all(user_id_);
-                    END IF;
-                END IF;
-            ELSE
-                DELETE FROM user_sessions WHERE id = _session_id
-
+            -- return green http status, with a new salt
+            SELECT 205, user_id_, new_salt;
+        
+        -- otherwise
+        ELSE
+            SELECT 401;
+            LEAVE sp;
         END IF;
     END IF;
 
-    SELECT http_status_ AS http_status_, user_id_ AS user_id, _session_id AS session_id, session_salt_ AS session_salt;
+    -- if session is not expired
+    SELECT 200, user_id_;
 END;

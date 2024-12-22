@@ -3,11 +3,11 @@ DROP PROCEDURE IF EXISTS sp_validate_salt;
 CREATE PROCEDURE sp_validate_salt(
     IN _session_id INT UNSIGNED,
     IN _session_salt INT,
-    OUT _http_status SMALLINT,
+    OUT _is_valid BOOLEAN,
 )
-BEGIN
+sp:BEGIN
     -- default status
-    SET _http_status = 401;
+    SET _is_valid = FALSE;
 
     -- init variables
     DECLARE session_salt_ INT DEFAULT NULL;
@@ -18,10 +18,15 @@ BEGIN
     FROM user_sessions
     WHERE id = _session_id;
 
+    -- if session is not found, then leave with false status
+    IF session_salt_ IS NULL THEN        
+        LEAVE sp;
+    END IF;
+
     -- compare provided salt with confirmed salt
     IF session_salt_ = _session_salt THEN
         -- update status (succesful)
-        SET _http_status = 200;    
+        SET _is_valid = TRUE;    
     ELSE
         -- retrieve any unconfirmed salt
         SET session_salt_ = fn_get_unconfirmed_salt(_session_id);
@@ -32,14 +37,11 @@ BEGIN
             CALL sp_confirm_salt(_session_id, _session_salt);
 
             -- update status (succesful)
-            SET _http_status = 200;
+            SET _is_valid = TRUE;
         ELSE
             -- provided salt not match both confirmed and unconfirmed => potentially an exposed salt
             -- log out all sessions of this user
             CALL sp_log_out_all(user_id_);
-
-            -- update status (unauthorized)
-            SET _http_status = 401;
         END IF;
     END IF;
 END;
