@@ -6,7 +6,7 @@ CREATE FUNCTION fn_get_unconfirmed_salt(
 RETURNS INT
 DETERMINISTIC
 BEGIN
-    DECLARE _session_salt INT;
+    DECLARE _session_salt INT DEFAULT NULL;
 
     SELECT new_salt 
     INTO _session_salt

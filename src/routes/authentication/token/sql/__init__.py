@@ -8,3 +8,4 @@ def create_token_procedures():
     exe_queries(__file__, "sp_confirm_salt.sql")
     exe_queries(__file__, "sp_generate_salt.sql")
     exe_queries(__file__, "sp_log_out_all.sql")
+    exe_queries(__file__, "sp_validate_salt.sql")

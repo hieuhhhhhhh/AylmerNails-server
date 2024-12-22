@@ -8,11 +8,9 @@ sp:BEGIN
     -- placeholders for output
     DECLARE http_status_ SMALLINT DEFAULT 401;
     DECLARE user_id_ INT DEFAULT NULL;
-    DECLARE session_id_ INT UNSIGNED DEFAULT NULL;
     DECLARE session_salt_ INT DEFAULT NULL;
 
     -- other variables
-    DECLARE is_expired_ BOOLEAN DEFAULT NULL;
     DECLARE remember_me_ BOOLEAN DEFAULT NULL;
     DECLARE created_at_ BIGINT;
     DECLARE expiry_ INT;
@@ -28,39 +26,32 @@ sp:BEGIN
     IF user_id_ IS NOT NULL THEN
         -- If session is expired
         IF UNIX_TIMESTAMP() < (created_at_ + expiry_) THEN
-            SET is_expired_ = FALSE;
+            IF remember_me_ THEN
+                -- Check if the provided salt matches the stored salt
+                IF session_salt_ = _session_salt THEN
+                    -- generate a new salt
+                    CALL sp_generate_salt(_session_id, session_salt_);
+                    
+                    -- Return the session_id and updated session_salt
+                    SELECT _session_id, session_salt_;
+                ELSE
+                    -- validate if it is new salt that hasnot been confirmed
+                    SET session_salt_ = fn_get_unconfirmed_salt(_session_id);
+
+                    -- if it is a new salt overwrite that on this table
+                    IF session_salt_ = _session_salt THEN
+                        -- Update the new salt and birth time of the session (refresh session)
+                        CALL sp_confirm_salt(_session_id, _session_salt);
+                    ELSE
+                        -- Salt doesn't match (security risk): delete all active sessions of this user
+                        CALL sp_log_out_all(user_id_);
+                    END IF;
+                END IF;
+            ELSE
+                DELETE FROM user_sessions WHERE id = _session_id
+
         END IF;
-
-        -- if the token has been updated or token is exposed
-        IF session_salt_ != _session_salt THEN
-            -- validate if it is new salt that hasnot been confirmed
-            SELECT new_salt 
-            INTO session_salt_
-            FROM unconfirmed_salts
-            WHERE session_id = _session_id;
-
-            -- if it is truely a new salt, overwrite the salt of this table
-            IF session_salt_ = _session_salt THEN
-                -- Update the new salt and birth time of the session (refresh session)
-                UPDATE user_sessions
-                SET session_salt = session_salt_, created_at = UNIX_TIMESTAMP()
-                WHERE id = _session_id;
-
-                -- clean up that new salt on the other table (update completed)
-                DELETE FROM unconfirmed_salts
-                WHERE session_id = _session_id;
-            ELSE:
-                -- Salt doesn't match (security risk): delete all active sessions of this user
-                DELETE FROM user_sessions
-                WHERE user_id = user_id_;
-
-                -- Reset return data to nulls
-                SET user_id_ = NULL;
-                SET is_expired_ = NULL;
-                SET remember_me_ = NULL;
-            END IF;              
-        END IF;  
     END IF;
 
-
+    SELECT http_status_ AS http_status_, user_id_ AS user_id, _session_id AS session_id, session_salt_ AS session_salt;
 END;
