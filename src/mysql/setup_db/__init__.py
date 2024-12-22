@@ -18,6 +18,8 @@ from src.routes.authentication.login.sql import (
     create_sp_get_stored_pw,
 )
 
+from src.routes.authentication.session.sql import create_session_procedures
+
 
 # create required database if not exists
 def setup_db_on_mysql():
@@ -46,3 +48,4 @@ def create_procedures():
     create_sp_is_phonenum_avail()
     create_sp_add_session()
     create_sp_get_stored_pw()
+    create_session_procedures()

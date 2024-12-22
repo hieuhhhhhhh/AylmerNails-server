@@ -1,8 +1,16 @@
 from flask import jsonify, current_app
 from src.mysql.call_sp import call_sp
-from .get_stored_pw import get_stored_pw
 import bcrypt
 from hashids import Hashids
+
+# init session expiry (in secs)
+SESSION_EXPIRY = 24 * 60 * 60
+
+
+# return a tuple: user_id, password
+def get_stored_pw(phone_number):
+    res = call_sp("sp_get_stored_pw", phone_number)
+    return (res[0][0], res[0][1]) if res else (None, None)
 
 
 # handle credentials from client side:
@@ -19,7 +27,7 @@ def request_login(phone_number, password):
     # Validate the entered password against the stored hash
     if hashed and bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8")):
         # Generate session ID and salt
-        session_id, session_salt = call_sp("sp_add_session", user_id)[0]
+        session_id, session_salt = call_sp("sp_add_session", user_id, SESSION_EXPIRY)[0]
 
         # Encode session ID and salt to generate token
         token = hashids.encode(session_id, session_salt)

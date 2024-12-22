@@ -4,6 +4,7 @@ from .hello_table_test.read_all_hello_table import read_all_hello_table
 from .sign_up.request_signup import request_signup
 from .sign_up.verify_signup import verify_signup
 from .login.request_login import request_login
+from .login.continue_session import continue_session
 
 from ..helpers.unexpected_error_response import unexpected_error_response
 
@@ -67,6 +68,20 @@ def request_log_in():
         password = data.get("password")
 
         return request_login(phone_num, password)
+
+    # catch unexpected error
+    except Exception as e:
+        return unexpected_error_response(e)
+
+
+@authentication.route("/request_continue_session", methods=["POST"])
+def request_continue_session():
+    try:
+        # read json from request
+        data = request.get_json()
+        token = data.get("token")
+
+        return continue_session(token)
 
     # catch unexpected error
     except Exception as e:
