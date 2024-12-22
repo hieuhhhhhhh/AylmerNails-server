@@ -31,19 +31,19 @@ sp:BEGIN
     -- Check if the provided salt matches the stored salt
     IF session_salt_ = _session_salt THEN
         -- generate a new salt
-        CALL sp_generate_salt(_session_id, session_salt_)
+        CALL sp_generate_salt(_session_id, session_salt_);
         
         -- Return the session_id and updated session_salt
         SELECT _session_id, session_salt_;
     ELSE
         -- validate if it is new salt that hasnot been confirmed
-        SET _session_salt = fn_get_unconfirmed_salt(_session_id);
+        SET session_salt_ = fn_get_unconfirmed_salt(_session_id);
 
         -- if it is a new salt overwrite that on this table
         IF session_salt_ = _session_salt THEN
             -- Update the new salt and birth time of the session (refresh session)
-            CALL sp_confirm_salt(_session_salt);
-        ELSE:
+            CALL sp_confirm_salt(_session_id, _session_salt);
+        ELSE
             -- Salt doesn't match (security risk): delete all active sessions of this user
             CALL sp_log_out_all(user_id_);
         END IF;
