@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_generate_salt(
     OUT _session_salt INT
 )
 BEGIN
-    -- Salt matches: Generate a new salt
+    -- generate a new salt
     SET _session_salt = FLOOR(RAND() * 1000000000);
     
     -- write a new salt and store it on unconfirmed table
