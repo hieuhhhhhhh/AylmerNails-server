@@ -15,7 +15,7 @@ sp:BEGIN
     DECLARE created_at_ BIGINT;
     DECLARE expiry_ INT;
 
-    -- Fetch needed data from table
+    -- Fetch data from sessions table
     SELECT user_id, session_salt, created_at, expiry, remember_me
     INTO user_id_, session_salt_, created_at_, expiry_, remember_me_
     FROM user_sessions
@@ -29,16 +29,34 @@ sp:BEGIN
             SET is_expired_ = FALSE;
         END IF;
 
-        -- if token is exposed
+        -- if the token has been updated or token is exposed
         IF session_salt_ != _session_salt THEN
-            -- log out user in all sessions
-            DELETE FROM user_sessions
-            WHERE user_id = user_id_;
+            -- validate if it is new salt that hasnot been confirmed
+            SELECT new_salt 
+            INTO session_salt_
+            FROM unconfirmed_salts
+            WHERE session_id = _session_id;
 
-            -- Reset return data to nulls
-            SET user_id_ = NULL;
-            SET is_expired_ = NULL;
-            SET remember_me_ = NULL;
+            -- if it is truely a new salt, overwrite the salt of this table
+            IF session_salt_ = _session_salt THEN
+                -- Update the new salt and birth time of the session (refresh session)
+                UPDATE user_sessions
+                SET session_salt = session_salt_, created_at = UNIX_TIMESTAMP()
+                WHERE id = _session_id;
+
+                -- clean up that new salt on the other table (update completed)
+                DELETE FROM unconfirmed_salts
+                WHERE session_id = _session_id;
+            ELSE:
+                -- Salt doesn't match (security risk): delete all active sessions of this user
+                DELETE FROM user_sessions
+                WHERE user_id = user_id_;
+
+                -- Reset return data to nulls
+                SET user_id_ = NULL;
+                SET is_expired_ = NULL;
+                SET remember_me_ = NULL;
+            END IF;              
         END IF;  
     END IF;
  

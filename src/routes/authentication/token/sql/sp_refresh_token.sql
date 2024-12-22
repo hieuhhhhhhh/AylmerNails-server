@@ -14,10 +14,9 @@ sp:BEGIN
     SELECT  is_expired, remember_me INTO  is_expired_, remember_me_;
 
     IF remember_me_ THEN
-        -- refresh birth time and assign a new salt to session
-        UPDATE user_sessions
-        SET session_salt = FLOOR(RAND() * 1000000000), created_at = UNIX_TIMESTAMP()
-        WHERE id = _session_id;
+        -- write a new salt and store it on another table (next request will update session with this salt)
+        INSERT INTO unconfirmed_salts (session_id, new_salt)
+        VALUES (_session_id, session_salt_);
 
         -- Return the session_id and new salt
         SELECT _session_id, session_salt_;
