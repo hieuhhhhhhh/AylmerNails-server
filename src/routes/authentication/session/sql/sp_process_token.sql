@@ -5,16 +5,13 @@ CREATE PROCEDURE sp_process_token(
     IN _session_salt INT,
 )
 sp:BEGIN
-    -- placeholders for output
+    -- init variables
     DECLARE user_id_ INT DEFAULT NULL;
-    DECLARE new_salt INT DEFAULT NULL;
-
-    -- other variables
     DECLARE remember_me_ BOOLEAN ;
     DECLARE created_at_ BIGINT;
     DECLARE expiry_ INT;
 
-    -- Fetch data from sessions table
+    -- Fetch data to variables from user_sessions
     SELECT user_id, created_at, expiry, remember_me
     INTO user_id_, created_at_, expiry_, remember_me_
     FROM user_sessions
@@ -34,6 +31,7 @@ sp:BEGIN
     IF UNIX_TIMESTAMP() > (created_at_ + expiry_) THEN
         -- if remember_me is turned on, generate a new salt and reset birth time (refresh this session)
         IF remember_me THEN 
+            DECLARE new_salt INT DEFAULT NULL;              
             CALL sp_generate_salt(_session_id, new_salt);
             -- return green http status, with a new salt
             SELECT 205, user_id_, new_salt;

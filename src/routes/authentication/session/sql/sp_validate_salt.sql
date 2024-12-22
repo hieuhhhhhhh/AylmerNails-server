@@ -19,29 +19,32 @@ sp:BEGIN
     WHERE id = _session_id;
 
     -- if session is not found, then leave with false status
-    IF session_salt_ IS NULL THEN        
+    IF session_salt_ IS NULL THEN     
         LEAVE sp;
     END IF;
 
-    -- compare provided salt with confirmed salt
+    -- if provided salt matches the confirmed salt
     IF session_salt_ = _session_salt THEN
-        -- update status (succesful)
-        SET _is_valid = TRUE;    
-    ELSE
-        -- retrieve any unconfirmed salt
-        SET session_salt_ = fn_get_unconfirmed_salt(_session_id);
-
-        -- compare provided salt with unconfirmed salt
-        IF session_salt_ = _session_salt THEN
-            -- if matched, confirm the new salt and birth time of the session (refresh session)
-            CALL sp_confirm_salt(_session_id, _session_salt);
-
-            -- update status (succesful)
-            SET _is_valid = TRUE;
-        ELSE
-            -- provided salt not match both confirmed and unconfirmed => potentially an exposed salt
-            -- log out all sessions of this user
-            CALL sp_log_out_all(user_id_);
-        END IF;
+        -- leave with succesful status
+        SET _is_valid = TRUE;
+        LEAVE sp;
     END IF;
+
+    -- retrieve any unconfirmed salt
+    SET session_salt_ = fn_get_unconfirmed_salt(_session_id);
+
+    -- compare provided salt with unconfirmed salt
+    IF session_salt_ = _session_salt THEN
+        -- if matched, confirm that new salt and refresh birth time of the session (refreshing session)
+        CALL sp_confirm_salt(_session_id, _session_salt);
+
+        -- leave with succesful status
+        SET _is_valid = TRUE;
+        LEAVE sp;
+    END IF;
+
+    -- after 2 comparisions, the provided salt not match any, 
+    -- this can be a security risk, as this or the confirmed salt is exposed to an intruder
+    -- log out all sessions of this user
+    CALL sp_log_out_all(user_id_);
 END;
