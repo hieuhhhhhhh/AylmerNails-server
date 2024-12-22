@@ -30,37 +30,22 @@ sp:BEGIN
     
     -- Check if the provided salt matches the stored salt
     IF session_salt_ = _session_salt THEN
-        -- Salt matches: Generate a new salt
-        SET session_salt_ = FLOOR(RAND() * 1000000000);
-        
-        -- write a new salt and store it on another table (refresh session)
-        INSERT INTO unconfirmed_salts (session_id, new_salt)
-        VALUES (_session_id, session_salt_);
-
+        -- generate a new salt
+        CALL sp_generate_salt(_session_id, session_salt_)
         
         -- Return the session_id and updated session_salt
         SELECT _session_id, session_salt_;
     ELSE
         -- validate if it is new salt that hasnot been confirmed
-        SELECT new_salt 
-        INTO session_salt_
-        FROM unconfirmed_salts
-        WHERE session_id = _session_id;
+        SET _session_salt = fn_get_unconfirmed_salt(_session_id);
 
         -- if it is a new salt overwrite that on this table
         IF session_salt_ = _session_salt THEN
             -- Update the new salt and birth time of the session (refresh session)
-            UPDATE user_sessions
-            SET session_salt = session_salt_, created_at = UNIX_TIMESTAMP()
-            WHERE id = _session_id;
-
-            -- clean up that new salt on the other table
-            DELETE FROM unconfirmed_salts
-            WHERE session_id = _session_id;
+            CALL sp_confirm_salt(_session_salt);
         ELSE:
             -- Salt doesn't match (security risk): delete all active sessions of this user
-            DELETE FROM user_sessions
-            WHERE user_id = user_id_;
+            CALL sp_log_out_all(user_id_);
         END IF;
     END IF;
 END

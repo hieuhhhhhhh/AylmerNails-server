@@ -1,0 +1,17 @@
+DROP FUNCTION IF EXISTS fn_get_unconfirmed_salt;
+
+CREATE FUNCTION fn_get_unconfirmed_salt(
+    _session_id INT UNSIGNED
+)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE _session_salt INT;
+
+    SELECT new_salt 
+    INTO _session_salt
+    FROM unconfirmed_salts
+    WHERE session_id = _session_id;
+
+    RETURN _session_salt;
+END;
