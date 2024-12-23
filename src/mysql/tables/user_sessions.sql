@@ -5,7 +5,10 @@ CREATE TABLE user_sessions (
     created_at BIGINT NOT NULL,
     expiry INT NOT NULL,
     remember_me BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (user_id) REFERENCES authentication (user_id)
+    FOREIGN KEY (user_id) 
+        REFERENCES authentication (user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE INDEX idx_id_session_salt ON user_sessions (id, session_salt);
