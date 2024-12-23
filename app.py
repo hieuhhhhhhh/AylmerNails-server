@@ -18,7 +18,7 @@ app.config["TWILIO_TOKEN"] = os.getenv("TWILIO_TOKEN")
 app.config["TOKEN_SALT"] = os.getenv("TOKEN_SALT")
 
 # Enable CORS for all routes
-CORS(app)
+CORS(app, supports_credentials=True)
 
 # register blueprints (groups of routes)
 app.register_blueprint(authentication, url_prefix="/api/authentication")
