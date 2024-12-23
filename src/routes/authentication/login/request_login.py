@@ -34,7 +34,7 @@ def request_login(phone_number, password):
 
         # Generate and return a response with token on cookie
         response = make_response(jsonify({"token": token}), 200)
-        response.set_cookie("Hi", "hi", samesite="None", secure=True)
+        response.set_cookie("TOKEN", token, samesite="None", secure=True)
 
         return response
 
