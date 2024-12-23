@@ -5,6 +5,9 @@ from ...helpers.response_with_token import response_with_token
 
 
 def continue_session(token):
+    if not token:
+        return {"error": "Token not found in cookies"}, 400
+
     # Initialize Hashids with a salt and optional configuration
     hashids = Hashids(salt=current_app.config["TOKEN_SALT"], min_length=20)
 

@@ -74,12 +74,11 @@ def request_log_in():
         return unexpected_error_response(e)
 
 
-@authentication.route("/request_continue_session", methods=["POST"])
+@authentication.route("/request_continue_session")
 def request_continue_session():
     try:
-        # read json from request
-        data = request.get_json()
-        token = data.get("token")
+        # read token from cookie
+        token = request.cookies.get("TOKEN")
 
         return continue_session(token)
 
