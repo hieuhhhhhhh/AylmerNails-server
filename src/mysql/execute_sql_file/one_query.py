@@ -12,7 +12,7 @@ def exe_one_query(__file__, fileName):
     results = []  # placeholder for table returned from mysql server
 
     try:
-        print(f"Executing: {fileName}")
+        print(f"\033[34mExecuting: \033[0m{fileName}")
 
         # Establishing connection to MySQL server (without specifying database for setup)
         connection = mysql.connector.connect(
@@ -61,6 +61,5 @@ def exe_one_query(__file__, fileName):
         if connection.is_connected():
             cursor.close()
             connection.close()
-        print()
 
     return results  # Return the accumulated results
