@@ -3,6 +3,9 @@ CREATE TABLE profiles (
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     theme_color VARCHAR(20), 
+    appos_pending SMALLINT UNSIGNED DEFAULT 0,
+    appos_finished SMALLINT UNSIGNED DEFAULT 0,
+    appos_missed SMALLINT UNSIGNED DEFAULT 0,
     FOREIGN KEY (user_id) 
         REFERENCES authentication(user_id) 
         ON DELETE CASCADE

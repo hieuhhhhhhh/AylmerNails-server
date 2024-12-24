@@ -3,7 +3,7 @@ from src.mysql.db_config import DATABASE_CONFIG
 
 
 def call_sp(sp_name, *params):
-    print(f"Calling proc: {sp_name}")
+    print(f"\033[34mCalling: \033[0m{sp_name}")
 
     results = []
     try:
