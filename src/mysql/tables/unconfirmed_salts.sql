@@ -4,5 +4,4 @@ CREATE TABLE unconfirmed_salts (
     FOREIGN KEY (session_id) 
         REFERENCES user_sessions(id)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
 );

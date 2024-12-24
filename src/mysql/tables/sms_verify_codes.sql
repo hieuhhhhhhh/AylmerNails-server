@@ -7,4 +7,5 @@ CREATE TABLE sms_verify_codes (
     expiry INT NOT NULL
 );
 
+-- index on birth
 CREATE INDEX idx_created_at ON sms_verify_codes(created_at);
