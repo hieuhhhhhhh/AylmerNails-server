@@ -1,9 +1,13 @@
 from flask import current_app, jsonify
 from hashids import Hashids
 from src.mysql.call_sp import call_sp
+from ...helpers.response_with_token import response_with_token
 
 
 def continue_session(token):
+    if not token:
+        return {"error": "Token not found in cookies"}, 400
+
     # Initialize Hashids with a salt and optional configuration
     hashids = Hashids(salt=current_app.config["TOKEN_SALT"], min_length=20)
 
@@ -18,7 +22,9 @@ def continue_session(token):
         # Encode session ID with new salt to generate new token
         token = hashids.encode(session_id, new_salt)
 
-        return jsonify({"user_id": user_id, "new_token": token}), status
+        return response_with_token(
+            jsonify({"user_id": user_id, "new_token": token}), status, token
+        )
 
     # if token is valid
     if status == 200:

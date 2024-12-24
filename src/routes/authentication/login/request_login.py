@@ -1,10 +1,11 @@
 from flask import jsonify, current_app
 from src.mysql.call_sp import call_sp
 import bcrypt
+from ...helpers.response_with_token import response_with_token
 from hashids import Hashids
 
 # init session expiry (in secs)
-SESSION_EXPIRY = 24 * 60 * 60
+SESSION_EXPIRY = 60 * 60
 
 
 # return a tuple: user_id, password
@@ -31,7 +32,8 @@ def request_login(phone_number, password):
 
         # Encode session ID and salt to generate token
         token = hashids.encode(session_id, session_salt)
-        return jsonify({"token": token}), 200
+
+        return response_with_token(jsonify({"token": token}), 200, token)
 
     # Invalid credentials
-    return jsonify({"message": "Invalid phone number or password"}), 404
+    return jsonify({"message": "Invalid phone number or password"}), 401

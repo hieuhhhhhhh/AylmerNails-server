@@ -10,7 +10,7 @@ def exe_queries(__file__, fileName):
     filePath = os.path.join(os.path.dirname(__file__), fileName)
 
     try:
-        print(f"Executing: {fileName}")
+        print(f"\033[34mExecuting: \033[0m{fileName}")
 
         # Establishing connection to MySQL server (without specifying database for setup)
         connection = mysql.connector.connect(
@@ -46,4 +46,3 @@ def exe_queries(__file__, fileName):
         if connection.is_connected():
             cursor.close()
             connection.close()
-        print()

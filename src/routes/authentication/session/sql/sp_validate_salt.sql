@@ -7,14 +7,15 @@ CREATE PROCEDURE sp_validate_salt(
 )
 sp:BEGIN
     -- init variables
-    DECLARE session_salt_ INT DEFAULT NULL;
+    DECLARE session_salt_ INT;
+    DECLARE user_id_ INT UNSIGNED;
 
     -- default status
     SET _is_valid = FALSE;
 
     -- validate if it is new salt that hasnot been confirmed
-    SELECT session_salt
-    INTO session_salt_
+    SELECT session_salt, user_id
+    INTO session_salt_, user_id_
     FROM user_sessions
     WHERE id = _session_id;
 
