@@ -1,15 +1,12 @@
-# matrix = return multiple tables
-# this function to call a proc that return more than 1 table (many SELECT executions)
-
 import mysql.connector
 from src.mysql.db_config import DATABASE_CONFIG
 
 
-def call_matrix_sp(sp_name, *params):
+def call_2D_proc(sp_name, *params):
     print(f"\033[34mCalling: \033[0m{sp_name}")
 
-    # results is a 3D list so i call it matrix [table][row][column]
-    matrix = []
+    # results are a 2D list [row][column]
+    results = []
     try:
         # Connect to the database using context manager to handle closing
         with mysql.connector.connect(**DATABASE_CONFIG) as connection:
@@ -20,13 +17,13 @@ def call_matrix_sp(sp_name, *params):
                 # Commit changes if necessary (for UPDATE, DELETE, etc.)
                 connection.commit()
 
-                # stack every table returned to matrix
+                # merge all tables to one single table
                 for table in cursor.stored_results():
-                    matrix.append(table.fetchall())  # each table is a 2D list
+                    results.extend(table.fetchall())
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         raise
 
     print()
-    return matrix  # Return the matrix to the caller
+    return results  # Return the results to the caller
