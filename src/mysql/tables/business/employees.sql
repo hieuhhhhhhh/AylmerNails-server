@@ -1,4 +1,4 @@
 CREATE TABLE employees(
-    employee_id INT UNSIGNED PRIMARY KEY,
-    alias VARCHAR(50) NOT NULL,
+    employee_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    alias VARCHAR(50) NOT NULL
 )
