@@ -17,15 +17,17 @@ BEGIN
     -- Lock the appo_details table for writing to prevent other transactions from modifying it
     LOCK TABLES appo_details WRITE;
 
-    -- the new appointment must not have duplicate times with others
-    -- check if there is any appointment conflicts with this new appointment
+    -- the new appointment must not have duplicate times with other appointments of that employee
     IF EXISTS (
-        SELECT 1
+        SELECT employee_id
         FROM appo_details
         WHERE 
-            (_start_time <= start_time AND start_time < _end_time) 
-            OR (_start_time < end_time AND end_time <= _end_time)
-        LIMIT 1  -- one is enough
+            (
+                (_start_time <= start_time AND start_time < _end_time) 
+                OR (_start_time < end_time AND end_time <= _end_time)
+            ) AND employee_id = _employee_id  
+        LIMIT 1  -- one row found is enough to indicate it is invalid
+
     ) THEN
         -- if a conflict exists, refuse to insert new appointment and return NULL 
         SELECT NULL AS new_appo_id;
