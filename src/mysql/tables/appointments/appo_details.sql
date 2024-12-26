@@ -11,7 +11,7 @@ CREATE TABLE appo_details (
     employees_selected VARCHAR(500),
 
     -- is FALSE when the appointment is created or modified by higher level users (admin)
-    only_client_modified BOOLEAN NOT NULL DEFAULT TRUE, 
+    created_by_client BOOLEAN NOT NULL DEFAULT TRUE, 
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id),
     FOREIGN KEY (service_id) REFERENCES services(service_id) 
@@ -24,7 +24,7 @@ CREATE INDEX idx_employee_id ON appo_details(employee_id);
 -- index on service_id
 CREATE INDEX idx_service_id ON appo_details(service_id);
 
--- composite index on start_time -> employee_id -> service_id
+-- index on start_time -> employee_id -> service_id
 CREATE INDEX idx_start_employee_service ON appo_details(start_time, employee_id, service_id);
 
 -- index on end_time
