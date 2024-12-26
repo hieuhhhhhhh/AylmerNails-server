@@ -9,6 +9,11 @@ CREATE PROCEDURE sp_add_appo(
     IN _created_by_client BOOLEAN DEFAULT TRUE
 )
 BEGIN
+    -- Declare a handler for exceptions to ensure the table is unlocked
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+        -- Unlock the table in case of an exception
+        UNLOCK TABLES;
+
     -- Lock the appo_details table for writing to prevent other transactions from modifying it
     LOCK TABLES appo_details WRITE;
 
