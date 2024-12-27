@@ -1,5 +1,5 @@
 from flask import jsonify, current_app
-from src.mysql.call_sp import call_sp
+from mysql.procedures.call_2D_proc import call_2D_proc
 import bcrypt
 from ...helpers.response_with_token import response_with_token
 from hashids import Hashids
@@ -10,7 +10,7 @@ SESSION_EXPIRY = 60 * 60
 
 # return a tuple: user_id, password
 def get_stored_pw(phone_number):
-    res = call_sp("sp_get_stored_pw", phone_number)
+    res = call_2D_proc("sp_get_stored_pw", phone_number)
     return (res[0][0], res[0][1]) if res else (None, None)
 
 
@@ -28,7 +28,9 @@ def request_login(phone_number, password):
     # Validate the entered password against the stored hash
     if hashed and bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8")):
         # Generate session ID and salt
-        session_id, session_salt = call_sp("sp_add_session", user_id, SESSION_EXPIRY)[0]
+        session_id, session_salt = call_2D_proc(
+            "sp_add_session", user_id, SESSION_EXPIRY
+        )[0]
 
         # Encode session ID and salt to generate token
         token = hashids.encode(session_id, session_salt)

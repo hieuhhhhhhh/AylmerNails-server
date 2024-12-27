@@ -1,6 +1,6 @@
 from flask import current_app, jsonify
 from hashids import Hashids
-from src.mysql.call_sp import call_sp
+from mysql.procedures.call_2D_proc import call_2D_proc
 from ...helpers.response_with_token import response_with_token
 
 
@@ -15,7 +15,9 @@ def continue_session(token):
     session_id, session_salt = hashids.decode(token)
 
     # Process the retrieved data
-    status, user_id, new_salt = call_sp("sp_process_token", session_id, session_salt)[0]
+    status, user_id, new_salt = call_2D_proc(
+        "sp_process_token", session_id, session_salt
+    )[0]
 
     # if token is valid but need refreshing
     if status == 205:

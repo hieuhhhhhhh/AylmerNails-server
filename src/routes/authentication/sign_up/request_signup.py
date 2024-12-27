@@ -1,11 +1,11 @@
 from flask import jsonify
 import bcrypt  # Import bcrypt for password hashing
 from ..sms_verification.generate_code import generate_code
-from src.mysql.call_sp import call_sp
+from mysql.procedures.call_2D_proc import call_2D_proc
 
 
 def phonenum_is_avail(phone_number):
-    return call_sp("sp_is_phonenum_avail", phone_number)[0][0]
+    return call_2D_proc("sp_is_phonenum_avail", phone_number)[0][0]
 
 
 def request_signup(phone_num, password):
