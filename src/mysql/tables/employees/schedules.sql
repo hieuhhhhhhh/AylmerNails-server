@@ -3,4 +3,4 @@ CREATE TABLE schedules(
     employee_id INT UNSIGNED,
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE CASCADE
-)
+);
