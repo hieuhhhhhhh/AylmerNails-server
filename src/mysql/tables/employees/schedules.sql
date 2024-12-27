@@ -1,21 +1,10 @@
 CREATE TABLE schedules(
     schedule_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     employee_id INT UNSIGNED,
-    start_time BIGINT NOT NULL,
-    sun_start INT,
-    sun_end INT,
-    mon_start INT,
-    mon_end INT,    
-    tue_start INT,
-    tue_end INT,    
-    wed_start INT,
-    wed_end INT,    
-    thu_start INT,
-    thu_end INT,    
-    fri_start INT,
-    fri_end INT,    
-    sar_start INT,
-    sar_end INT,    
+    effective_from BIGINT NOT NULL,
+    day_of_the_week TINYINT, -- start from sunday = 0, monday = 1, tuesday = 2, ...
+    start_time INT,
+    end_time INT,
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE CASCADE
 );
