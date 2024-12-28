@@ -4,4 +4,4 @@ CREATE TABLE service_categories(
     group_id INT UNSIGNED,
     FOREIGN KEY (group_id)
         REFERENCES category_groups(group_id)
-)
+);

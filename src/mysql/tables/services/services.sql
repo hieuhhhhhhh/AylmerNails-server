@@ -5,4 +5,4 @@ CREATE TABLE services(
     category_id INT UNSIGNED NOT NULL,
     FOREIGN KEY (category_id) 
         REFERENCES service_categories(category_id)
-)
+);

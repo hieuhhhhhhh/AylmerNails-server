@@ -4,8 +4,9 @@ CREATE TABLE service_lengths(
     effective_from BIGINT NOT NULL,
     length INT NOT NULL, -- length of service in seconds
     FOREIGN KEY (service_id) REFERENCES services(service_id)
-        ON DELETE CASCADE,
+        ON DELETE CASCADE
 );
 
 -- idx on service_id -> effective_from
-CREATE INDEX idx_service_id_effective_from ON (service_id, effective_from)
+CREATE INDEX idx_service_id_effective_from 
+    ON (service_id, effective_from);
