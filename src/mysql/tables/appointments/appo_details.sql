@@ -1,7 +1,7 @@
 -- show details of an appointment
 
 CREATE TABLE appo_details (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    appo_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     employee_id INT UNSIGNED,
     service_id INT UNSIGNED,
     start_time BIGINT NOT NULL,
