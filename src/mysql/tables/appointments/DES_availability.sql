@@ -2,7 +2,7 @@
 
 CREATE TABLE DES_availability (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    day_start BIGINT NOT NULL,
+    date BIGINT NOT NULL,
     employee_id INT UNSIGNED NOT NULL,
     service_id INT UNSIGNED NOT NULL,
 
@@ -16,6 +16,6 @@ CREATE TABLE DES_availability (
 
 );
 
--- index for search queries with order: day_start -> employee_id -> service_id
+-- index for search queries with order: date -> employee_id -> service_id
 CREATE UNIQUE INDEX idx_day_employee_service 
-    ON DES_availability (day_start, employee_id, service_id);
+    ON DES_availability (date, employee_id, service_id);
