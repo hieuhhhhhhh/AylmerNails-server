@@ -4,8 +4,8 @@ CREATE TABLE appo_details (
     appo_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     employee_id INT UNSIGNED,
     service_id INT UNSIGNED,
-    date BIGINT NOT NULL,
-    start_time INT NOT NULL,
+    date BIGINT NOT NULL, -- date in unix time (in seconds)
+    start_time INT NOT NULL, -- clock time of appointment on its date
     end_time INT NOT NULL,
 
     -- list of employees that the client accepted for the appointment

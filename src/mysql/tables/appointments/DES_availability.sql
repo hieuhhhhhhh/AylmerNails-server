@@ -2,7 +2,7 @@
 
 CREATE TABLE DES_availability (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    date BIGINT NOT NULL,
+    date BIGINT NOT NULL, -- date in unix time (in seconds)
     employee_id INT UNSIGNED NOT NULL,
     service_id INT UNSIGNED NOT NULL,
 
