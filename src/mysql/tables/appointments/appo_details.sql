@@ -5,7 +5,7 @@ CREATE TABLE appo_details (
     employee_id INT UNSIGNED,
     service_id INT UNSIGNED,
     date BIGINT NOT NULL, -- date in unix time (in seconds)
-    start_time INT NOT NULL, -- clock time of appointment on its date
+    start_time INT NOT NULL, -- clock time when the appointment starts on that day (in seconds)
     end_time INT NOT NULL,
 
     -- list of employees that the client accepted for the appointment

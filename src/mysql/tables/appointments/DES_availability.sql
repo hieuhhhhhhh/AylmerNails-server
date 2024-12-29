@@ -7,7 +7,7 @@ CREATE TABLE DES_availability (
     service_id INT UNSIGNED NOT NULL,
 
     -- array of all available slots on that day
-    available_clock_times JSON -- clock time = time on that date in seconds
+    available_times JSON -- all available clock times on DES
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id) 
         ON DELETE CASCADE,
