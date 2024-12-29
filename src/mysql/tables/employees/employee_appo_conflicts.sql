@@ -1,5 +1,5 @@
 CREATE TABLE employee_appo_conflicts(
-    employee_id BIGINT,
+    employee_id INT UNSIGNED,
     appo_id INT UNSIGNED,
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE CASCADE,
