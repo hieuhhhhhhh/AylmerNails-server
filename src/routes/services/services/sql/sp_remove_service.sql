@@ -13,5 +13,5 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Group ID not found.';
     END IF;
-END 
+END; 
 

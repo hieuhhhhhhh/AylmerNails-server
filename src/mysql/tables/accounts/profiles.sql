@@ -6,6 +6,7 @@ CREATE TABLE profiles (
     pending_appos SMALLINT UNSIGNED DEFAULT 0,
     completed_appos SMALLINT UNSIGNED DEFAULT 0,
     missed_appos SMALLINT UNSIGNED DEFAULT 0,
+    
     FOREIGN KEY (user_id) 
         REFERENCES authentication(user_id) 
         ON DELETE CASCADE

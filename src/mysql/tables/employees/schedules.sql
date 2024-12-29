@@ -2,6 +2,7 @@ CREATE TABLE schedules(
     schedule_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     employee_id INT UNSIGNED NOT NULL,
     effective_from BIGINT NOT NULL, -- the date when it start taking effect
+    
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE CASCADE
 );

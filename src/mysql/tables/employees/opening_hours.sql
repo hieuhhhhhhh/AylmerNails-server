@@ -3,8 +3,10 @@ CREATE TABLE opening_hours (
     day_of_the_week TINYINT, -- sunday = 0, monday = 1, tuesday = 2, etc.
     opening_time INT, -- the clock time when employee starts on that day (in seconds)
     closing_time INT, -- the clock time when employee stops on that day (in seconds)
+    
     FOREIGN KEY (schedule_id) REFERENCES schedules(schedule_id)
         ON DELETE CASCADE,
+    
     PRIMARY KEY (schedule_id, day_of_the_week) -- composite primary key
 );
 
