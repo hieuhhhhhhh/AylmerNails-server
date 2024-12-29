@@ -8,7 +8,7 @@ CREATE PROCEDURE sp_add_appo(
     IN _date BIGINT,
     IN _start_time INT,
     IN _end_time INT,
-    IN _employees_selected VARCHAR(500) DEFAULT NULL,
+    IN _employees_selected VARCHAR(500),
     IN _created_by_client BOOLEAN DEFAULT TRUE
 )
 BEGIN
