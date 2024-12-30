@@ -8,8 +8,10 @@ CREATE TABLE appo_details (
     start_time INT NOT NULL, -- clock time when the appointment starts on that day (in seconds)
     end_time INT NOT NULL,
 
-    FOREIGN KEY (employee_id) REFERENCES employees(employee_id),
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+        ON DELETE SET NULL,
     FOREIGN KEY (service_id) REFERENCES services(service_id) 
+        ON DELETE SET NULL
 );
 
 
