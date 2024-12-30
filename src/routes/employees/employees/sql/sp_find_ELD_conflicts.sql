@@ -18,7 +18,8 @@ BEGIN
         SELECT last_date
             INTO last_date_
             FROM employees
-            WHERE employee_id = _employee_id;
+            WHERE employee_id = _employee_id
+            LIMIT 1;
 
         -- Proceed only if last_date is not NULL
         IF last_date_ IS NOT NULL THEN

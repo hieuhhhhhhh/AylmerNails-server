@@ -28,7 +28,8 @@ sp:BEGIN
     SELECT user_id, created_at, expiry, remember_me
         INTO user_id_, created_at_, expiry_, remember_me_
         FROM user_sessions
-        WHERE id = _session_id;
+        WHERE id = _session_id
+        LIMIT 1;
 
     -- if session has not expired 
     IF UNIX_TIMESTAMP() <= (created_at_ + expiry_) THEN

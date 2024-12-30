@@ -3,12 +3,12 @@ DROP PROCEDURE IF EXISTS sp_add_schedule;
 CREATE PROCEDURE sp_add_schedule(
     IN _employee_id INT UNSIGNED,
     IN _effective_from BIGINT,
-    IN _opening_times JSON, -- array of opening times from sunday (index 0) to saturday (index 6)
-    IN _closing_times JSON, -- array of closing times from sunday (index 0) to saturday (index 6)
+    IN _opening_times JSON, -- array of opening times from monday (index 1) to sunday (index 7)
+    IN _closing_times JSON, -- array of closing times from monday (index 1) to sunday (index 7)
 )
 BEGIN
-    -- declare an index starts from 0 ~ sunday to 6 ~ saturday
-    DECLARE i TINYINT DEFAULT 0; 
+    -- declare an index starts from 1 ~ monday
+    DECLARE i TINYINT DEFAULT 1; 
     
     -- placeholders
     DECLARE opening_time_ INT;
@@ -23,7 +23,7 @@ BEGIN
     SET schedule_id_ = LAST_INSERT_ID();
 
     -- start iterating to generate opening hours that reference the new schedule_id
-    WHILE i <= 6 DO 
+    WHILE i <= 7 DO 
         SET opening_time_ = JSON_UNQUOTE(JSON_EXTRACT(_opening_times, CONCAT('$[', i, ']')));
         SET closing_time_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
 

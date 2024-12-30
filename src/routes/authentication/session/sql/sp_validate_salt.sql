@@ -17,7 +17,8 @@ sp:BEGIN
     SELECT session_salt, user_id
         INTO session_salt_, user_id_
         FROM user_sessions
-        WHERE id = _session_id;
+        WHERE id = _session_id
+        LIMIT 1;
 
     -- if session is not found, then leave with false status
     IF session_salt_ IS NULL THEN     
