@@ -1,4 +1,4 @@
--- show details of an appointment
+-- show key aspects of an appointment
 
 CREATE TABLE appo_details (
     appo_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -7,12 +7,6 @@ CREATE TABLE appo_details (
     date BIGINT NOT NULL, -- date in unix time (in seconds)
     start_time INT NOT NULL, -- clock time when the appointment starts on that day (in seconds)
     end_time INT NOT NULL,
-
-    -- list of employees that the client accepted for the appointment
-    employees_selected VARCHAR(500),
-
-    -- is FALSE when the appointment is created or modified by higher level users (admin)
-    made_by_client BOOLEAN NOT NULL DEFAULT TRUE, 
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id),
     FOREIGN KEY (service_id) REFERENCES services(service_id) 
