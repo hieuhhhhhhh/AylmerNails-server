@@ -1,3 +1,5 @@
+-- this proc find and store all apointments that conflict with the new last_date of an employee
+
 DROP PROCEDURE IF EXISTS sp_find_ELD_conflicts;
 
 CREATE PROCEDURE sp_find_ELD_conflicts(
@@ -31,6 +33,6 @@ BEGIN
                 AND employee_id = _employee_id;
         END IF;
 
-    -- Commit the transaction if everything went well
+        -- Commit the transaction if everything went well
     COMMIT;
 END;
