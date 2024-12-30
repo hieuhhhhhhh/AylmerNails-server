@@ -24,15 +24,15 @@ BEGIN
 
         -- Proceed only if last_date is not NULL
         IF last_date_ IS NOT NULL THEN
-            -- Lock the ELD_appo_conflicts table
-            LOCK TABLES ELD_appo_conflicts READ WRITE;
+            -- Lock the ELD_conflicts table
+            LOCK TABLES ELD_conflicts READ WRITE;
             
             -- Remove all existing conflicts for the given employee before revalidating
-            DELETE FROM ELD_appo_conflicts
+            DELETE FROM ELD_conflicts
                 WHERE employee_id = _employee_id;
 
-            -- Insert appointments with a date greater than the employee's last_date into ELD_appo_conflicts
-            INSERT INTO ELD_appo_conflicts (appo_id, employee_id)
+            -- Insert appointments with a date greater than the employee's last_date into ELD_conflicts
+            INSERT INTO ELD_conflicts (appo_id, employee_id)
                 SELECT appo_id, _employee_id
                     FROM appo_details
                     WHERE date > last_date_ 

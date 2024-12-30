@@ -1,6 +1,6 @@
 -- ELD = employee's last date
 
-CREATE TABLE ELD_appo_conflicts(
+CREATE TABLE ELD_conflicts(
     employee_id INT UNSIGNED,
     appo_id INT UNSIGNED,
 

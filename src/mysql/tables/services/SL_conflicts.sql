@@ -1,4 +1,6 @@
-CREATE TABLE service_length_appo_conflicts(
+-- SL = service's length
+
+CREATE TABLE SL_conflicts(
     service_length_id INT UNSIGNED,
     appo_id INT UNSIGNED,
 

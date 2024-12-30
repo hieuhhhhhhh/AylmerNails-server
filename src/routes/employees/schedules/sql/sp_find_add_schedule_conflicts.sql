@@ -39,7 +39,7 @@ BEGIN
         -- Check if the schedule is not null
         IF schedule_id_ IS NOT NULL THEN
             -- Insert into the conflicts table
-            INSERT INTO schedule_appo_conflicts(schedule_id_, appo_id_);
+            INSERT INTO schedule_conflicts(schedule_id_, appo_id_);
         END IF;
     END LOOP;
 
