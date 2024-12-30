@@ -1,4 +1,4 @@
 CREATE TABLE category_groups(
     group_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-)
+    name VARCHAR(50) NOT NULL UNIQUE
+);

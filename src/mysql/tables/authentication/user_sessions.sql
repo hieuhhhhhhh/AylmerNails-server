@@ -5,6 +5,7 @@ CREATE TABLE user_sessions (
     created_at BIGINT NOT NULL,
     expiry INT NOT NULL,
     remember_me BOOLEAN DEFAULT FALSE,
+    
     FOREIGN KEY (user_id) 
         REFERENCES authentication (user_id)
         ON DELETE CASCADE

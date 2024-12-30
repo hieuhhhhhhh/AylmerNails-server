@@ -1,7 +1,7 @@
 from flask import jsonify, current_app
 from twilio.rest import Client
 import random
-from mysql.procedures.call_2D_proc import call_2D_proc
+from src.mysql.procedures.call_2D_proc import call_2D_proc
 
 # Init lifetime of code (in sec)
 CODE_EXPIRY = 300

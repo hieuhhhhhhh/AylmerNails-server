@@ -2,12 +2,12 @@
 
 CREATE TABLE DES_availability (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    day_start BIGINT NOT NULL,
+    date BIGINT NOT NULL, -- date in unix time (in seconds)
     employee_id INT UNSIGNED NOT NULL,
     service_id INT UNSIGNED NOT NULL,
 
     -- array of all available slots on that day
-    available_clock_times JSON -- clock time = time on that date in seconds
+    available_times JSON -- all available clock times on DES
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id) 
         ON DELETE CASCADE,
@@ -16,6 +16,6 @@ CREATE TABLE DES_availability (
 
 );
 
--- index for search queries with order: day_start -> employee_id -> service_id
+-- index for search queries with order: date -> employee_id -> service_id
 CREATE UNIQUE INDEX idx_day_employee_service 
-    ON DES_availability (day_start, employee_id, service_id);
+    ON DES_availability (date, employee_id, service_id);

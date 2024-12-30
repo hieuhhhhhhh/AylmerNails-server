@@ -1,18 +1,22 @@
+-- this one will be re-made
+
 DROP PROCEDURE IF EXISTS sp_add_appo;
 
 CREATE PROCEDURE sp_add_appo(
     IN _employee_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
-    IN _start_time BIGINT,
-    IN _end_time BIGINT,
-    IN _employees_selected VARCHAR(500) DEFAULT NULL,
+    IN _date BIGINT,
+    IN _start_time INT,
+    IN _end_time INT,
+    IN _employees_selected VARCHAR(500),
     IN _created_by_client BOOLEAN DEFAULT TRUE
 )
 BEGIN
-    -- Declare a handler for exceptions to ensure the table is unlocked
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-        -- Unlock the table in case of an exception
+    -- Ensure that the table is unlocked in case of an error
+    DECLARE error_handler HANDLER FOR SQLEXCEPTION
+    BEGIN
         UNLOCK TABLES;
+    END;
 
     -- Lock the appo_details table for writing to prevent other transactions from modifying it
     LOCK TABLES appo_details WRITE;
