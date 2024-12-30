@@ -1,32 +1,42 @@
-# matrix = return multiple tables
-# this function to call a proc that return more than 1 table (many SELECT executions)
-
 import mysql.connector
 from src.mysql.db_config import DATABASE_CONFIG
+import threading  # Import threading module
+
+
+# This method will close the connection in a separate thread
+def close_connection(connection):
+    if connection:
+        connection.close()  # Closing the connection (blocking, but not awaited in main flow)
 
 
 def call_3D_proc(sp_name, *params):
     print(f"\033[34mCalling: \033[0m{sp_name}")
 
-    # results is a 3D list so i call it matrix [table][row][column]
+    # results is a 3D list, so it's called a matrix [table][row][column]
     matrix = []
+    connection = None
     try:
-        # Connect to the database using context manager to handle closing
-        with mysql.connector.connect(**DATABASE_CONFIG) as connection:
-            with connection.cursor() as cursor:
-                # Call the stored procedure with dynamic parameters
-                cursor.callproc(sp_name, params)
+        # Connect to the database
+        connection = mysql.connector.connect(**DATABASE_CONFIG)
+        connection.autocommit = True
 
-                # Commit changes if necessary (for UPDATE, DELETE, etc.)
-                connection.commit()
+        # Use a cursor within a context manager to handle its closing
+        with connection.cursor() as cursor:
+            # Call the stored procedure with dynamic parameters
+            cursor.callproc(sp_name, params)
 
-                # stack every table returned to matrix
-                for table in cursor.stored_results():
-                    matrix.append(table.fetchall())  # each table is a 2D list
+            # Stack every table returned to matrix
+            for table in cursor.stored_results():
+                matrix.append(table.fetchall())  # each table is a 2D list
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         raise
+
+    finally:
+        # Use a thread to close the connection in the background
+        thread = threading.Thread(target=close_connection, args=(connection,))
+        thread.start()
 
     print()
     return matrix  # Return the matrix to the caller
