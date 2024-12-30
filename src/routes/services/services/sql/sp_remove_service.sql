@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_remove_service(
 BEGIN
     -- delete the row with the specified service_id
     DELETE FROM services
-    WHERE service_id = _service_id;
+        WHERE service_id = _service_id;
     
     -- check if the deletion was successful (using ROW_COUNT)
     IF ROW_COUNT() = 0 THEN

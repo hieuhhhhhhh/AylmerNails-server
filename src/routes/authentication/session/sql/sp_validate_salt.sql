@@ -15,9 +15,9 @@ sp:BEGIN
 
     -- validate if it is new salt that hasnot been confirmed
     SELECT session_salt, user_id
-    INTO session_salt_, user_id_
-    FROM user_sessions
-    WHERE id = _session_id;
+        INTO session_salt_, user_id_
+        FROM user_sessions
+        WHERE id = _session_id;
 
     -- if session is not found, then leave with false status
     IF session_salt_ IS NULL THEN     

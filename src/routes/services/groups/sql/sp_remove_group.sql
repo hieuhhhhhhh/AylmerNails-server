@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_remove_group(
 BEGIN
     -- delete the row with the specified group_id
     DELETE FROM category_groups
-    WHERE group_id = _group_id;
+        WHERE group_id = _group_id;
     
     -- check if the deletion was successful (using ROW_COUNT)
     IF ROW_COUNT() = 0 THEN
