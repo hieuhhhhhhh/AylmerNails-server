@@ -6,7 +6,7 @@ CREATE FUNCTION fn_validate_appo_by_schedule(
     _start_time INT,  -- Appointment start time
     _end_time INT  -- Appointment end time
 )
-RETURNS BOOLEAN
+RETURNS INT UNSIGNED
 DETERMINISTIC
 BEGIN
     -- 2 endpoints of a time range
@@ -38,8 +38,8 @@ BEGIN
 
     -- Return true if the appointment time is within the opening and closing time
     IF _start_time >= opening_time_ AND _end_time <= closing_time_ THEN
-        RETURN TRUE;
+        RETURN schedule_id_;
     ELSE
-        RETURN FALSE;
+        RETURN NULL;
     END IF;
 END;
