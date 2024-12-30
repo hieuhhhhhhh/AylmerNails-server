@@ -8,6 +8,7 @@ CREATE PROCEDURE sp_find_ELD_conflicts(
 BEGIN
     DECLARE last_date_ BIGINT;
     DECLARE exit HANDLER FOR SQLEXCEPTION
+        UNLOCK TABLES;
         ROLLBACK;  -- Rollback if there is any error
 
     -- Start the transaction
@@ -21,6 +22,9 @@ BEGIN
 
         -- Proceed only if last_date is not NULL
         IF last_date_ IS NOT NULL THEN
+            -- Lock the ELD_appo_conflicts table
+            LOCK TABLES ELD_appo_conflicts READ WRITE;
+            
             -- Remove all existing conflicts for the given employee before revalidating
             DELETE FROM ELD_appo_conflicts
             WHERE employee_id = _employee_id;
@@ -31,6 +35,9 @@ BEGIN
             FROM appo_details
             WHERE date > last_date_ 
                 AND employee_id = _employee_id;
+
+            -- Unlock the table after operations are complete
+            UNLOCK TABLES;
         END IF;
 
         -- Commit the transaction if everything went well
