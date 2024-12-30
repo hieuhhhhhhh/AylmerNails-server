@@ -14,7 +14,7 @@ BEGIN
 
     IF last_date_ IS NOT NULL THEN
         -- Find appointments with a date greater than the employee's last_date
-        SELECT *
+        SELECT appo_id
         FROM appo_details
         WHERE date > last_date_ 
             AND employee_id = _employee_id;

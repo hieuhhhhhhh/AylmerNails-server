@@ -9,7 +9,7 @@ CREATE PROCEDURE sp_add_appo(
     IN _start_time INT,
     IN _end_time INT,
     IN _employees_selected VARCHAR(500),
-    IN _created_by_client BOOLEAN DEFAULT TRUE
+    IN _made_by_client BOOLEAN DEFAULT TRUE
 )
 BEGIN
     -- Ensure that the table is unlocked in case of an error
@@ -44,7 +44,7 @@ BEGIN
             start_time, 
             end_time, 
             employees_selected, 
-            created_by_client
+            made_by_client
         )
         VALUES (
             _employee_id, 
@@ -52,7 +52,7 @@ BEGIN
             _start_time, 
             _end_time, 
             _employees_selected, 
-            _created_by_client
+            _made_by_client
         );
 
         -- Return the ID of the newly inserted appointment

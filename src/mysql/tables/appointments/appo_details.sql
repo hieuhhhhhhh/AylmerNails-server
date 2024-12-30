@@ -12,7 +12,7 @@ CREATE TABLE appo_details (
     employees_selected VARCHAR(500),
 
     -- is FALSE when the appointment is created or modified by higher level users (admin)
-    created_by_client BOOLEAN NOT NULL DEFAULT TRUE, 
+    made_by_client BOOLEAN NOT NULL DEFAULT TRUE, 
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id),
     FOREIGN KEY (service_id) REFERENCES services(service_id) 
