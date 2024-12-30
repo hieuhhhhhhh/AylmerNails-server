@@ -1,9 +1,9 @@
-CREATE TABLE service_length_deviations(
-    deviation_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE service_length_variations(
+    variation_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     service_id INT UNSIGNED NOT NULL,
     employee_id INT UNSIGNED NOT NULL,
     effective_from BIGINT NOT NULL, -- the date when it start taking effect
-    deviation_length INT NOT NULL, -- length of deviation in seconds
+    length_offset INT NOT NULL, -- offset to original length in seconds
     
     FOREIGN KEY (service_id) REFERENCES services(service_id)
         ON DELETE CASCADE;

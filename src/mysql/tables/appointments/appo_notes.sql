@@ -9,5 +9,5 @@ CREATE TABLE appo_notes(
 
 
     FOREIGN KEY (appo_id) REFERENCES appo_details(appo_id)
-        ON DELETE CASCADE,
+        ON DELETE CASCADE
 )
