@@ -1,7 +1,7 @@
 from flask import jsonify
 import bcrypt  # Import bcrypt for password hashing
 from ..sms_verification.generate_code import generate_code
-from mysql.procedures.call_2D_proc import call_2D_proc
+from src.mysql.procedures.call_2D_proc import call_2D_proc
 
 
 def phonenum_is_avail(phone_number):

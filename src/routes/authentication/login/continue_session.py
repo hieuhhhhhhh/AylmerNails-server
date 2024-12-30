@@ -1,6 +1,6 @@
 from flask import current_app, jsonify
 from hashids import Hashids
-from mysql.procedures.call_2D_proc import call_2D_proc
+from src.mysql.procedures.call_2D_proc import call_2D_proc
 from ...helpers.response_with_token import response_with_token
 
 

@@ -1,6 +1,6 @@
 import mysql.connector
 from src.mysql.db_config import DATABASE_CONFIG
-import threading  # Import threading module
+from .thread_pool import job_queue
 
 
 # This method will close the connection in a separate thread
@@ -34,9 +34,8 @@ def call_3D_proc(sp_name, *params):
         raise
 
     finally:
-        # Use a thread to close the connection in the background
-        thread = threading.Thread(target=close_connection, args=(connection,))
-        thread.start()
+        # send job to thread pool
+        job_queue.put(lambda: close_connection(connection))
 
     print()
     return matrix  # Return the matrix to the caller

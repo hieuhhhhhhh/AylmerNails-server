@@ -1,4 +1,4 @@
-from mysql.procedures.call_2D_proc import call_2D_proc
+from src.mysql.procedures.call_2D_proc import call_2D_proc
 
 
 def verify_code(phone_number, code):
