@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_add_weekly_schedule;
+DROP PROCEDURE IF EXISTS sp_add_schedule;
 
-CREATE PROCEDURE sp_add_weekly_schedule(
+CREATE PROCEDURE sp_add_schedule(
     IN _employee_id INT UNSIGNED,
     IN _effective_from BIGINT,
     IN _opening_times JSON, -- array of opening times from sunday (index 0) to saturday (index 6)
@@ -28,11 +28,11 @@ BEGIN
         SET closing_time_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
 
         -- store values to opening_hours table
-        INSERT INTO opening_hours (schedule_id, day_of_the_week, opening_time, closing_time)
+        INSERT INTO opening_hours (schedule_id, day_of_week, opening_time, closing_time)
             VALUES (schedule_id_, i, opening_time_, closing_time_);
 
         -- increment index
-        SET i = i + 1
+        SET i = i + 1;
     END WHILE;
 
 

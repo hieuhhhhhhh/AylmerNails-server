@@ -5,6 +5,7 @@ CREATE TABLE appo_details (
     employee_id INT UNSIGNED,
     service_id INT UNSIGNED,
     date BIGINT NOT NULL, -- date in unix time (in seconds)
+    day_of_week TINYINT NOT NULL, -- start from sunday ~ 0, monday ~ 1 up to saturday ~ 6
     start_time INT NOT NULL, -- clock time when the appointment starts on that day (in seconds)
     end_time INT NOT NULL,
 
