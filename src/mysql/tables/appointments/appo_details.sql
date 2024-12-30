@@ -18,11 +18,11 @@ CREATE TABLE appo_details (
 -- index on employee_id
 CREATE INDEX idx_employee_id ON appo_details(employee_id);
 
--- index on date -> service_id
-CREATE INDEX idx_date_service_id ON appo_details(date, service_id);
+-- index on service_id
+CREATE INDEX idx_service_id ON appo_details(service_id);
 
--- index on date -> employee_id -> service_id
-CREATE INDEX idx_date_employee_service ON appo_details(date, employee_id, service_id);
+-- index on date -> employee_id
+CREATE INDEX idx_date_employee_id ON appo_details(date, employee_id);
 
 -- index on start_time
 CREATE INDEX idx_start_time ON appo_details(start_time);
