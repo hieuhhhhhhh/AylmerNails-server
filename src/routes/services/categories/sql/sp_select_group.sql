@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_select_group(
     IN _group_id INT UNSIGNED
 )
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM categories WHERE category_id = category_id) THEN
+    IF NOT EXISTS (SELECT 1 FROM categories WHERE category_id = _category_id) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Invalid category_id, no such category exists';
     END IF;
