@@ -16,7 +16,6 @@ BEGIN
 
     -- Start the transaction
     START TRANSACTION;
-
         -- Lock the SLD_conflicts table
         LOCK TABLES SLD_conflicts READ WRITE;
 

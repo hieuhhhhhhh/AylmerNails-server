@@ -14,6 +14,8 @@ BEGIN
 
     -- Start the transaction
     START TRANSACTION;
+        -- Lock the ELD_conflicts table
+        LOCK TABLES ELD_conflicts READ WRITE;
 
         -- Fetch last_date of the given employee
         SELECT last_date
@@ -24,9 +26,6 @@ BEGIN
 
         -- Proceed only if last_date is not NULL
         IF last_date_ IS NOT NULL THEN
-            -- Lock the ELD_conflicts table
-            LOCK TABLES ELD_conflicts READ WRITE;
-            
             -- Remove all existing conflicts for the given employee before revalidating
             DELETE FROM ELD_conflicts
                 WHERE employee_id = _employee_id;
@@ -38,10 +37,10 @@ BEGIN
                     WHERE  employee_id = _employee_id
                         AND date >= (UNIX_TIMESTAMP() - 24*60*60)
                         AND date > last_date_;
-
-            -- Unlock the table after operations are complete
-            UNLOCK TABLES;
         END IF;
+
+        -- Unlock the table after operations are complete
+        UNLOCK TABLES;
 
         -- Commit the transaction if everything went well
     COMMIT;
