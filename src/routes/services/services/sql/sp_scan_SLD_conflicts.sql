@@ -43,7 +43,7 @@ BEGIN
                         AND date > last_date_;
         END IF;
 
-        -- Unlock the table after transaction is complete
+        -- Unlock the table when transaction is complete
         UNLOCK TABLES;
 
         -- Commit the transaction if everything went well

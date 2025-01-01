@@ -8,7 +8,7 @@ CREATE TABLE service_lengths(
         ON DELETE CASCADE
 );
 
--- index on service_id -> effective_from
-CREATE INDEX idx_service_id_effective_from 
+-- unique index on service_id -> effective_from
+CREATE UNIQUE INDEX idx_service_id_effective_from 
     ON (service_id, effective_from);
 
