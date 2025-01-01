@@ -30,7 +30,7 @@ BEGIN
             SELECT date, start_time, end_time, appo_id
                 FROM appo_details
                 WHERE employee_id = _employee_id
-                    AND date >= UNIX_TIMESTAMP()
+                    AND date >= (UNIX_TIMESTAMP() - 24*60*60)
                     AND date >= _scan_from;
 
         -- Declare continue handler for cursor end

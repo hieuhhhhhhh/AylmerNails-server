@@ -39,7 +39,7 @@ BEGIN
                 SELECT appo_id, _service_id
                     FROM appo_details
                     WHERE service_id = _service_id
-                        AND date >= UNIX_TIMESTAMP()
+                        AND date >= (UNIX_TIMESTAMP() - 24*60*60)
                         AND date > last_date_;
         END IF;
 

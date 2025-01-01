@@ -36,7 +36,7 @@ BEGIN
                 SELECT appo_id, _employee_id
                     FROM appo_details
                     WHERE  employee_id = _employee_id
-                        AND date >= UNIX_TIMESTAMP()
+                        AND date >= (UNIX_TIMESTAMP() - 24*60*60)
                         AND date > last_date_;
 
             -- Unlock the table after operations are complete
