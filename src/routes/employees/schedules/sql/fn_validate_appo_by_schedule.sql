@@ -36,7 +36,7 @@ BEGIN
             AND day_of_week = day_of_week_
         LIMIT 1;
 
-    -- Return true if the appointment time is within the opening and closing time
+    -- Return an schedule_id with which the appointment matches
     IF _start_time >= opening_time_ AND _end_time <= closing_time_ THEN
         RETURN schedule_id_;
     ELSE

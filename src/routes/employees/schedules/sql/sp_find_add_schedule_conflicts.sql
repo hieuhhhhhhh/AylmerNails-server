@@ -16,8 +16,9 @@ BEGIN
     DECLARE cur CURSOR FOR
         SELECT date, start_time, end_time, appo_id
             FROM appo_details
-            WHERE date >= _effective_from
-            AND employee_id = _employee_id;
+            WHERE date >= UNIX_TIMESTAMP()
+                AND date >= _effective_from
+                AND employee_id = _employee_id;
 
     -- Declare continue handler for cursor end
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
