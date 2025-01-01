@@ -35,7 +35,8 @@ BEGIN
             INSERT INTO SLD_conflicts (appo_id, service_id)
                 SELECT appo_id, _service_id
                     FROM appo_details
-                    WHERE date > last_date_ 
+                    WHERE date >= UNIX_TIMESTAMP()
+                        AND date > last_date_ 
                         AND service_id = _service_id;
 
             -- Unlock the table after operations are complete
