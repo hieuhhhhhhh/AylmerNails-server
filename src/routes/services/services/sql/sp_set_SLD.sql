@@ -24,8 +24,8 @@ BEGIN
             SET last_date = _last_date
             WHERE service_id = _service_id;
 
-        -- Call sp_find_SLD_conflicts to find any appointments that conflict the update
-        CALL sp_find_SLD_conflicts(_service_id);
+        -- Call sp_scan_SLD_conflicts to find any appointments that conflict the update
+        CALL sp_scan_SLD_conflicts(_service_id);
 
         -- Commit the transaction if all operations are successful
     COMMIT;

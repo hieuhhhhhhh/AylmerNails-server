@@ -1,9 +1,9 @@
 -- ELD = service's last date
 -- this proc find and store all apointments that conflict with the new last_date of an service
 
-DROP PROCEDURE IF EXISTS sp_find_SLD_conflicts;
+DROP PROCEDURE IF EXISTS sp_scan_SLD_conflicts;
 
-CREATE PROCEDURE sp_find_SLD_conflicts(
+CREATE PROCEDURE sp_scan_SLD_conflicts(
     IN _service_id INT UNSIGNED
 )
 BEGIN

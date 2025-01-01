@@ -1,9 +1,9 @@
 -- ELD = employee's last date
 -- this proc find and store all apointments that conflict with the new last_date of an employee
 
-DROP PROCEDURE IF EXISTS sp_find_ELD_conflicts;
+DROP PROCEDURE IF EXISTS sp_scan_ELD_conflicts;
 
-CREATE PROCEDURE sp_find_ELD_conflicts(
+CREATE PROCEDURE sp_scan_ELD_conflicts(
     IN _employee_id INT UNSIGNED
 )
 BEGIN

@@ -1,8 +1,8 @@
-DROP PROCEDURE IF EXISTS sp_find_add_schedule_conflicts;
+DROP PROCEDURE IF EXISTS sp_scan_schedule_conflicts;
 
-CREATE PROCEDURE sp_find_add_schedule_conflicts(
+CREATE PROCEDURE sp_scan_schedule_conflicts(
     IN _employee_id INT UNSIGNED,
-    IN _effective_from BIGINT
+    IN _scan_from BIGINT
 )
 BEGIN
     DECLARE done TINYINT DEFAULT 0;
@@ -23,7 +23,7 @@ BEGIN
         LOCK TABLES schedule_conflicts READ WRITE;
 
         -- clean old conflicts from last schedules
-        CALL sp_clean_old_schedule_conflicts(_employee_id, _effective_from);
+        CALL sp_clean_old_schedule_conflicts(_employee_id, _scan_from);
 
         -- Declare the cursor for fetching the appointment details
         DECLARE cur CURSOR FOR
@@ -31,7 +31,7 @@ BEGIN
                 FROM appo_details
                 WHERE employee_id = _employee_id
                     AND date >= UNIX_TIMESTAMP()
-                    AND date >= _effective_from;
+                    AND date >= _scan_from;
 
         -- Declare continue handler for cursor end
         DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
