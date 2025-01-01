@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS sp_remove_group;
 
 CREATE PROCEDURE sp_remove_group(
-    IN _group_id INT
+    IN _group_id INT UNSIGNED
 )
 BEGIN
     -- delete the row with the specified group_id

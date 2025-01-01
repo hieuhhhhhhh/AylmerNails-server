@@ -7,7 +7,7 @@ CREATE PROCEDURE sp_find_add_schedule_conflicts(
 BEGIN
     DECLARE done TINYINT DEFAULT 0;
     DECLARE schedule_id_ INT UNSIGNED;
-    DECLARE appo_id_ INT;
+    DECLARE appo_id_ INT UNSIGNED;
     DECLARE date_ BIGINT;
     DECLARE start_time_ INT;
     DECLARE end_time_ INT;
