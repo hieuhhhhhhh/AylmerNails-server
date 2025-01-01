@@ -8,12 +8,17 @@ CREATE PROCEDURE sp_find_SLD_conflicts(
 )
 BEGIN
     DECLARE last_date_ BIGINT;
-    DECLARE exit HANDLER FOR SQLEXCEPTION
-        UNLOCK TABLES;
-        ROLLBACK;  -- Rollback if there is any error
+
+    -- Exception handling to roll back in case of an error
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        UNLOCK TABLES; -- release lock
+        ROLLBACK; -- rollback transaction
 
     -- Start the transaction
     START TRANSACTION;
+
+        -- Lock the SLD_conflicts table
+        LOCK TABLES SLD_conflicts READ WRITE;
 
         -- Fetch last_date of the given service
         SELECT last_date
@@ -24,8 +29,6 @@ BEGIN
 
         -- Proceed only if last_date is not NULL
         IF last_date_ IS NOT NULL THEN
-            -- Lock the SLD_conflicts table
-            LOCK TABLES SLD_conflicts READ WRITE;
             
             -- Remove all existing conflicts for the given service before revalidating
             DELETE FROM SLD_conflicts
@@ -38,10 +41,10 @@ BEGIN
                     WHERE service_id = _service_id
                         AND date >= UNIX_TIMESTAMP()
                         AND date > last_date_;
-
-            -- Unlock the table after operations are complete
-            UNLOCK TABLES;
         END IF;
+
+        -- Unlock the table after transaction is complete
+        UNLOCK TABLES;
 
         -- Commit the transaction if everything went well
     COMMIT;
