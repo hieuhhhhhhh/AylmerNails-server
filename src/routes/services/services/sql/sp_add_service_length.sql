@@ -35,7 +35,8 @@ BEGIN
         -- Insert the new variations into the SLVs table
         INSERT INTO SLVs (service_length_id, employee_id, length_offset)
             VALUES (service_length_id_, employee_id_, length_offset_);
-
+        
+        -- end loop
     END WHILE;
 END; 
 
