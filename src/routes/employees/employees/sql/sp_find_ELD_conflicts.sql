@@ -35,9 +35,9 @@ BEGIN
             INSERT INTO ELD_conflicts (appo_id, employee_id)
                 SELECT appo_id, _employee_id
                     FROM appo_details
-                    WHERE date >= UNIX_TIMESTAMP()
-                        AND date > last_date_ 
-                        AND employee_id = _employee_id;
+                    WHERE  employee_id = _employee_id
+                        AND date >= UNIX_TIMESTAMP()
+                        AND date > last_date_;
 
             -- Unlock the table after operations are complete
             UNLOCK TABLES;
