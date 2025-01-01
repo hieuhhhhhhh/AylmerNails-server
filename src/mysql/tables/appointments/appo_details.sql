@@ -4,6 +4,7 @@ CREATE TABLE appo_details (
     appo_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     employee_id INT UNSIGNED,
     service_id INT UNSIGNED,
+    selected_AOSO JSON, -- list of selected add-on-service options for the selected service
     date BIGINT NOT NULL, -- date in unix time (in seconds)
     start_time INT NOT NULL, -- clock time when the appointment starts on that day (in seconds)
     end_time INT NOT NULL,
