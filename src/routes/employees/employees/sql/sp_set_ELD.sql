@@ -1,6 +1,8 @@
-DROP PROCEDURE IF EXISTS sp_set_employee_last_date;
+-- ELD = employee's last date
 
-CREATE PROCEDURE sp_set_employee_last_date(
+DROP PROCEDURE IF EXISTS sp_set_ELD;
+
+CREATE PROCEDURE sp_set_ELD(
     IN  _employee_id INT UNSIGNED, 
     IN  _last_date BIGINT
 )
