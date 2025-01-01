@@ -15,28 +15,27 @@ BEGIN
     DECLARE employee_id_ INT UNSIGNED;
     DECLARE length_offset_ INT;
 
-    -- Insert the new service into the services table
+    -- create new service length
     INSERT INTO service_lengths (service_id, effective_from, length)
         VALUES (_service_id, _effective_from, _length);
 
-    -- fetch the newly added id
+    -- fetch id of new service_length
     SET service_length_id_ = LAST_INSERT_ID();
 
-    -- start iterating to generate opening hours that reference the new schedule_id
+    -- start iterating to fetch variations from the JSON array
     WHILE i < JSON_LENGTH(_SLVs) DO 
-        SET employee_id_ = JSON_UNQUOTE(JSON_EXTRACT(_opening_times, CONCAT('$[', i, ']')));
-
-        -- increment index
+        -- fetch id of the owner of this variation
+        SET employee_id_ = JSON_UNQUOTE(JSON_EXTRACT(_SLVs, CONCAT('$[', i, ']')));
         SET i = i + 1;
 
-        SET length_offset_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
+        -- fetch the offset value of this variation
+        SET length_offset_ = JSON_UNQUOTE(JSON_EXTRACT(_SLVs, CONCAT('$[', i, ']')));
+        SET i = i + 1;
 
         -- Insert the new variations into the SLVs table
         INSERT INTO SLVs (service_length_id, employee_id, length_offset)
             VALUES (service_length_id_, employee_id_, length_offset_);
 
-        -- increment index
-        SET i = i + 1;
     END WHILE;
 END; 
 
