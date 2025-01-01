@@ -14,8 +14,8 @@ CREATE TABLE appo_details (
         ON DELETE SET NULL
 );
 
--- index on service_id
-CREATE INDEX idx_service_id ON appo_details(service_id);
+-- index on service_id -> date
+CREATE INDEX idx_service_id_date ON appo_details(service_id, date);
 
 -- index on employee_id -> date
 CREATE INDEX idx_employee_id_date ON appo_details(employee_id, date);

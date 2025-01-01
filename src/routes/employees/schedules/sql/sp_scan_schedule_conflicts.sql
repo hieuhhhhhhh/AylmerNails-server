@@ -39,25 +39,25 @@ BEGIN
         -- Open the cursor
         OPEN cur;
 
-        -- Loop through every apointment found and validate them
-        read_loop: LOOP
-            FETCH cur INTO date_, start_time_, end_time_, appo_id_;
-            
-            IF done THEN
-                LEAVE read_loop;
-            END IF;
+            -- Loop through every apointment found and validate them
+            read_loop: LOOP
+                FETCH cur INTO date_, start_time_, end_time_, appo_id_;
+                
+                IF done THEN
+                    LEAVE read_loop;
+                END IF;
 
-            -- find a schedule_id that fits this appoinment
-            SET schedule_id_ = fn_validate_appo_by_schedule(_employee_id, date_, start_time_, end_time_);
+                -- find a schedule_id that conflict with this appoinment
+                SET schedule_id_ = fn_find_conflicting_schedule(_employee_id, date_, start_time_, end_time_);
 
-            -- if no schedule_id returned it means invalid
-            IF schedule_id_ IS NOT NULL THEN
-                -- create a new schedule_conflict
-                INSERT INTO schedule_conflicts(schedule_id_, appo_id_);
-            END IF;
-        END LOOP;
+                -- if a schedule_id returned it means invalid
+                IF schedule_id_ IS NOT NULL THEN
+                    -- create a new schedule_conflict
+                    INSERT INTO schedule_conflicts(schedule_id_, appo_id_);
+                END IF;
+            END LOOP;
 
-        -- Close the cursor
+            -- Close the cursor
         CLOSE cur;
 
         -- Unlock the table after transaction is complete
