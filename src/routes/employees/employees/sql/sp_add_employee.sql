@@ -7,7 +7,7 @@ CREATE PROCEDURE sp_add_employee(
 BEGIN 
     -- Insert the new category into the categories table
     INSERT INTO employees (alias, first_date)
-    VALUES (_alias, _first_date);
+        VALUES (_alias, _first_date);
     
     -- Optionally, you could return the last inserted ID
     SELECT LAST_INSERT_ID();

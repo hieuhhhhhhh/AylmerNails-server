@@ -14,14 +14,15 @@ sp:BEGIN
 
     -- Decrement the attempts left
     UPDATE sms_verify_codes
-    SET attempts_left = attempts_left - 1
-    WHERE phone_number = _phone_number;
+        SET attempts_left = attempts_left - 1
+        WHERE phone_number = _phone_number;
 
     -- Get the current timestamp and record details
     SELECT new_password, code, attempts_left, created_at, expiry
-    INTO new_password_, code_, attempts_left_, created_at_, expiry_
-    FROM sms_verify_codes
-    WHERE phone_number = _phone_number;
+        INTO new_password_, code_, attempts_left_, created_at_, expiry_
+        FROM sms_verify_codes
+        WHERE phone_number = _phone_number
+        LIMIT 1;
 
     -- If the phone number doesn't exist or other failure conditions
     IF code_ IS NULL THEN

@@ -26,9 +26,10 @@ sp:BEGIN
 
     -- Fetch required data from user_sessions
     SELECT user_id, created_at, expiry, remember_me
-    INTO user_id_, created_at_, expiry_, remember_me_
-    FROM user_sessions
-    WHERE id = _session_id;
+        INTO user_id_, created_at_, expiry_, remember_me_
+        FROM user_sessions
+        WHERE id = _session_id
+        LIMIT 1;
 
     -- if session has not expired 
     IF UNIX_TIMESTAMP() <= (created_at_ + expiry_) THEN
@@ -46,6 +47,7 @@ sp:BEGIN
     END IF;
 
     -- if session has expired 
-    DELETE FROM user_sessions WHERE id = _session_id;
+    DELETE FROM user_sessions 
+        WHERE id = _session_id;
     SELECT 401, NULL, NULL;
 END;

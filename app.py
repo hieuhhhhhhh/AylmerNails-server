@@ -16,6 +16,7 @@ load_dotenv()
 app.config["TWILIO_SID"] = os.getenv("TWILIO_SID")
 app.config["TWILIO_TOKEN"] = os.getenv("TWILIO_TOKEN")
 app.config["TOKEN_SALT"] = os.getenv("TOKEN_SALT")
+app.config["BUSINESS_PHONE"] = os.getenv("BUSINESS_PHONE")
 
 # Enable CORS for all routes
 CORS(app, supports_credentials=True)

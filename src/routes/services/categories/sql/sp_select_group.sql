@@ -12,7 +12,7 @@ BEGIN
 
     -- Update the group_id for the given category_id
     UPDATE categories
-    SET group_id = _group_id
-    WHERE category_id = _category_id;
+        SET group_id = _group_id
+        WHERE category_id = _category_id;
 END;
 

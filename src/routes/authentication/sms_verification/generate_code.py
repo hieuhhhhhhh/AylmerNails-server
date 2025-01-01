@@ -13,6 +13,7 @@ def generate_code(phone_number, new_password=None):
         # get env variables
         TWILIO_SID = current_app.config["TWILIO_SID"]
         TWILIO_TOKEN = current_app.config["TWILIO_TOKEN"]
+        BUSINESS_PHONE = current_app.config["BUSINESS_PHONE"]
 
         # Initialize the Twilio client
         client = Client(TWILIO_SID, TWILIO_TOKEN)
@@ -26,7 +27,7 @@ def generate_code(phone_number, new_password=None):
         # Send a message
         client.messages.create(
             body=msg_body,
-            from_="+17824823111",
+            from_=BUSINESS_PHONE,
             to=phone_number,
         )
 

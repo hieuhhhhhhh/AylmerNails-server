@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_is_phonenum_avail(
 BEGIN
     SELECT NOT EXISTS (
         SELECT 1
-        FROM authentication
-        WHERE phone_number = input_phone_number
+            FROM authentication
+            WHERE phone_number = input_phone_number
     ) AS PhoneExists;
 END

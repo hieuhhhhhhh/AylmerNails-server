@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_add_category(
 BEGIN
     -- Insert the new category into the categories table
     INSERT INTO categories (name)
-    VALUES (_name);
+        VALUES (_name);
     
     -- Optionally, you could return the last inserted ID
     SELECT LAST_INSERT_ID();

@@ -1,4 +1,4 @@
-CREATE TABLE schedule_appo_conflicts(
+CREATE TABLE schedule_conflicts(
     schedule_id INT UNSIGNED,
     appo_id INT UNSIGNED,
     

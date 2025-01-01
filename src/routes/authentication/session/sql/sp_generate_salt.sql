@@ -10,8 +10,8 @@ BEGIN
     
     -- write a new salt, update if session_id already exists
     INSERT INTO unconfirmed_salts (session_id, new_salt)
-    VALUES (_session_id, new_salt_)
-    ON DUPLICATE KEY UPDATE new_salt = new_salt_;
+        VALUES (_session_id, new_salt_)
+        ON DUPLICATE KEY UPDATE new_salt = new_salt_;
 
     -- return that new salt
     SET _session_salt = new_salt_;

@@ -1,6 +1,8 @@
-DROP PROCEDURE IF EXISTS sp_set_employee_last_date;
+-- ELD = employee's last date
 
-CREATE PROCEDURE sp_set_employee_last_date(
+DROP PROCEDURE IF EXISTS sp_set_ELD;
+
+CREATE PROCEDURE sp_set_ELD(
     IN  _employee_id INT UNSIGNED, 
     IN  _last_date BIGINT
 )
@@ -19,8 +21,8 @@ BEGIN
 
         -- Update the last_date for the given employee_id
         UPDATE employees
-        SET last_date = _last_date
-        WHERE employee_id = _employee_id;
+            SET last_date = _last_date
+            WHERE employee_id = _employee_id;
 
         -- Call sp_find_ELD_conflicts to find any appointments that conflict the update
         CALL sp_find_ELD_conflicts(_employee_id);
