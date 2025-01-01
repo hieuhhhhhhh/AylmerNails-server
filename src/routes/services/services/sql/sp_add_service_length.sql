@@ -31,8 +31,8 @@ BEGIN
 
         SET length_offset_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
 
-        -- Insert the new variations into the service_length_variations table
-        INSERT INTO service_length_variations (service_length_id, employee_id, length_offset)
+        -- Insert the new variations into the SLVs table
+        INSERT INTO SLVs (service_length_id, employee_id, length_offset)
             VALUES (service_length_id_, employee_id_, length_offset_);
 
         -- increment index
