@@ -1,9 +1,9 @@
 -- ELD = employee's last date
 -- this proc find and store all apointments that conflict with the new last_date of an employee
 
-DROP PROCEDURE IF EXISTS sp_find_ELD_conflicts;
+DROP PROCEDURE IF EXISTS sp_scan_ELD_conflicts;
 
-CREATE PROCEDURE sp_find_ELD_conflicts(
+CREATE PROCEDURE sp_scan_ELD_conflicts(
     IN _employee_id INT UNSIGNED
 )
 BEGIN
@@ -14,6 +14,8 @@ BEGIN
 
     -- Start the transaction
     START TRANSACTION;
+        -- Lock the ELD_conflicts table
+        LOCK TABLES ELD_conflicts READ WRITE;
 
         -- Fetch last_date of the given employee
         SELECT last_date
@@ -24,9 +26,6 @@ BEGIN
 
         -- Proceed only if last_date is not NULL
         IF last_date_ IS NOT NULL THEN
-            -- Lock the ELD_conflicts table
-            LOCK TABLES ELD_conflicts READ WRITE;
-            
             -- Remove all existing conflicts for the given employee before revalidating
             DELETE FROM ELD_conflicts
                 WHERE employee_id = _employee_id;
@@ -35,12 +34,13 @@ BEGIN
             INSERT INTO ELD_conflicts (appo_id, employee_id)
                 SELECT appo_id, _employee_id
                     FROM appo_details
-                    WHERE date > last_date_ 
-                        AND employee_id = _employee_id;
-
-            -- Unlock the table after operations are complete
-            UNLOCK TABLES;
+                    WHERE  employee_id = _employee_id
+                        AND date >= (UNIX_TIMESTAMP() - 24*60*60)
+                        AND date > last_date_;
         END IF;
+
+        -- Unlock the table after operations are complete
+        UNLOCK TABLES;
 
         -- Commit the transaction if everything went well
     COMMIT;

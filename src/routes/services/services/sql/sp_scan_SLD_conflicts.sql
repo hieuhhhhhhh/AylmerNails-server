@@ -1,19 +1,23 @@
 -- ELD = service's last date
--- this proc find and store all apointments that conflict with the new last_date of an service
+-- this proc find conflicts: any apointments that are hold after the last_date of a service
 
-DROP PROCEDURE IF EXISTS sp_find_SLD_conflicts;
+DROP PROCEDURE IF EXISTS sp_scan_SLD_conflicts;
 
-CREATE PROCEDURE sp_find_SLD_conflicts(
+CREATE PROCEDURE sp_scan_SLD_conflicts(
     IN _service_id INT UNSIGNED
 )
 BEGIN
     DECLARE last_date_ BIGINT;
-    DECLARE exit HANDLER FOR SQLEXCEPTION
-        UNLOCK TABLES;
-        ROLLBACK;  -- Rollback if there is any error
+
+    -- Exception handling to roll back in case of an error
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        UNLOCK TABLES; -- release lock
+        ROLLBACK; -- rollback transaction
 
     -- Start the transaction
     START TRANSACTION;
+        -- Lock the SLD_conflicts table
+        LOCK TABLES SLD_conflicts READ WRITE;
 
         -- Fetch last_date of the given service
         SELECT last_date
@@ -24,8 +28,6 @@ BEGIN
 
         -- Proceed only if last_date is not NULL
         IF last_date_ IS NOT NULL THEN
-            -- Lock the SLD_conflicts table
-            LOCK TABLES SLD_conflicts READ WRITE;
             
             -- Remove all existing conflicts for the given service before revalidating
             DELETE FROM SLD_conflicts
@@ -35,12 +37,13 @@ BEGIN
             INSERT INTO SLD_conflicts (appo_id, service_id)
                 SELECT appo_id, _service_id
                     FROM appo_details
-                    WHERE date > last_date_ 
-                        AND service_id = _service_id;
-
-            -- Unlock the table after operations are complete
-            UNLOCK TABLES;
+                    WHERE service_id = _service_id
+                        AND date >= (UNIX_TIMESTAMP() - 24*60*60)
+                        AND date > last_date_;
         END IF;
+
+        -- Unlock the table when transaction is complete
+        UNLOCK TABLES;
 
         -- Commit the transaction if everything went well
     COMMIT;

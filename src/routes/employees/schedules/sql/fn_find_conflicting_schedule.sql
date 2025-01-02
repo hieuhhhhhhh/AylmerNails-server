@@ -1,6 +1,6 @@
-DROP FUNCTION IF EXISTS fn_validate_appo_by_schedule;
+DROP FUNCTION IF EXISTS fn_find_conflicting_schedule;
 
-CREATE FUNCTION fn_validate_appo_by_schedule(
+CREATE FUNCTION fn_find_conflicting_schedule(
     _employee_id INT UNSIGNED,
     _date BIGINT,  -- Unix timestamp (BIGINT)
     _start_time INT,  -- Appointment start time
@@ -36,10 +36,10 @@ BEGIN
             AND day_of_week = day_of_week_
         LIMIT 1;
 
-    -- Return true if the appointment time is within the opening and closing time
+    -- Return an schedule_id with which the appointment violates
     IF _start_time >= opening_time_ AND _end_time <= closing_time_ THEN
-        RETURN schedule_id_;
-    ELSE
         RETURN NULL;
+    ELSE
+        RETURN schedule_id_;
     END IF;
 END;

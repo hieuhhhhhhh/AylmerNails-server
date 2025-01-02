@@ -24,8 +24,8 @@ BEGIN
             SET last_date = _last_date
             WHERE employee_id = _employee_id;
 
-        -- Call sp_find_ELD_conflicts to find any appointments that conflict the update
-        CALL sp_find_ELD_conflicts(_employee_id);
+        -- Call sp_scan_ELD_conflicts to find any appointments that conflict the update
+        CALL sp_scan_ELD_conflicts(_employee_id);
 
         -- Commit the transaction if all operations are successful
     COMMIT;

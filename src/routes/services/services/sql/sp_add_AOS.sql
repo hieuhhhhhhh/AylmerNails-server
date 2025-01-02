@@ -36,8 +36,8 @@ BEGIN
         -- Insert the new AOS options into the AOS_options table
         INSERT INTO AOS_options (AOS_id, name, length_offset)
             VALUES (AOS_id_, name_, length_offset_);
-
-
+        
+        -- end loop
     END WHILE;
 END; 
 

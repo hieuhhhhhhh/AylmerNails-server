@@ -22,7 +22,7 @@ BEGIN
     -- fetch id of new service
     SET service_id_ = LAST_INSERT_ID();
 
-     -- start iterating to fetch all AOSs from the JSON array
+    -- start iterating to fetch all AOSs from the JSON array
     WHILE i < JSON_LENGTH(_AOSs) DO 
         -- fetch prompt of AOS
         SET prompt_ = JSON_UNQUOTE(JSON_EXTRACT(_AOSs, CONCAT('$[', i, ']')));
@@ -34,6 +34,8 @@ BEGIN
 
         -- call the sp that hanlde adding AOS options
         CALL sp_add_AOS(service_id_, prompt_, AOS_options_);
+
+        -- end loop
     END WHILE;
 END; 
 
