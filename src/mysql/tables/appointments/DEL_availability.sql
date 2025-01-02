@@ -5,7 +5,6 @@ CREATE TABLE DEL_availability (
     date BIGINT NOT NULL, -- date in unix time (in seconds)
     employee_id INT UNSIGNED NOT NULL,
     service_length INT NOT NULL,
-    available_times JSON, -- array of all available slots on that day
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id) 
         ON DELETE CASCADE

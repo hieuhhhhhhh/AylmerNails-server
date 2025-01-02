@@ -5,7 +5,10 @@ CREATE PROCEDURE sp_scan_schedule_conflicts(
     IN _scan_from BIGINT
 )
 BEGIN
-    DECLARE done TINYINT DEFAULT 0;
+    -- loop breaker (escape loop when true)
+    DECLARE done BOOLEAN DEFAULT FALSE;
+
+    -- placeholders
     DECLARE schedule_id_ INT UNSIGNED;
     DECLARE appo_id_ INT UNSIGNED;
     DECLARE date_ BIGINT;
