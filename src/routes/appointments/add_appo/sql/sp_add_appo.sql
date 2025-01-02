@@ -5,62 +5,87 @@ DROP PROCEDURE IF EXISTS sp_add_appo;
 CREATE PROCEDURE sp_add_appo(
     IN _employee_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
+    IN _selected_AOSO JSON,
     IN _date BIGINT,
     IN _start_time INT,
     IN _end_time INT,
     IN _employees_selected VARCHAR(500),
-    IN _made_by_client BOOLEAN DEFAULT TRUE
 )
-BEGIN
-    -- Ensure that the table is unlocked in case of an error
-    DECLARE error_handler HANDLER FOR SQLEXCEPTION
-    BEGIN
-        UNLOCK TABLES;
-    END;
+sp:BEGIN
+    -- placeholders
+    DECLARE service_length_id_ INT UNSIGNED;
+    DECLARE length_ INT;
+    DECLARE DELA_id_ INT UNSIGNED;
 
-    -- Lock the appo_details table for writing to prevent other transactions from modifying it
-    LOCK TABLES appo_details WRITE;
+    -- Exception handling to roll back in case of an error
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        UNLOCK TABLES; -- release lock
+        ROLLBACK; -- rollback transaction
 
-    -- the new appointment must not have duplicate times with other appointments of that employee
-    IF EXISTS (
-        SELECT employee_id
-        FROM appo_details
-        WHERE 
-            (
-                (_start_time <= start_time AND start_time < _end_time) 
-                OR (_start_time < end_time AND end_time <= _end_time)
-            ) AND employee_id = _employee_id  
-        LIMIT 1  -- one row found is enough to indicate it is invalid
+    -- Start the transaction
+    START TRANSACTION;
+        -- Lock the appo_details table for writing to prevent other transactions from modifying it
+        LOCK TABLES appo_details, DEL_availability, DEL_available_times READ WRITE;
 
-    ) THEN
-        -- if a conflict exists, refuse to insert new appointment and return NULL 
-        SELECT NULL AS new_appo_id;
-
-    ELSE
-        -- if no conflicts, add the new appointment
-        INSERT INTO appo_details (
-            employee_id, 
-            service_id, 
-            start_time, 
-            end_time, 
-            employees_selected, 
-            made_by_client
-        )
-        VALUES (
-            _employee_id, 
+        -- fetch length_ from the given description
+        CALL sp_get_service_length(
             _service_id, 
-            _start_time, 
-            _end_time, 
-            _employees_selected, 
-            _made_by_client
+            _employee_id, 
+            _date, 
+            _selected_AOSO, 
+            service_length_id_, 
+            length_
         );
 
-        -- Return the ID of the newly inserted appointment
-        SELECT LAST_INSERT_ID() AS new_appo_id;
-    END IF;
+        -- fetch the DELA_id that matches the length, date, employee
+        SELECT DELA_id
+            INTO DELA_id_
+            FROM DEL_availability
+            WHERE date = _date
+                AND employee_id = _employee_id
+                AND service_length = length_
 
-    -- Unlock the appo_details table
-    UNLOCK TABLES;
+        -- check if the start time is valid to a DEL_availability
+        IF EXISTS(
+            SELECT 1 
+                FROM DEL_available_times
+                WHERE 
+                    DELA_id = DELA_id_
+                    start_time = _start_time
+        ) 
+        THEN 
+            -- if the start time exists in DELA, add the new appointment
+            INSERT INTO appo_details (
+                employee_id, 
+                service_id, 
+                selected_AOSO,
+                start_time, 
+                end_time
+            )
+            VALUES (
+                _employee_id, 
+                _service_id, 
+                _selected_AOSO,
+                _start_time, 
+                _end_time
+            );
+
+            -- remove the used DELA (after a write that DELA will be invalid)
+            DELETE FROM DEL_availability
+                WHERE DELA_id = DELA_id_;
+                
+            -- Return the ID of the newly inserted appointment
+            SELECT LAST_INSERT_ID() AS new_appo_id;
+        ELSE
+            -- if description not matches DELA, return null
+            SELECT NULL;
+        END IF;
+
+        -- Unlock the appo_details table
+        UNLOCK TABLES;
+
+        -- Commit the transaction if everything went well
+    COMMIT;
 END;
 
 
