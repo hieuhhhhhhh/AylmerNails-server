@@ -71,7 +71,7 @@ BEGIN
         -- end loop
     END WHILE;
 
-    -- Return an service_length_id with which the appointment violates
+    -- Return a service_length_id with which the appointment is conflicting
     IF length_ = (_end_time - _start_time) THEN
         RETURN NULL;
     ELSE 
