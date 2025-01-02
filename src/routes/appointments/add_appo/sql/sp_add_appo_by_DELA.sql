@@ -1,8 +1,6 @@
--- this one will be re-made
+DROP PROCEDURE IF EXISTS sp_add_appo_by_DELA;
 
-DROP PROCEDURE IF EXISTS sp_add_appo;
-
-CREATE PROCEDURE sp_add_appo(
+CREATE PROCEDURE sp_add_appo_by_DELA(
     IN _employee_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
     IN _selected_AOSO JSON,
@@ -88,15 +86,3 @@ sp:BEGIN
     COMMIT;
 END;
 
-
--- Revoke INSERT and UPDATE permissions on the appo_details table from the root user
-REVOKE INSERT, UPDATE ON appo_details FROM 'root'@'%';
-
--- Grant EXECUTE permission on the stored procedure to the root user
-GRANT EXECUTE ON PROCEDURE sp_add_appo TO 'root'@'%';
-
--- Grant SELECT (read) and DELETE permissions on appo_details table to the root user
-GRANT SELECT, DELETE ON appo_details TO 'root'@'%';
-
-
-FLUSH PRIVILEGES;
