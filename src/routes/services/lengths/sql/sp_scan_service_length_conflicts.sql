@@ -7,8 +7,8 @@ CREATE PROCEDURE sp_scan_service_length_conflicts(
     IN _scan_from BIGINT
 )
 BEGIN
-    -- loop breaker (0 = false, 1 = true)
-    DECLARE done TINYINT DEFAULT 0;    
+    -- loop breaker (escape loop when true)
+    DECLARE done BOOLEAN DEFAULT FALSE;    
 
     -- placeholders
     DECLARE service_length_id_ INT UNSIGNED;
