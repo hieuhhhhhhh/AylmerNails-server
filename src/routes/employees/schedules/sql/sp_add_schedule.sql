@@ -1,19 +1,34 @@
 DROP PROCEDURE IF EXISTS sp_add_schedule;
 
 CREATE PROCEDURE sp_add_schedule(
+    IN _session JSON,
     IN _employee_id INT UNSIGNED,
     IN _effective_from BIGINT,
     IN _opening_times JSON, -- array of opening times from monday (index 1) to sunday (index 7)
-    IN _closing_times JSON, -- array of closing times from monday (index 1) to sunday (index 7)
+    IN _closing_times JSON -- array of closing times from monday (index 1) to sunday (index 7)
 )
 BEGIN
     -- declare an index starts from 1 ~ monday
     DECLARE i TINYINT DEFAULT 1; 
     
     -- placeholders
+    DECLARE user_id_ INT UNSIGNED;
+    DECLARE role_ VARCHAR(20);
+    
     DECLARE opening_time_ INT;
     DECLARE closing_time_ INT;
     DECLARE schedule_id_ INT UNSIGNED;
+
+    -- fetch and validate user's role from session data
+    CALL sp_get_user_id_role(_session, user_id_, role_);
+
+    -- IF role is not valid return null and leave procedure
+    IF role_ IS NULL
+        OR role_ NOT IN ('admin', 'developer')
+    THEN 
+        SELECT NULL;
+        LEAVE sp;
+    END IF;
 
     -- add a new schedule
     INSERT INTO schedules(employee_id, effective_from)
@@ -35,5 +50,6 @@ BEGIN
         SET i = i + 1;
     END WHILE;
 
-
+    -- return the added schedule_id
+    SELECT schedule_id_;
 END;
