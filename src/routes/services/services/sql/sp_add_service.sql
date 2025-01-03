@@ -1,19 +1,31 @@
 DROP PROCEDURE IF EXISTS sp_add_service;
 
 CREATE PROCEDURE sp_add_service(
+    IN _session JSON,
     IN _name VARCHAR(50),
     IN _category_id INT UNSIGNED,
     IN _AOSs JSON -- JSON array of all AOSs (add-on services) for this service
 )
-BEGIN
+sp:BEGIN
     -- index to iterate json array
     DECLARE i TINYINT DEFAULT 0;
 
     -- other place holders
+    DECLARE role_ VARCHAR(20);
     DECLARE service_id_ INT UNSIGNED;
     DECLARE AOS_id_ INT UNSIGNED;
     DECLARE prompt_ VARCHAR(400);
     DECLARE AOS_options_ JSON;
+
+    -- fetch and validate user's role from session data
+    CALL sp_get_user_id_role(_session, NULL, role_)
+
+    -- IF role is not valid return null and leave procedure
+    IF role_ NOT IN ('admin', 'developer')
+    THEN 
+        SELECT NULL;
+        LEAVE sp;
+    END IF;
 
     -- create new service
     INSERT INTO services (name, category_id)
