@@ -7,14 +7,14 @@ CREATE PROCEDURE sp_get_user_id_role(
 )
 BEGIN
     -- placeholders
-    DECLARE session_id_ INT UNSIGNED,
-    DECLARE session_salt_ INT,
+    DECLARE session_id_ INT UNSIGNED;
+    DECLARE session_salt_ INT;
     DECLARE expiry_ INT;      
     DECLARE created_at_ BIGINT;
 
     -- fetch id and salt from session
-    SET @session_id_ = JSON_UNQUOTE(JSON_EXTRACT(_session, '$.id'));
-    SET @session_salt_ = JSON_UNQUOTE(JSON_EXTRACT(_session, '$.salt'));
+    SET session_id_ = JSON_UNQUOTE(JSON_EXTRACT(_session, '$.id'));
+    SET session_salt_ = JSON_UNQUOTE(JSON_EXTRACT(_session, '$.salt'));
 
 
     -- fetch role and user_id by session id and salt
@@ -23,8 +23,8 @@ BEGIN
         FROM user_sessions us
             JOIN authentication a
             ON us.user_id = a.user_id
-        WHERE us.id = _session_id
-            AND us.session_salt = _session_salt;
+        WHERE us.id = session_id_
+            AND us.session_salt = session_salt_;
 
     -- if expired, set outputs back to NULL
     IF (created_at_ + expiry_) < UNIX_TIMESTAMP() THEN

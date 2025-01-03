@@ -20,3 +20,7 @@ CREATE INDEX idx_id_session_salt ON user_sessions (id, session_salt);
 
 -- index on user id
 CREATE INDEX idx_user_id ON user_sessions (user_id);
+
+-- populate default rows
+INSERT INTO aylmer_nails.user_sessions (id, session_salt, user_id, created_at, expiry, remember_me)
+    VALUES(1, 739782736, 1, 1735877479, 3600, 1);

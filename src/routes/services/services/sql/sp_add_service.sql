@@ -11,6 +11,7 @@ sp:BEGIN
     DECLARE i TINYINT DEFAULT 0;
 
     -- other place holders
+    DECLARE user_id_ INT UNSIGNED;
     DECLARE role_ VARCHAR(20);
     DECLARE service_id_ INT UNSIGNED;
     DECLARE AOS_id_ INT UNSIGNED;
@@ -18,7 +19,7 @@ sp:BEGIN
     DECLARE AOS_options_ JSON;
 
     -- fetch and validate user's role from session data
-    CALL sp_get_user_id_role(_session, NULL, role_)
+    CALL sp_get_user_id_role(_session, user_id_, role_);
 
     -- IF role is not valid return null and leave procedure
     IF role_ NOT IN ('admin', 'developer')

@@ -11,14 +11,10 @@ BEGIN
 
     -- Exception handling to roll back in case of an error
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        UNLOCK TABLES; -- release lock
         ROLLBACK; -- rollback transaction
 
     -- Start the transaction
     START TRANSACTION;
-        -- Lock the SLD_conflicts table
-        LOCK TABLES SLD_conflicts READ WRITE;
-
         -- Fetch last_date of the given service
         SELECT last_date
             INTO last_date_
@@ -41,10 +37,6 @@ BEGIN
                         AND date >= (UNIX_TIMESTAMP() - 24*60*60)
                         AND date > last_date_;
         END IF;
-
-        -- Unlock the table when transaction is complete
-        UNLOCK TABLES;
-
         -- Commit the transaction if everything went well
     COMMIT;
 END;

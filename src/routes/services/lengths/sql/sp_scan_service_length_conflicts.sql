@@ -57,9 +57,11 @@ BEGIN
                 SET service_length_id_ = fn_find_conflicting_length(_service_id, employee_id_, date_, start_time_, end_time_);
 
                 -- if a id is returned it means invalid appointment
-                IF service_length_id_ IS NOT NULL THEN
+                IF service_length_id_ IS NOT NULL 
+                THEN
                     -- create a new service_length_conflict
-                    INSERT INTO service_length_conflicts(service_length_id_, appo_id_);
+                    INSERT INTO service_length_conflicts(service_length_id, appo_id) 
+                    VALUES (service_length_id_, appo_id_);
                 END IF;
             END LOOP;
             -- Close the cursor
