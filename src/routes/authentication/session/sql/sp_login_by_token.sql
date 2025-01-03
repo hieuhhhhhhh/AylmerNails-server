@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_process_token;
+DROP PROCEDURE IF EXISTS sp_login_by_token;
 
-CREATE PROCEDURE sp_process_token(
+CREATE PROCEDURE sp_login_by_token(
     IN _session_id INT UNSIGNED,
     IN _session_salt INT
 )

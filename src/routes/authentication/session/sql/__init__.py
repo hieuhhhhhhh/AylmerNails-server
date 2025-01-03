@@ -9,5 +9,5 @@ def create_authentication_session_sps():
     exe_queries(__file__, "sp_generate_salt.sql")
     exe_queries(__file__, "sp_log_out_all.sql")
     exe_queries(__file__, "sp_validate_salt.sql")
-    exe_queries(__file__, "sp_process_token.sql")
+    exe_queries(__file__, "sp_login_by_token.sql")
     print()

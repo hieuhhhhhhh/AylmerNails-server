@@ -37,5 +37,8 @@ BEGIN
 
         -- end loop
     END WHILE;
+
+    -- return service_id
+    SELECT service_id_;
 END; 
 
