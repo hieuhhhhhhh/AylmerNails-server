@@ -8,3 +8,11 @@ def create_tables():
     exe_queries(__file__, "authentication/sms_verify_codes.sql")
     exe_queries(__file__, "authentication/user_sessions.sql")
     exe_queries(__file__, "authentication/unconfirmed_salts.sql")
+
+    exe_queries(__file__, "services/add_ons/add_on_services.sql")
+    exe_queries(__file__, "services/add_ons/AOS_options.sql")
+    exe_queries(__file__, "services/length/categories.sql")
+    exe_queries(__file__, "services/length/category_groups.sql")
+    exe_queries(__file__, "services/length/employee_services.sql")
+    exe_queries(__file__, "services/length/services.sql")
+    exe_queries(__file__, "services/length/SLD_conflicts.sql")
