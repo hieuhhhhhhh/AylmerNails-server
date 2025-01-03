@@ -17,12 +17,10 @@ BEGIN
 
     -- Exception handling to roll back in case of an error
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        UNLOCK TABLES; -- release lock
         ROLLBACK; -- rollback transaction
 
     -- Start the transaction
     START TRANSACTION;
-        LOCK TABLES service_lengths READ WRITE;
 
         -- delete any old service_length that has same effective_from
         DELETE FROM service_lengths
@@ -52,9 +50,6 @@ BEGIN
             
             -- end loop
         END WHILE;
-
-        -- Unlock the table when transaction is complete
-        UNLOCK TABLES;
 
      -- Commit the transaction if everything went well
     COMMIT;

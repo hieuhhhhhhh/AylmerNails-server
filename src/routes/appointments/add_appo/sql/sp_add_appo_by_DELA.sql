@@ -41,7 +41,7 @@ sp:BEGIN
             FROM DEL_availability
             WHERE date = _date
                 AND employee_id = _employee_id
-                AND service_length = length_
+                AND service_length = length_;
 
         -- check if the start time is valid to a DEL_availability
         IF EXISTS(

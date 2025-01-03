@@ -5,7 +5,7 @@ CREATE TABLE SLVs(
     employee_id INT UNSIGNED,
     length_offset INT NOT NULL, -- offset from original length that is applied to a specific employee (in seconds)
     
-    FOREIGN KEY (service_length_id) REFERENCES services(service_length_id)
+    FOREIGN KEY (service_length_id) REFERENCES service_lengths(service_length_id)
         ON DELETE CASCADE,
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE CASCADE,

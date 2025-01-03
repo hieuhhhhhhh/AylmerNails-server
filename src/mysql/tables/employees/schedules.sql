@@ -9,4 +9,4 @@ CREATE TABLE schedules(
 
 -- index on employee_id -> effective_from
 CREATE INDEX idx_employee_id_effective_from 
-    ON (employee_id, effective_from);
+    ON schedules(employee_id, effective_from);

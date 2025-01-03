@@ -14,14 +14,14 @@ RETURNS INT UNSIGNED
 DETERMINISTIC
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0,
+    DECLARE i TINYINT DEFAULT 0;
 
     -- other place holders
-    DECLARE service_length_id_ INT UNSIGNED,
-    DECLARE length_ INT,
-    DECLARE offset_ INT,
-    DECLARE AOS_id_ INT UNSIGNED,
-    DECLARE option_id_ INT UNSIGNED,
+    DECLARE service_length_id_ INT UNSIGNED;
+    DECLARE length_ INT;
+    DECLARE offset_ INT;
+    DECLARE AOS_id_ INT UNSIGNED;
+    DECLARE option_id_ INT UNSIGNED;
 
     -- get total length for this service by employee and selected AOSO
     CALL sp_get_service_length(

@@ -10,12 +10,12 @@ CREATE PROCEDURE sp_get_service_length(
 )
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0,
+    DECLARE i TINYINT DEFAULT 0;
 
     -- other place holders
-    DECLARE offset_ INT,
-    DECLARE AOS_id_ INT UNSIGNED,
-    DECLARE option_id_ INT UNSIGNED,
+    DECLARE offset_ INT;
+    DECLARE AOS_id_ INT UNSIGNED;
+    DECLARE option_id_ INT UNSIGNED;
 
     -- fetch service's default length and its id
     SELECT service_length_id, length

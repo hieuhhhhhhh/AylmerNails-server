@@ -16,7 +16,7 @@ def continue_session(token):
 
     # Process the retrieved data
     status, user_id, new_salt = call_2D_proc(
-        "sp_process_token", session_id, session_salt
+        "sp_login_by_token", session_id, session_salt
     )[0]
 
     # if token is valid but need refreshing
