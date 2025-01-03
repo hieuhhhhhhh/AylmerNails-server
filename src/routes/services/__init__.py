@@ -1,3 +1,4 @@
+import json
 from flask import Blueprint, request
 from .services.add_service import add_service
 
@@ -18,7 +19,7 @@ def request_sign_up():
         data = request.get_json()
         name = data.get("name")
         category_id = data.get("category_id")
-        AOSs = data.get("AOSs")
+        AOSs = json.dumps(data.get("AOSs"))  # convert python list to json
 
         return add_service(session, name, category_id, AOSs)
 

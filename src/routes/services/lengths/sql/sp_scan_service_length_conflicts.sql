@@ -21,14 +21,10 @@ BEGIN
 
     -- Exception handling of errors during transaction
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        UNLOCK TABLES; -- release lock
         ROLLBACK; -- rollback transaction
 
     -- Start the transaction
     START TRANSACTION;
-
-        -- Lock the service_length_conflicts table
-        LOCK TABLES service_length_conflicts READ WRITE;
 
         -- Declare the cursor for fetching the appointment details
         DECLARE cur CURSOR FOR
@@ -43,7 +39,6 @@ BEGIN
 
         -- Open the cursor
         OPEN cur;
-
             -- Loop through every apointment found and validate them
             read_loop: LOOP
                 FETCH cur INTO date_, start_time_, end_time_, appo_id_, employee_id_;
@@ -61,12 +56,8 @@ BEGIN
                     INSERT INTO service_length_conflicts(service_length_id_, appo_id_);
                 END IF;
             END LOOP;
-
             -- Close the cursor
         CLOSE cur;
-
-        -- Unlock the table when transaction is complete
-        UNLOCK TABLES;
 
         -- Commit the transaction if everything went well
     COMMIT;

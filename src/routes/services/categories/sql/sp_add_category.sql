@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS sp_add_category;
 
 CREATE PROCEDURE sp_add_category(
-    IN _name VARCHAR(50),
+    IN _name VARCHAR(50)
 )
 BEGIN
     -- Insert the new category into the categories table

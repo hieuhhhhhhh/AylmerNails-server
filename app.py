@@ -1,6 +1,8 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from src.routes.authentication import authentication
+from src.routes.services import services
+
 from src.mysql.setup_db import setup_db_on_mysql
 from dotenv import load_dotenv
 import os
@@ -23,6 +25,7 @@ CORS(app, supports_credentials=True)
 
 # register blueprints (groups of routes)
 app.register_blueprint(authentication, url_prefix="/api/authentication")
+app.register_blueprint(services, url_prefix="/api/services")
 
 
 # add route
