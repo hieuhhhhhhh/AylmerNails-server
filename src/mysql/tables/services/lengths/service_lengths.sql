@@ -10,5 +10,5 @@ CREATE TABLE service_lengths(
 
 -- unique index on service_id -> effective_from
 CREATE UNIQUE INDEX idx_service_id_effective_from 
-    ON (service_id, effective_from);
+    ON service_lengths(service_id, effective_from);
 

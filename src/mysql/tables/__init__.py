@@ -9,10 +9,28 @@ def create_tables():
     exe_queries(__file__, "authentication/user_sessions.sql")
     exe_queries(__file__, "authentication/unconfirmed_salts.sql")
 
+    exe_queries(__file__, "employees/employees.sql")
+    exe_queries(__file__, "employees/schedules.sql")
+    exe_queries(__file__, "employees/opening_hours.sql")
+
+    exe_queries(__file__, "services/category_groups.sql")
+    exe_queries(__file__, "services/categories.sql")
+    exe_queries(__file__, "services/services.sql")
+    exe_queries(__file__, "services/employee_services.sql")
+
+    exe_queries(__file__, "appointments/appo_details.sql")
+    exe_queries(__file__, "appointments/appo_notes.sql")
+    exe_queries(__file__, "appointments/DEL_availability.sql")
+    exe_queries(__file__, "appointments/DEL_available_times.sql")
+
     exe_queries(__file__, "services/add_ons/add_on_services.sql")
     exe_queries(__file__, "services/add_ons/AOS_options.sql")
-    exe_queries(__file__, "services/length/categories.sql")
-    exe_queries(__file__, "services/length/category_groups.sql")
-    exe_queries(__file__, "services/length/employee_services.sql")
-    exe_queries(__file__, "services/length/services.sql")
-    exe_queries(__file__, "services/length/SLD_conflicts.sql")
+
+    exe_queries(__file__, "services/lengths/service_lengths.sql")
+    exe_queries(__file__, "services/lengths/SLVs.sql")
+
+    # conflicts
+    exe_queries(__file__, "employees/schedule_conflicts.sql")
+    exe_queries(__file__, "employees/ELD_conflicts.sql")
+    exe_queries(__file__, "services/SLD_conflicts.sql")
+    exe_queries(__file__, "services/lengths/service_length_conflicts.sql")
