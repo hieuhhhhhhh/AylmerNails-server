@@ -9,3 +9,6 @@ CREATE TABLE service_length_conflicts(
         
     PRIMARY KEY (service_length_id, appo_id)
 );
+
+-- index on appo_id
+CREATE INDEX idx_appo_id ON service_length_conflicts(appo_id);

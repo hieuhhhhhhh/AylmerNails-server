@@ -17,7 +17,17 @@ BEGIN
     DECLARE date_ BIGINT;
     DECLARE start_time_ INT;
     DECLARE end_time_ INT;
+    
+    -- Declare the cursor for fetching the appointment details
+    DECLARE cur CURSOR FOR
+        SELECT date, start_time, end_time, appo_id, employee_id
+            FROM appo_details
+            WHERE service_id = _service_id
+                AND date >= (UNIX_TIMESTAMP() - 24*60*60)
+                AND date >= _scan_from;
 
+    -- Declare continue handler for cursor end
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
     -- Exception handling of errors during transaction
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -26,16 +36,12 @@ BEGIN
     -- Start the transaction
     START TRANSACTION;
 
-        -- Declare the cursor for fetching the appointment details
-        DECLARE cur CURSOR FOR
-            SELECT date, start_time, end_time, appo_id, employee_id
-                FROM appo_details
-                WHERE service_id = _service_id
-                    AND date >= (UNIX_TIMESTAMP() - 24*60*60)
-                    AND date >= _scan_from;
-
-        -- Declare continue handler for cursor end
-        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+        -- Clean old conflicts
+        DELETE slc
+            FROM service_length_conflicts slc
+                JOIN appo_details ad 
+                ON slc.appo_id = ad.appo_id
+            WHERE ad.date >= _scan_from;
 
         -- Open the cursor
         OPEN cur;

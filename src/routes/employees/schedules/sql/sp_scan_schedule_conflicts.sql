@@ -37,7 +37,7 @@ BEGIN
                     AND date >= _scan_from;
 
         -- Declare continue handler for cursor end
-        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
         -- Open the cursor
         OPEN cur;
