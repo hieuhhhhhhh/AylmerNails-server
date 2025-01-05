@@ -17,13 +17,10 @@ BEGIN
 
     -- Exception handling to roll back in case of an error
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        UNLOCK TABLES; -- release lock
         ROLLBACK; -- rollback transaction
 
     -- Start the transaction
     START TRANSACTION;    
-        -- Lock the schedule_conflicts table
-        LOCK TABLES schedule_conflicts READ WRITE;
 
         -- clean old conflicts from last schedules
         CALL sp_clean_old_schedule_conflicts(_employee_id, _scan_from);
@@ -41,7 +38,6 @@ BEGIN
 
         -- Open the cursor
         OPEN cur;
-
             -- Loop through every apointment found and validate them
             read_loop: LOOP
                 FETCH cur INTO date_, start_time_, end_time_, appo_id_;
@@ -62,9 +58,6 @@ BEGIN
 
             -- Close the cursor
         CLOSE cur;
-
-        -- Unlock the table after transaction is complete
-        UNLOCK TABLES;
 
         -- Commit the transaction
     COMMIT;

@@ -50,6 +50,9 @@ BEGIN
         SET i = i + 1;
     END WHILE;
 
+    -- scan and clean conflicts after finishing adding new schedule with AOSs
+    CALL sp_scan_schedule_conflicts(_employee_id, _effective_from);
+
     -- return the added schedule_id
     SELECT schedule_id_;
 END;
