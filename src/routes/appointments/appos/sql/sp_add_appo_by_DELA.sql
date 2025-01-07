@@ -12,7 +12,7 @@ CREATE PROCEDURE sp_add_appo_by_DELA(
 sp:BEGIN
     -- placeholders
     DECLARE service_length_id_ INT UNSIGNED;
-    DECLARE length_ INT;
+    DECLARE planned_length_ INT;
     DECLARE DELA_id_ INT UNSIGNED;
 
     -- Exception handling to roll back in case of an error
@@ -22,14 +22,14 @@ sp:BEGIN
     -- Start the transaction
     START TRANSACTION;
 
-        -- fetch length_ from the given description
+        -- calculate length from the given description
         CALL sp_calculate_length(
             _service_id, 
             _employee_id, 
             _date, 
             _selected_AOSO, 
             service_length_id_, 
-            length_
+            planned_length_
         );
 
         -- fetch the DELA_id that matches the length, date, employee
@@ -38,7 +38,7 @@ sp:BEGIN
             FROM DELA
             WHERE date = _date
                 AND employee_id = _employee_id
-                AND service_length = length_;
+                AND planned_length = planned_length_;
 
         -- check if the start time is valid to a DELA
         IF EXISTS(

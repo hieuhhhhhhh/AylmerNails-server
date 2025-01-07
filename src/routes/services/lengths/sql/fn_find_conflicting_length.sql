@@ -18,7 +18,7 @@ BEGIN
 
     -- other place holders
     DECLARE service_length_id_ INT UNSIGNED;
-    DECLARE length_ INT;
+    DECLARE planned_length_ INT;
     DECLARE offset_ INT;
     DECLARE AOS_id_ INT UNSIGNED;
     DECLARE option_id_ INT UNSIGNED;
@@ -30,11 +30,11 @@ BEGIN
         _date, 
         _selected_AOSO, 
         service_length_id_, 
-        length_
+        planned_length_
     );
 
     -- Compare a service_length_id with which the appointment is conflicting
-    IF length_ = (_end_time - _start_time) THEN
+    IF planned_length_ = (_end_time - _start_time) THEN
         RETURN NULL;
     ELSE 
         RETURN service_length_id_;
