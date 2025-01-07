@@ -17,13 +17,10 @@ sp:BEGIN
 
     -- Exception handling to roll back in case of an error
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        UNLOCK TABLES; -- release lock
         ROLLBACK; -- rollback transaction
 
     -- Start the transaction
     START TRANSACTION;
-        -- Lock the appo_details table for writing to prevent other transactions from modifying it
-        LOCK TABLES appo_details, DEL_availability, DEL_available_times READ WRITE;
 
         -- fetch length_ from the given description
         CALL sp_calculate_length(
@@ -38,18 +35,18 @@ sp:BEGIN
         -- fetch the DELA_id that matches the length, date, employee
         SELECT DELA_id
             INTO DELA_id_
-            FROM DEL_availability
+            FROM DELA
             WHERE date = _date
                 AND employee_id = _employee_id
                 AND service_length = length_;
 
-        -- check if the start time is valid to a DEL_availability
+        -- check if the start time is valid to a DELA
         IF EXISTS(
             SELECT 1 
-                FROM DEL_available_times
+                FROM DELA_slots
                 WHERE 
                     DELA_id = DELA_id_
-                    start_time = _start_time
+                    slot = _start_time
         ) 
         THEN 
             -- if the start time exists in DELA, add the new appointment
@@ -69,7 +66,7 @@ sp:BEGIN
             );
 
             -- remove the used DELA (after a write that DELA will be invalid)
-            DELETE FROM DEL_availability
+            DELETE FROM DELA
                 WHERE DELA_id = DELA_id_;
                 
             -- Return the ID of the newly inserted appointment
@@ -78,9 +75,6 @@ sp:BEGIN
             -- if description not matches DELA, return null
             SELECT NULL;
         END IF;
-
-        -- Unlock the appo_details table
-        UNLOCK TABLES;
 
         -- Commit the transaction if everything went well
     COMMIT;
