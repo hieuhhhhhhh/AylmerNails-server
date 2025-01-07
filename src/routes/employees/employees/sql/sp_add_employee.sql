@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_add_employee(
     IN _alias VARCHAR(50),
     IN _first_date BIGINT,
     IN _stored_intervals JSON,
-    IN _service_list JSON
+    IN _service_ids JSON
 )
 sp:BEGIN 
     -- placeholders
@@ -28,7 +28,7 @@ sp:BEGIN
         VALUES (_alias, _stored_intervals, _first_date);
     
     -- set service list for the new employee
-    CALL sp_set_employee_services(LAST_INSERT_ID() ,_service_list);
+    CALL sp_set_employee_services(LAST_INSERT_ID() ,_service_ids);
 
     -- return id of new employee
     SELECT LAST_INSERT_ID();

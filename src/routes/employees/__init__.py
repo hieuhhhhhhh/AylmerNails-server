@@ -20,8 +20,12 @@ def request_sign_up():
         data = request.get_json()
         alias = data.get("alias")
         first_date = data.get("first_date")
+        stored_intervals = json.dumps(
+            data.get("stored_intervals")
+        )  # convert python list to json
+        service_ids = json.dumps(data.get("service_ids"))  # convert python list to json
 
-        return add_employee(session, alias, first_date)
+        return add_employee(session, alias, first_date, stored_intervals, service_ids)
 
     # catch unexpected error
     except Exception as e:
