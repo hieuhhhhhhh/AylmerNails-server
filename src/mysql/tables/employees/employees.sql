@@ -1,6 +1,7 @@
 CREATE TABLE employees(
     employee_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     alias VARCHAR(50) NOT NULL UNIQUE,
+    stored_intervals JSON,
 
     -- the first day that this employee has appointments
     first_date BIGINT NOT NULL, 

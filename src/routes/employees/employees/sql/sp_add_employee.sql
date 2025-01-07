@@ -3,9 +3,11 @@ DROP PROCEDURE IF EXISTS sp_add_employee;
 CREATE PROCEDURE sp_add_employee(
     IN _session JSON,
     IN _alias VARCHAR(50),
-    IN _first_date BIGINT
+    IN _first_date BIGINT,
+    IN _stored_intervals JSON,
+    IN _service_list JSON
 )
-BEGIN 
+sp:BEGIN 
     -- placeholders
     DECLARE user_id_ INT UNSIGNED;
     DECLARE role_ VARCHAR(20);
@@ -21,10 +23,13 @@ BEGIN
         LEAVE sp;
     END IF;
 
-    -- Insert the new category into the categories table
-    INSERT INTO employees (alias, first_date)
-        VALUES (_alias, _first_date);
+    -- create new employee
+    INSERT INTO employees (alias, stored_intervals, first_date)
+        VALUES (_alias, _stored_intervals, _first_date);
     
-    -- Optionally, you could return the last inserted ID
+    -- set service list for the new employee
+    CALL sp_set_employee_services(LAST_INSERT_ID() ,_service_list);
+
+    -- return id of new employee
     SELECT LAST_INSERT_ID();
 END; 
