@@ -1,6 +1,7 @@
 DROP PROCEDURE IF EXISTS sp_get_DELAs_or_appo_lists;
 
 CREATE PROCEDURE sp_get_DELAs_or_appo_lists(
+    IN _session JSON,
     IN _date BIGINT,
     IN _service_id INT UNSIGNED,
     IN _selected_AOSO JSON, 
@@ -12,6 +13,21 @@ BEGIN
     DECLARE planned_length_ INT;
     DECLARE service_length_id_ INT UNSIGNED;
     DECLARE employee_id_ INT UNSIGNED;
+    DECLARE user_id_ INT UNSIGNED;
+    DECLARE role_ VARCHAR(20);
+    DECLARE opening_time_ INT;
+    DECLARE closing_time_ INT;
+    
+    -- fetch and validate user's role from session data
+    CALL sp_get_user_id_role(_session, user_id_, role_);
+
+    -- IF role is not valid return null and leave procedure
+    IF role_ IS NULL
+        OR role_ NOT IN ('client','admin', 'developer')
+    THEN 
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '401, Unauthorized';
+    END IF;
 
     -- calculate planned length
     CALL sp_calculate_length(
@@ -45,14 +61,19 @@ BEGIN
             SELECT * FROM DELA_;
 
         ELSE
+            -- fetch opening time and closing time
+            CALL sp_get_opening_hours(_employee_id, _date, opening_time_, closing_time_);
+
             -- if DELA empty, return list of date-employee appointments & planned length & stored intervals
                 SELECT NULL, NULL, fn_get_stored_intervals(_employee_id), planned_length_
+            UNION ALL
+                SELECT opening_time_, closing_time_, NULL, NULL
             UNION ALL
                 SELECT start_time, end_time, NULL, NULL
                     FROM appo_details
                     WHERE date = _date
                         AND employee_id = _employee_id;
-
+                
         END IF;
 
         -- clean up temporary table

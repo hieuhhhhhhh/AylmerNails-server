@@ -15,26 +15,8 @@ BEGIN
     DECLARE schedule_id_ INT UNSIGNED;
     DECLARE day_of_week_ INT;
 
-    -- Convert the Unix timestamp (_date) to the day of the week in the Toronto timezone
-    -- _date is increase by 43200 seconds (1/2 a day) to shift the time to middle of the day
-    SET day_of_week_ = DAYOFWEEK(CONVERT_TZ(FROM_UNIXTIME(_date + 43200), 'UTC', 'America/Toronto'));
-
-    -- fetch most recent schedule of this employee on that date
-    SELECT schedule_id
-        INTO schedule_id_
-        FROM schedules
-        WHERE employee_id = _employee_id
-            AND effective_from <= UNIX_TIMESTAMP()
-        ORDER BY effective_from DESC
-        LIMIT 1;
-
-    -- from the schedule_id, fetch the opening and closing time of that day_of_week
-    SELECT opening_time, closing_time
-        INTO opening_time_, closing_time_
-        FROM opening_hours 
-        WHERE schedule_id = schedule_id_
-            AND day_of_week = day_of_week_
-        LIMIT 1;
+    -- fetch the opening and closing time of that day_of_week
+    CALL sp_get_opening_hours(_employee_id, _date, opening_time_, closing_time_);
 
     -- Return an schedule_id with which the appointment violates
     IF _start_time >= opening_time_ AND _end_time <= closing_time_ THEN
