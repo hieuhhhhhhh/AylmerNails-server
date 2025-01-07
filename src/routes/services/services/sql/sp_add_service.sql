@@ -22,7 +22,8 @@ sp:BEGIN
     CALL sp_get_user_id_role(_session, user_id_, role_);
 
     -- IF role is not valid return null and leave procedure
-    IF role_ NOT IN ('admin', 'developer')
+    IF role_ IS NULL
+        OR role_ NOT IN ('admin', 'developer')
     THEN 
         SELECT NULL;
         LEAVE sp;
@@ -53,5 +54,4 @@ sp:BEGIN
 
     -- return service_id
     SELECT service_id_;
-END; 
-
+END;

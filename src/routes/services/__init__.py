@@ -1,9 +1,8 @@
 import json
 from flask import Blueprint, request
-from .services.add_service import add_service
-
 from ..helpers.unexpected_error_response import unexpected_error_response
 from src.routes.authentication.session.read_token import read_token
+from .services.add_service import add_service
 
 # create blueprint (group of routes)
 services = Blueprint("services", __name__)
