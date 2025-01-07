@@ -1,6 +1,6 @@
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
-from .appo_list_table_to_DELA import appo_list_table_to_DELA
+from .helpers.appo_list_table_to_DELA import appo_list_table_to_DELA
 
 
 # return list of DELAs for inputted list of employee_ids
