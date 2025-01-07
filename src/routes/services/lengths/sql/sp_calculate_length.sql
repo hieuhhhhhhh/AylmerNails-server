@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_get_service_length;
+DROP PROCEDURE IF EXISTS sp_calculate_length;
 
-CREATE PROCEDURE sp_get_service_length(
+CREATE PROCEDURE sp_calculate_length(
     IN _service_id INT UNSIGNED,
     IN _employee_id INT UNSIGNED,
     IN _date BIGINT,  -- Unix timestamp (BIGINT)

@@ -26,7 +26,7 @@ sp:BEGIN
         LOCK TABLES appo_details, DEL_availability, DEL_available_times READ WRITE;
 
         -- fetch length_ from the given description
-        CALL sp_get_service_length(
+        CALL sp_calculate_length(
             _service_id, 
             _employee_id, 
             _date, 

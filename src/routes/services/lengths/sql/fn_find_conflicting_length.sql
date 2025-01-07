@@ -24,7 +24,7 @@ BEGIN
     DECLARE option_id_ INT UNSIGNED;
 
     -- get total length for this service by employee and selected AOSO
-    CALL sp_get_service_length(
+    CALL sp_calculate_length(
         _service_id, 
         _employee_id, 
         _date, 
