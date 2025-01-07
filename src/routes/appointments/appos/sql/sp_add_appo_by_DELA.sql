@@ -7,7 +7,7 @@ CREATE PROCEDURE sp_add_appo_by_DELA(
     IN _date BIGINT,
     IN _start_time INT,
     IN _end_time INT,
-    IN _employees_selected VARCHAR(500),
+    IN _employees_selected VARCHAR(500)
 )
 sp:BEGIN
     -- placeholders

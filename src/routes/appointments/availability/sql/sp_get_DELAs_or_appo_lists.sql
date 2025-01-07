@@ -29,8 +29,8 @@ BEGIN
         SET employee_id_ = JSON_UNQUOTE(JSON_EXTRACT(_employee_ids, CONCAT('$[', i, ']')));
         SET i = i + 1;
 
-        -- fetch DELA via date & employee & planned length
-        CREATE TEMPORARY TABLE DELA AS
+        -- temporary table: fetch DELA via date & employee & planned length
+        CREATE TEMPORARY TABLE DELA_ AS
             SELECT ds.slots
                 FROM DELAs d
                     JOIN DELA_slots ds
@@ -40,16 +40,23 @@ BEGIN
                     AND d.planned_length = planned_length_;
 
         -- check if DELA is empty 
-        IF EXISTS (SELECT 1 FROM DELA LIMIT 1) THEN
+        IF EXISTS (SELECT 1 FROM DELA_ LIMIT 1) THEN
             -- if DELA not empty, return DELA
-            SELECT * FROM DELA;
+            SELECT * FROM DELA_;
+
         ELSE
             -- if DELA empty, return list of date-employee appointments & planned length & stored intervals
-            SELECT 'The table is empty' AS message;
+                SELECT NULL, NULL, fn_get_stored_intervals(_employee_id), planned_length_
+            UNION ALL
+                SELECT start_time, end_time, NULL, NULL
+                    FROM appo_details
+                    WHERE date = _date
+                        AND employee_id = _employee_id;
+
         END IF;
 
-        -- clean up
-        DROP TEMPORARY TABLE IF EXISTS DELA;
+        -- clean up temporary table
+        DROP TEMPORARY TABLE IF EXISTS DELA_;
 
         -- end loop
     END WHILE;
