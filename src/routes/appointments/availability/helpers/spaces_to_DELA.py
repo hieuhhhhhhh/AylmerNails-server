@@ -1,4 +1,8 @@
-def spaces_to_DELA(appo_ranges, planned_length, stored_intervals):
+from .space_to_slots import space_to_slots
+from .space_to_prioritized_slots import space_to_prioritized_slots
+
+
+def spaces_to_DELA(spaces, planned_length, stored_intervals):
     # result holder
     DELA = []
 
@@ -8,5 +12,27 @@ def spaces_to_DELA(appo_ranges, planned_length, stored_intervals):
     # create a set contain ideal gaps
     ideal_gaps = set(stored_intervals)
 
-    # iterate a ascending list of appo_ranges
+    # iterate a ascending list of spaces
+    for space in spaces[:-1]:
+        if space not in ideal_gaps:
+            all_spaces_are_ideal = False
+            DELA.extend(space_to_slots(space, planned_length, stored_intervals))
+        else:
+            DELA.extend(
+                space_to_prioritized_slots(
+                    space, planned_length, stored_intervals, ideal_gaps
+                )
+            )
+
+    # specially process the last space (which is also the largest length)
+    if all_spaces_are_ideal or space not in ideal_gaps:
+        DELA.extend(space_to_slots(space, planned_length, stored_intervals))
+    else:
+        DELA.extend(
+            space_to_prioritized_slots(
+                space, planned_length, stored_intervals, ideal_gaps
+            )
+        )
+
+    # return result
     return DELA
