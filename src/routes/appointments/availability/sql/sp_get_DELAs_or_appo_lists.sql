@@ -17,6 +17,7 @@ BEGIN
     DECLARE role_ VARCHAR(20);
     DECLARE opening_time_ INT;
     DECLARE closing_time_ INT;
+    DECLARE DELA_id_ INT UNSIGNED;
     
     -- fetch and validate user's role from session data
     CALL sp_get_user_id_role(_session, user_id_, role_);
@@ -60,20 +61,26 @@ BEGIN
             -- if DELA not empty, return DELA
             SELECT * FROM DELA_;
 
-        ELSE
+        ELSE -- if DELA empty
             -- fetch opening time and closing time
             CALL sp_get_opening_hours(_employee_id, _date, opening_time_, closing_time_);
 
-            -- if DELA empty, return list of date-employee appointments & planned length & stored intervals
-                SELECT NULL, NULL, fn_get_stored_intervals(_employee_id), planned_length_
+            -- create new DELA_id for this employee and date and length
+            INSERT INTO DELAs(date, employee_id, planned_length)
+                VALUES (_date, _employee_id, planned_length_);
+            SET DELA_id_ = LAST_INSERT_ID();
+
+            --  return list of date-employee appointments & planned length & stored intervals & DELA_id
+                SELECT NULL, NULL, fn_get_stored_intervals(_employee_id), planned_length_, DELA_id_
             UNION ALL
-                SELECT opening_time_, closing_time_, NULL, NULL
+                SELECT opening_time_, closing_time_, NULL, NULL, NULL
             UNION ALL
-                SELECT start_time, end_time, NULL, NULL
+                SELECT start_time, end_time, NULL, NULL, NULL
                     FROM appo_details
                     WHERE date = _date
                         AND employee_id = _employee_id
                     ORDER BY start_time;
+
                 
         END IF;
 

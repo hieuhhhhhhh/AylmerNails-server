@@ -1,5 +1,6 @@
 from .appo_ranges_to_spaces import appo_ranges_to_spaces
 from .spaces_to_DELA import spaces_to_DELA
+from .store_DELA import store_DELA
 import json
 
 
@@ -11,6 +12,9 @@ def appo_ranges_table_to_DELA(table):
 
     # fetch list of favorable intervals (this list is supposed to be ascending)
     stored_intervals = json.loads(table[0][2])
+
+    # fetch DELA_id
+    DELA_id = table[0][4]
 
     # fetch and merge opening time
     opening_time = table[1][0]
@@ -33,9 +37,14 @@ def appo_ranges_table_to_DELA(table):
     # filter out intervals that exceed the opening hours range
     stored_intervals = slice_asc_list(stored_intervals, closing_time - opening_time)
 
+    # create and return  DELA
     spaces = appo_ranges_to_spaces(appo_ranges, planned_length, stored_intervals)
+    DELA = spaces_to_DELA(spaces)
 
-    return spaces_to_DELA(spaces)
+    # send DELA to mysql
+    store_DELA(DELA, DELA_id)
+
+    return DELA
 
 
 # to slice ascending list with a ceiling
