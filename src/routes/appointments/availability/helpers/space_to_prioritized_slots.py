@@ -3,7 +3,7 @@ def space_to_prioritized_slots(space, planned_length, stored_intervals, ideal_ga
     slots = []
 
     # calculate total gap to next and last endpoints
-    gap = space[1] - space[0]
+    length = space[1] - space[0]
 
     # iterate an ascending list of stored intervals
     for interval in stored_intervals:
@@ -12,7 +12,7 @@ def space_to_prioritized_slots(space, planned_length, stored_intervals, ideal_ga
         left_gap = interval
 
         # calculate how much is the gap on the right of the slot (toward closing time)
-        right_gap = gap - left_gap - planned_length
+        right_gap = length - left_gap - planned_length
 
         # if the iteration has exceed threshold, break the loop
         if right_gap < 0:

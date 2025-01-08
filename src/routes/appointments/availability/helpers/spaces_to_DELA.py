@@ -1,4 +1,4 @@
-def appo_ranges_to_DELA(appo_ranges, planned_length, stored_intervals):
+def spaces_to_DELA(appo_ranges, planned_length, stored_intervals):
     # result holder
     DELA = []
 

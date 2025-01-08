@@ -1,4 +1,5 @@
-from .appo_ranges_to_DELA import appo_ranges_to_DELA
+from .appo_ranges_to_spaces import appo_ranges_to_spaces
+from .spaces_to_DELA import spaces_to_DELA
 import json
 
 
@@ -32,7 +33,9 @@ def appo_ranges_table_to_DELA(table):
     # filter out intervals that exceed the opening hours range
     stored_intervals = slice_asc_list(stored_intervals, closing_time - opening_time)
 
-    return appo_ranges_to_DELA(appo_ranges, planned_length, stored_intervals)
+    spaces = appo_ranges_to_spaces(appo_ranges, planned_length, stored_intervals)
+
+    return spaces_to_DELA(spaces)
 
 
 # to slice ascending list with a ceiling
