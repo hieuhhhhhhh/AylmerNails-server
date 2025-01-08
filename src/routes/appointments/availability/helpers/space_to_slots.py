@@ -1,9 +1,9 @@
-def range_to_slots(range, planned_length, stored_intervals):
+def space_to_slots(space, planned_length, stored_intervals):
     # result holder
     slots = []
 
     # calculate total gap to next and last endpoints
-    gap = range[1] - range[0]
+    gap = space[1] - space[0]
 
     # iterate an ascending list of stored intervals
     for interval in stored_intervals:
@@ -19,11 +19,11 @@ def range_to_slots(range, planned_length, stored_intervals):
             break
 
         # calculate and add 2 new slot to list
-        slot = range[0] + left_gap
+        slot = space[0] + left_gap
         slots.append(slot)
 
         # mirrored version (right_gap swap to left_gap)
-        slot = range[0] + right_gap
+        slot = space[0] + right_gap
         slots.append(slot)
 
     return slots

@@ -72,7 +72,8 @@ BEGIN
                 SELECT start_time, end_time, NULL, NULL
                     FROM appo_details
                     WHERE date = _date
-                        AND employee_id = _employee_id;
+                        AND employee_id = _employee_id
+                    ORDER BY start_time;
                 
         END IF;
 
