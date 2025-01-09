@@ -19,8 +19,8 @@ sp:BEGIN
     IF role_ IS NULL
         OR role_ NOT IN ('admin', 'developer')
     THEN 
-        SELECT NULL;
-        LEAVE sp;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '401, Unauthorized';
     END IF;
 
     -- create new employee

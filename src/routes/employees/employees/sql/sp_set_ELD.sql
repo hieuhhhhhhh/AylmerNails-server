@@ -22,7 +22,8 @@ BEGIN
     IF role_ IS NULL
         OR role_ NOT IN ('admin', 'developer')
     THEN 
-        LEAVE sp;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = '401, Unauthorized';
     END IF;
 
     -- Start the transaction

@@ -1,4 +1,6 @@
-CREATE FUNCTION get_stored_intervals(_employee_id INT UNSIGNED) 
+CREATE FUNCTION get_stored_intervals(
+    _employee_id INT UNSIGNED
+) 
 RETURNS JSON
 DETERMINISTIC
 BEGIN

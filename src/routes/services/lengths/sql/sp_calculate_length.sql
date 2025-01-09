@@ -1,12 +1,12 @@
-DROP PROCEDURE IF EXISTS sp_get_service_length;
+DROP PROCEDURE IF EXISTS sp_calculate_length;
 
-CREATE PROCEDURE sp_get_service_length(
+CREATE PROCEDURE sp_calculate_length(
     IN _service_id INT UNSIGNED,
     IN _employee_id INT UNSIGNED,
     IN _date BIGINT,  -- Unix timestamp (BIGINT)
     IN _selected_AOSO JSON, -- list of selected add-on-service options for the selected service
     OUT _service_length_id INT UNSIGNED,
-    OUT _length INT
+    OUT _planned_length INT
 )
 BEGIN
     -- index to iterate json array
@@ -19,7 +19,7 @@ BEGIN
 
     -- fetch service's default length and its id
     SELECT service_length_id, length
-        INTO _service_length_id, _length
+        INTO _service_length_id, _planned_length
         FROM service_lengths
         WHERE service_id = _service_id
             AND effective_from <= _date
@@ -35,7 +35,7 @@ BEGIN
             AND employee_id = _employee_id
         LIMIT 1;
 
-    SET _length = _length + offset_;
+    SET _planned_length = _planned_length + offset_;
 
     -- iterate _selected_AOSO, fetch and merge offset of every AOSO 
     WHILE i < JSON_LENGTH(_selected_AOSO) DO 
@@ -60,7 +60,7 @@ BEGIN
                 AND ao.option_id = option_id_
             LIMIT 1;
 
-        SET _length = _length + offset_;
+        SET _planned_length = _planned_length + offset_;
 
         -- end loop
     END WHILE;
