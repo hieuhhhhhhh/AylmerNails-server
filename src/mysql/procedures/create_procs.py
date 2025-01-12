@@ -10,6 +10,8 @@ from src.routes.services.groups.sql import create_services_groups_sps
 from src.routes.services.lengths.sql import create_services_lengths_sps
 from src.routes.services.services.sql import create_services_services_sps
 
+from src.routes.employees.employees.sql import create_employees_employees_sps
+
 
 # build/update procedures
 def create_procedures():
@@ -25,3 +27,6 @@ def create_procedures():
     create_services_groups_sps()
     create_services_lengths_sps()
     create_services_services_sps()
+
+    # from employees routes
+    create_employees_employees_sps()
