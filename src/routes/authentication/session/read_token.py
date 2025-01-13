@@ -10,7 +10,7 @@ def read_token():
 
     # Fetch token
     # token = request.cookies.get("TOKEN")
-    token = "DX2kjM5wtxgAJzwK4QpY"
+    token = "xZAlkKWjuWYQlaQ3R9mB"
 
     if token:
         # Initialize Hashids with a salt and optional configuration

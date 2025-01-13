@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS sp_set_employee_services;
 
 CREATE PROCEDURE sp_set_employee_services(
-    IN _employee_id JSON,
+    IN _employee_id INT UNSIGNED,
     IN _service_ids JSON
 )
 BEGIN
