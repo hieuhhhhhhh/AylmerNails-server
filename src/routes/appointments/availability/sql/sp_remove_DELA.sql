@@ -1,0 +1,8 @@
+DROP PROCEDURE IF EXISTS sp_remove_DELA;
+
+CREATE PROCEDURE sp_remove_DELA(
+    IN _appo_id INT UNSIGNED
+)
+sp:BEGIN
+END;
+

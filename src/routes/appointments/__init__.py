@@ -5,10 +5,10 @@ from src.routes.authentication.session.read_token import read_token
 from .availability.get_daily_DELAs import get_daily_DELAs
 
 # create blueprint (group of routes)
-services = Blueprint("services", __name__)
+appointments = Blueprint("appointments", __name__)
 
 
-@services.route("/get_availability", methods=["POST"])
+@appointments.route("/get_availability", methods=["POST"])
 def get_availability():
     try:
         # read token
