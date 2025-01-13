@@ -15,6 +15,17 @@ BEGIN
     DECLARE start_time_ INT;
     DECLARE end_time_ INT;
 
+    -- Declare the cursor for fetching the appointment details
+    DECLARE cur CURSOR FOR
+        SELECT date, start_time, end_time, appo_id
+            FROM appo_details
+            WHERE employee_id = _employee_id
+                AND date >= (UNIX_TIMESTAMP() - 24*60*60)
+                AND date >= _scan_from;
+
+    -- Declare continue handler for cursor end
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
     -- Exception handling to roll back in case of an error
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
         ROLLBACK; -- rollback transaction
@@ -24,17 +35,6 @@ BEGIN
 
         -- clean old conflicts from last schedules
         CALL sp_clean_old_schedule_conflicts(_employee_id, _scan_from);
-
-        -- Declare the cursor for fetching the appointment details
-        DECLARE cur CURSOR FOR
-            SELECT date, start_time, end_time, appo_id
-                FROM appo_details
-                WHERE employee_id = _employee_id
-                    AND date >= (UNIX_TIMESTAMP() - 24*60*60)
-                    AND date >= _scan_from;
-
-        -- Declare continue handler for cursor end
-        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
         -- Open the cursor
         OPEN cur;
@@ -52,7 +52,8 @@ BEGIN
                 -- if a schedule_id returned it means invalid
                 IF schedule_id_ IS NOT NULL THEN
                     -- create a new schedule_conflict
-                    INSERT INTO schedule_conflicts(schedule_id_, appo_id_);
+                    INSERT INTO schedule_conflicts(schedule_id, appo_id)
+                        VALUES (schedule_id_, appo_id_);
                 END IF;
             END LOOP;
 

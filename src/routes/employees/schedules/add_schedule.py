@@ -11,6 +11,6 @@ def add_schedule(session, employee_id, effective_from, opening_times, closing_ti
         effective_from,
         opening_times,
         closing_times,
-    )
+    )[0][0]
 
     return jsonify({"added_schedule_id": schedule_id}), 200

@@ -23,7 +23,8 @@ def get_daily_DELAs(session, date, service_id, selected_AOSO, employee_ids):
         if table[0][0] is not None:
             for row in table[0]:
                 DELA = []
-                DELA.append(row[0])
+                if row[0] is not None:
+                    DELA.append(row[0])
             DELAs.append(DELA)
         else:
             # generate DELA
