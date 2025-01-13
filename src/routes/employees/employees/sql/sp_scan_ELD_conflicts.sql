@@ -9,13 +9,10 @@ CREATE PROCEDURE sp_scan_ELD_conflicts(
 BEGIN
     DECLARE last_date_ BIGINT;
     DECLARE exit HANDLER FOR SQLEXCEPTION
-        UNLOCK TABLES;
         ROLLBACK;  -- Rollback if there is any error
 
     -- Start the transaction
     START TRANSACTION;
-        -- Lock the ELD_conflicts table
-        LOCK TABLES ELD_conflicts READ WRITE;
 
         -- Fetch last_date of the given employee
         SELECT last_date
@@ -38,9 +35,6 @@ BEGIN
                         AND date >= (UNIX_TIMESTAMP() - 24*60*60)
                         AND date > last_date_;
         END IF;
-
-        -- Unlock the table after operations are complete
-        UNLOCK TABLES;
 
         -- Commit the transaction if everything went well
     COMMIT;

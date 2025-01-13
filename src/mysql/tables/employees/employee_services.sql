@@ -1,4 +1,4 @@
-CREATE TABLE employees_services (
+CREATE TABLE employee_services (
     employee_id INT UNSIGNED,
     service_id INT UNSIGNED,
     

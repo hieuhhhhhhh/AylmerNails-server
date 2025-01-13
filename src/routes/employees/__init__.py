@@ -11,7 +11,7 @@ employees = Blueprint("employees", __name__)
 
 
 @employees.route("/add_employee", methods=["POST"])
-def request_sign_up():
+def add_employee_():
     try:
         # read token
         session = read_token()
@@ -20,12 +20,10 @@ def request_sign_up():
         data = request.get_json()
         alias = data.get("alias")
         first_date = data.get("first_date")
-        stored_intervals = json.dumps(
-            data.get("stored_intervals")
-        )  # convert python list to json
+        key_intervals = data.get("key_intervals")
         service_ids = json.dumps(data.get("service_ids"))  # convert python list to json
 
-        return add_employee(session, alias, first_date, stored_intervals, service_ids)
+        return add_employee(session, alias, first_date, key_intervals, service_ids)
 
     # catch unexpected error
     except Exception as e:
@@ -33,7 +31,7 @@ def request_sign_up():
 
 
 @employees.route("/set_employee_last_date", methods=["POST"])
-def request_sign_up():
+def set_employee_last_date_():
     try:
         # read token
         session = read_token()
@@ -51,7 +49,7 @@ def request_sign_up():
 
 
 @employees.route("/add_schedule", methods=["POST"])
-def request_sign_up():
+def add_schedule_():
     try:
         # read token
         session = read_token()

@@ -1,4 +1,6 @@
-CREATE FUNCTION get_stored_intervals(
+DROP FUNCTION IF EXISTS fn_get_stored_intervals;
+
+CREATE FUNCTION fn_get_stored_intervals(
     _employee_id INT UNSIGNED
 ) 
 RETURNS JSON
