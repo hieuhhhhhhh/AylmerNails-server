@@ -1,6 +1,7 @@
 from .appo_ranges_to_spaces import appo_ranges_to_spaces
 from .spaces_to_DELA import spaces_to_DELA
 from .store_DELA import store_DELA
+from src.routes.employees.employees.generate_intervals import generate_intervals
 import json
 
 
@@ -10,8 +11,11 @@ def appo_ranges_table_to_DELA(table):
     # fetch appointment length
     planned_length = table[0][3]
 
-    # fetch list of favorable intervals (this list is supposed to be ascending)
-    stored_intervals = json.loads(table[0][2])
+    # fetch key intervals
+    key_intervals = json.loads(table[0][2])
+
+    # generate list of favorable intervals (this list is supposed to be ascending)
+    stored_intervals = generate_intervals(key_intervals, 24 * 60 * 60)
 
     # fetch DELA_id
     DELA_id = table[0][4]

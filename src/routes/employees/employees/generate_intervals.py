@@ -1,7 +1,7 @@
 import json
 
 
-def generate_stored_intervals(key_intervals, threshold):
+def generate_intervals(key_intervals, threshold):
     # result holder
     interval_set = set()
 
