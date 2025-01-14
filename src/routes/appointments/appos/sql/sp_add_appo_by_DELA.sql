@@ -21,7 +21,8 @@ sp:BEGIN
     -- Exception handling to roll back in case of an error
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
         ROLLBACK; -- rollback transaction
-
+        RESIGNAL;
+        
     -- Start the transaction
     START TRANSACTION;
         -- fetch and validate user's role from session data

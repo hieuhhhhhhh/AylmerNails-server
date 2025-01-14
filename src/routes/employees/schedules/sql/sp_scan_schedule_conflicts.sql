@@ -28,6 +28,7 @@ BEGIN
 
     -- Exception handling to roll back in case of an error
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        RESIGNAL; 
         ROLLBACK; -- rollback transaction
 
     -- Start the transaction
