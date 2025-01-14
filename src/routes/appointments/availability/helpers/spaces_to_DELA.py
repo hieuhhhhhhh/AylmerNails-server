@@ -24,13 +24,16 @@ def spaces_to_DELA(spaces, planned_length, stored_intervals):
                 )
             )
 
-    # specially process the last space (which is also the largest length)
-    if all_spaces_are_ideal or space not in ideal_gaps:
-        DELA.extend(space_to_slots(space, planned_length, stored_intervals))
+    # fetch last element is space list
+    last_space = spaces[-1]
+
+    # specially process the last space (which is also the largest length, cause the list is sorted)
+    if all_spaces_are_ideal or last_space not in ideal_gaps:
+        DELA.extend(space_to_slots(last_space, planned_length, stored_intervals))
     else:
         DELA.extend(
             space_to_prioritized_slots(
-                space, planned_length, stored_intervals, ideal_gaps
+                last_space, planned_length, stored_intervals, ideal_gaps
             )
         )
 

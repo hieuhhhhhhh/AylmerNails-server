@@ -1,6 +1,7 @@
 DROP PROCEDURE IF EXISTS sp_add_service_length;
 
 CREATE PROCEDURE sp_add_service_length(
+    IN _session JSON,
     IN _service_id INT UNSIGNED,
     IN _effective_from BIGINT,
     IN _length INT,
@@ -11,20 +12,29 @@ BEGIN
     DECLARE i TINYINT DEFAULT 0;
 
     -- other place holders
+    DECLARE user_id_ INT UNSIGNED;
+    DECLARE role_ VARCHAR(20);
     DECLARE service_length_id_ INT UNSIGNED;
     DECLARE employee_id_ INT UNSIGNED;
     DECLARE length_offset_ INT;
 
-    -- Exception handling to roll back in case of an error
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        ROLLBACK; -- rollback transaction
-
     -- Start the transaction
     START TRANSACTION;
 
+        -- fetch and validate user's role from session data
+        CALL sp_get_user_id_role(_session, user_id_, role_);
+
+        -- IF role is not valid return null and leave procedure
+        IF role_ IS NULL
+            OR role_ NOT IN ('admin', 'developer')
+        THEN 
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '401, Unauthorized';
+        END IF;
+
         -- delete any old service_length that has same effective_from
         DELETE FROM service_lengths
-            WHERE servide_id = _service_id  
+            WHERE service_id = _service_id  
                 AND effective_from = _effective_from;
 
         -- create new service length
@@ -51,6 +61,8 @@ BEGIN
             -- end loop
         END WHILE;
 
+        -- return added service_length_id
+        SELECT service_length_id_;
      -- Commit the transaction if everything went well
     COMMIT;
 END; 

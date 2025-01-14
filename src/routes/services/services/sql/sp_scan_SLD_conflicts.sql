@@ -9,10 +9,6 @@ CREATE PROCEDURE sp_scan_SLD_conflicts(
 BEGIN
     DECLARE last_date_ BIGINT;
 
-    -- Exception handling to roll back in case of an error
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        ROLLBACK; -- rollback transaction
-
     -- Start the transaction
     START TRANSACTION;
         -- Fetch last_date of the given service

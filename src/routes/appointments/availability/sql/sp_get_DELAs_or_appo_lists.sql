@@ -3,6 +3,7 @@ DROP PROCEDURE IF EXISTS sp_get_DELAs_or_appo_lists;
 CREATE PROCEDURE sp_get_DELAs_or_appo_lists(
     IN _session JSON,
     IN _date BIGINT,
+    IN _day_of_week TINYINT, -- start at monday = 1, end at sunday = 7
     IN _service_id INT UNSIGNED,
     IN _selected_AOSO JSON, 
     IN _employee_ids JSON
@@ -30,27 +31,27 @@ BEGIN
         SET MESSAGE_TEXT = '401, Unauthorized';
     END IF;
 
-    -- calculate planned length
-    CALL sp_calculate_length(
-        _service_id, 
-        _employee_id, 
-        _date, 
-        _selected_AOSO, 
-        service_length_id_, 
-        planned_length_
-    );
-
     -- iterate every employee_id from _employee_ids (json array)
     WHILE i < JSON_LENGTH(_employee_ids) DO 
         -- fetch employee_id
         SET employee_id_ = JSON_UNQUOTE(JSON_EXTRACT(_employee_ids, CONCAT('$[', i, ']')));
         SET i = i + 1;
 
+        -- calculate planned length
+        CALL sp_calculate_length(
+            _service_id, 
+            employee_id_, 
+            _date, 
+            _selected_AOSO, 
+            service_length_id_, 
+            planned_length_
+        );
+
         -- temporary table: fetch DELA via date & employee & planned length
         CREATE TEMPORARY TABLE DELA_ AS
-            SELECT ds.slots, d.DELA_id
+            SELECT ds.slot
                 FROM DELAs d
-                    LEFT JOIN DELA_slots ds
+                    JOIN DELA_slots ds
                     ON d.DELA_id = ds.DELA_id
                 WHERE d.date = _date
                     AND d.employee_id = employee_id_
@@ -63,25 +64,49 @@ BEGIN
 
         ELSE -- if DELA empty
             -- fetch opening time and closing time
-            CALL sp_get_opening_hours(_employee_id, _date, opening_time_, closing_time_);
+            CALL sp_get_opening_hours(employee_id_, _day_of_week, opening_time_, closing_time_);
 
-            -- create new DELA_id for this employee and date and length
+            -- clean the old DELA 
+            DELETE FROM DELAs
+                WHERE date = _date
+                    AND employee_id = employee_id_
+                    AND planned_length = planned_length_
+                LIMIT 1;
+
+            -- create new DELA_id from this employee_id & date & length
             INSERT INTO DELAs(date, employee_id, planned_length)
-                VALUES (_date, _employee_id, planned_length_);
+                VALUES (_date, employee_id_, planned_length_);
             SET DELA_id_ = LAST_INSERT_ID();
 
             --  return list of date-employee appointments & planned length & stored intervals & DELA_id
-                SELECT NULL, NULL, fn_get_stored_intervals(_employee_id), planned_length_, DELA_id_
+            WITH sorted_appos AS (
+                SELECT 
+                    start_time AS c1,
+                    end_time AS c2,
+                    NULL AS c3,
+                    NULL AS c4,
+                    NULL AS c5
+                        FROM appo_details 
+                        WHERE date = _date 
+                            AND employee_id = employee_id_
+                        ORDER BY start_time
+            )
+                SELECT 
+                    NULL AS c1,
+                    NULL AS c2,
+                    fn_get_stored_intervals(employee_id_) AS c3,
+                    planned_length_ AS c4,
+                    DELA_id_ AS c5
             UNION ALL
-                SELECT opening_time_, closing_time_, NULL, NULL, NULL
+                SELECT 
+                    opening_time_ AS c1,
+                    closing_time_ AS c2,
+                    NULL AS c3,
+                    NULL AS c4,
+                    NULL AS c5
             UNION ALL
-                SELECT start_time, end_time, NULL, NULL, NULL
-                    FROM appo_details
-                    WHERE date = _date
-                        AND employee_id = _employee_id
-                    ORDER BY start_time;
-
-                
+                SELECT * FROM sorted_appos;
+           
         END IF;
 
         -- clean up temporary table

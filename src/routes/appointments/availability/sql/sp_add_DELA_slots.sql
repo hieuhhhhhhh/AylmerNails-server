@@ -17,7 +17,7 @@ BEGIN
 
         -- create new DELA_slot
         INSERT INTO DELA_slots(DELA_id, slot)
-            VALUES (_DELA_id, slot_)
+            VALUES (_DELA_id, slot_);
 
         -- end body
     END WHILE;

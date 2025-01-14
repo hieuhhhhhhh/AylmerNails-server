@@ -26,6 +26,12 @@ BEGIN
         ORDER BY effective_from DESC
         LIMIT 1;
 
+    -- if no service_length found, throw an exception
+    IF _planned_length IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '400, no service_length found';
+    END IF;
+
     -- fetch and merge offset of employee to current length
     SET offset_ = 0;
     SELECT length_offset

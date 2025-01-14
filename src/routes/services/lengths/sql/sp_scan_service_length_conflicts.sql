@@ -28,11 +28,7 @@ BEGIN
 
     -- Declare continue handler for cursor end
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-    -- Exception handling of errors during transaction
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-        ROLLBACK; -- rollback transaction
-
+    
     -- Start the transaction
     START TRANSACTION;
 

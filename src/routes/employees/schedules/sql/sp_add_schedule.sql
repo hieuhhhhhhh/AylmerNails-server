@@ -7,52 +7,55 @@ CREATE PROCEDURE sp_add_schedule(
     IN _opening_times JSON, -- array of opening times from monday (index 1) to sunday (index 7)
     IN _closing_times JSON -- array of closing times from monday (index 1) to sunday (index 7)
 )
-BEGIN
-    -- declare an index starts from 1 ~ monday
-    DECLARE i TINYINT DEFAULT 1; 
-    
+BEGIN    
     -- placeholders
+    DECLARE i TINYINT DEFAULT 0; 
     DECLARE user_id_ INT UNSIGNED;
-    DECLARE role_ VARCHAR(20);
-    
+    DECLARE role_ VARCHAR(20); 
     DECLARE opening_time_ INT;
     DECLARE closing_time_ INT;
     DECLARE schedule_id_ INT UNSIGNED;
 
-    -- fetch and validate user's role from session data
-    CALL sp_get_user_id_role(_session, user_id_, role_);
+    -- Start the transaction
+    START TRANSACTION;
 
-    -- IF role is not valid return null and leave procedure
-    IF role_ IS NULL
-        OR role_ NOT IN ('admin', 'developer')
-    THEN 
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = '401, Unauthorized';
-    END IF;
+        -- fetch and validate user's role from session data
+        CALL sp_get_user_id_role(_session, user_id_, role_);
 
-    -- add a new schedule
-    INSERT INTO schedules(employee_id, effective_from)
-        VALUES (_employee_id, _effective_from);
+        -- IF role is not valid return null and leave procedure
+        IF role_ IS NULL
+            OR role_ NOT IN ('admin', 'developer')
+        THEN 
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '401, Unauthorized';
+        END IF;
 
-    -- fetch the newly created schedule_id
-    SET schedule_id_ = LAST_INSERT_ID();
+        -- add a new schedule
+        INSERT INTO schedules(employee_id, effective_from)
+            VALUES (_employee_id, _effective_from);
 
-    -- start iterating to generate opening hours that reference the new schedule_id
-    WHILE i <= 7 DO 
-        SET opening_time_ = JSON_UNQUOTE(JSON_EXTRACT(_opening_times, CONCAT('$[', i, ']')));
-        SET closing_time_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
+        -- fetch the newly created schedule_id
+        SET schedule_id_ = LAST_INSERT_ID();
 
-        -- store values to opening_hours table
-        INSERT INTO opening_hours (schedule_id, day_of_week, opening_time, closing_time)
-            VALUES (schedule_id_, i, opening_time_, closing_time_);
+        -- start iterating to generate opening hours that reference the new schedule_id
+        WHILE i < 7 DO 
+            SET opening_time_ = JSON_UNQUOTE(JSON_EXTRACT(_opening_times, CONCAT('$[', i, ']')));
+            SET closing_time_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
 
-        -- increment index
-        SET i = i + 1;
-    END WHILE;
+            -- store values to opening_hours table
+            INSERT INTO opening_hours (schedule_id, day_of_week, opening_time, closing_time)
+                VALUES (schedule_id_, i + 1, opening_time_, closing_time_);
 
-    -- scan and clean conflicts after finishing adding new schedule with AOSs
-    CALL sp_scan_schedule_conflicts(_employee_id, _effective_from);
+            -- increment index
+            SET i = i + 1;
+        END WHILE;
 
-    -- return the added schedule_id
-    SELECT schedule_id_;
+        -- scan and clean conflicts after finishing adding new schedule with AOSs
+        CALL sp_scan_schedule_conflicts(_employee_id, _effective_from);
+
+        -- return the added schedule_id
+        SELECT schedule_id_;
+
+        -- Commit the transaction
+    COMMIT;
 END;

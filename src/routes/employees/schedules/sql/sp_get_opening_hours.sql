@@ -2,18 +2,13 @@ DROP PROCEDURE IF EXISTS sp_get_opening_hours;
 
 CREATE PROCEDURE sp_get_opening_hours(
     IN _employee_id INT UNSIGNED,
-    IN _date BIGINT,  -- Unix timestamp (BIGINT)
+    IN _day_of_week BIGINT,  -- start at monday = 1, end at sunday = 7
     OUT _opening_time INT, 
     OUT _closing_time INT  
 )
 BEGIN
     -- placeholders
     DECLARE schedule_id_ INT UNSIGNED;
-    DECLARE day_of_week_ INT;
-
-    -- Convert the Unix timestamp (_date) to the day of the week in the Toronto timezone
-    -- _date is increase by 43200 seconds (1/2 a day) to shift the time to middle of the day
-    SET day_of_week_ = DAYOFWEEK(CONVERT_TZ(FROM_UNIXTIME(_date + 43200), 'UTC', 'America/Toronto'));
 
     -- fetch most recent schedule of this employee from inputted date
     SELECT schedule_id
@@ -29,7 +24,7 @@ BEGIN
         INTO _opening_time, _closing_time
         FROM opening_hours 
         WHERE schedule_id = schedule_id_
-            AND day_of_week = day_of_week_
+            AND day_of_week = _day_of_week
         LIMIT 1;
 
 END;

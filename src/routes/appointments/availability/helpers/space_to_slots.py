@@ -26,4 +26,4 @@ def space_to_slots(space, planned_length, stored_intervals):
         slot = space[0] + right_gap
         slots.append(slot)
 
-    return slots
+    return sorted(slots)
