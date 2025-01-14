@@ -44,8 +44,8 @@ def table_to_DELA(table):
     stored_intervals = slice_asc_list(stored_intervals, closing_time - opening_time)
 
     # create and return  DELA
-    spaces = appo_ranges_to_spaces(appo_ranges, planned_length, stored_intervals)
-    DELA = spaces_to_DELA(spaces)
+    spaces = appo_ranges_to_spaces(appo_ranges)
+    DELA = spaces_to_DELA(spaces, planned_length, stored_intervals)
 
     # send DELA to mysql
     store_DELA(DELA, DELA_id)

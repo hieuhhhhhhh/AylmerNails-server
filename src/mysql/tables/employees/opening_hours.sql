@@ -1,6 +1,6 @@
 CREATE TABLE opening_hours (
     schedule_id INT UNSIGNED, -- the time when this schedule takes effect
-    day_of_week TINYINT, -- sunday = 0, monday = 1, tuesday = 2, etc.
+    day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), -- start from monday = 1, end at sunday = 7
     opening_time INT, -- the clock time when employee starts on that day (in seconds)
     closing_time INT, -- the clock time when employee stops on that day (in seconds)
     

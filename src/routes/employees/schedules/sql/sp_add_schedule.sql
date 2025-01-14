@@ -9,7 +9,7 @@ CREATE PROCEDURE sp_add_schedule(
 )
 BEGIN
     -- declare an index starts from 1 ~ monday
-    DECLARE i TINYINT DEFAULT 1; 
+    DECLARE i TINYINT DEFAULT 0; 
     
     -- placeholders
     DECLARE user_id_ INT UNSIGNED;
@@ -38,13 +38,13 @@ BEGIN
     SET schedule_id_ = LAST_INSERT_ID();
 
     -- start iterating to generate opening hours that reference the new schedule_id
-    WHILE i <= 7 DO 
+    WHILE i < 7 DO 
         SET opening_time_ = JSON_UNQUOTE(JSON_EXTRACT(_opening_times, CONCAT('$[', i, ']')));
         SET closing_time_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
 
         -- store values to opening_hours table
         INSERT INTO opening_hours (schedule_id, day_of_week, opening_time, closing_time)
-            VALUES (schedule_id_, i, opening_time_, closing_time_);
+            VALUES (schedule_id_, i + 1, opening_time_, closing_time_);
 
         -- increment index
         SET i = i + 1;

@@ -49,7 +49,7 @@ BEGIN
 
         -- temporary table: fetch DELA via date & employee & planned length
         CREATE TEMPORARY TABLE DELA_ AS
-            SELECT ds.slot, d.DELA_id
+            SELECT ds.slot
                 FROM DELAs d
                     JOIN DELA_slots ds
                     ON d.DELA_id = ds.DELA_id
