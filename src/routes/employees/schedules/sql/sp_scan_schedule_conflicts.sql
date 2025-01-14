@@ -26,37 +26,31 @@ BEGIN
     -- Declare continue handler for cursor end
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-    -- Start the transaction
-    START TRANSACTION;    
+    -- clean old conflicts from last schedules
+    CALL sp_clean_old_schedule_conflicts(_employee_id, _scan_from);
 
-        -- clean old conflicts from last schedules
-        CALL sp_clean_old_schedule_conflicts(_employee_id, _scan_from);
+    -- Open the cursor
+    OPEN cur;
+        -- Loop through every apointment found and validate them
+        read_loop: LOOP
+            FETCH cur INTO date_, start_time_, end_time_, appo_id_;
+            
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
 
-        -- Open the cursor
-        OPEN cur;
-            -- Loop through every apointment found and validate them
-            read_loop: LOOP
-                FETCH cur INTO date_, start_time_, end_time_, appo_id_;
-                
-                IF done THEN
-                    LEAVE read_loop;
-                END IF;
+            -- find a schedule_id that conflict with this appoinment
+            SET schedule_id_ = fn_find_conflicting_schedule(_employee_id, date_, start_time_, end_time_);
 
-                -- find a schedule_id that conflict with this appoinment
-                SET schedule_id_ = fn_find_conflicting_schedule(_employee_id, date_, start_time_, end_time_);
+            -- if a schedule_id returned it means invalid
+            IF schedule_id_ IS NOT NULL THEN
+                -- create a new schedule_conflict
+                INSERT INTO schedule_conflicts(schedule_id, appo_id)
+                    VALUES (schedule_id_, appo_id_);
+            END IF;
+        END LOOP;
 
-                -- if a schedule_id returned it means invalid
-                IF schedule_id_ IS NOT NULL THEN
-                    -- create a new schedule_conflict
-                    INSERT INTO schedule_conflicts(schedule_id, appo_id)
-                        VALUES (schedule_id_, appo_id_);
-                END IF;
-            END LOOP;
-
-            -- Close the cursor
-        CLOSE cur;
-
-        -- Commit the transaction
-    COMMIT;
+        -- Close the cursor
+    CLOSE cur;
 
 END;

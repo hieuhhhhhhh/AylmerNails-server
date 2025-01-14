@@ -11,10 +11,7 @@ BEGIN
     -- placeholders
     DECLARE user_id_ INT UNSIGNED;
     DECLARE role_ VARCHAR(20);
-
-    DECLARE exit HANDLER FOR SQLEXCEPTION
-        ROLLBACK;  -- Rollback in case of an error
-
+    
     -- fetch and validate user's role from session data
     CALL sp_get_user_id_role(_session, user_id_, role_);
 
@@ -26,23 +23,17 @@ BEGIN
         SET MESSAGE_TEXT = '401, Unauthorized';
     END IF;
 
-    -- Start the transaction
-    START TRANSACTION;
+    -- Check if the employee exists
+    IF NOT EXISTS (SELECT 1 FROM employees WHERE employee_id = _employee_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid employee_id, no such employee exists';
+    END IF;
 
-        -- Check if the employee exists
-        IF NOT EXISTS (SELECT 1 FROM employees WHERE employee_id = _employee_id) THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Invalid employee_id, no such employee exists';
-        END IF;
+    -- Update the last_date for the given employee_id
+    UPDATE employees
+        SET last_date = _last_date
+        WHERE employee_id = _employee_id;
 
-        -- Update the last_date for the given employee_id
-        UPDATE employees
-            SET last_date = _last_date
-            WHERE employee_id = _employee_id;
-
-        -- Call sp_scan_ELD_conflicts to find any appointments that conflict the update
-        CALL sp_scan_ELD_conflicts(_employee_id);
-
-        -- Commit the transaction if all operations are successful
-    COMMIT;
+    -- Call sp_scan_ELD_conflicts to find any appointments that conflict the update
+    CALL sp_scan_ELD_conflicts(_employee_id);
 END;

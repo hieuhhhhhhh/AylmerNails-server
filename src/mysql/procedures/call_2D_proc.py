@@ -3,10 +3,18 @@ from src.mysql.db_config import DATABASE_CONFIG
 from .thread_pool import job_queue
 
 
-# This method will close the connection in a separate thread
-def close_connection(connection):
+# commit and close connection:
+def commit_connection(connection):
     if connection:
-        connection.close()  # Closing the connection (blocking, but not awaited in main flow)
+        connection.commit()
+        connection.close()  # Closing the connection
+
+
+# rollback and close connection:
+def rollback_connection(connection):
+    if connection:
+        connection.rollback()
+        connection.close()
 
 
 def call_2D_proc(sp_name, *params):
@@ -18,7 +26,7 @@ def call_2D_proc(sp_name, *params):
     try:
         # Connect to the database
         connection = mysql.connector.connect(**DATABASE_CONFIG)
-        connection.autocommit = True
+        connection.autocommit = False
 
         # Use a cursor within a context manager to handle its closing
         with connection.cursor() as cursor:
@@ -29,13 +37,12 @@ def call_2D_proc(sp_name, *params):
             for table in cursor.stored_results():
                 results.extend(table.fetchall())
 
+        job_queue.put(lambda: commit_connection(connection))
+
     except mysql.connector.Error as err:
+        job_queue.put(lambda: rollback_connection(connection))
         print(f"Error: {err}")
         raise
-
-    finally:
-        # send job to thread pool
-        job_queue.put(lambda: close_connection(connection))
 
     print()
     return results  # Return the results to the caller

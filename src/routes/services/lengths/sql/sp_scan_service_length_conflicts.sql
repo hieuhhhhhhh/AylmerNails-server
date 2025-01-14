@@ -28,41 +28,36 @@ BEGIN
 
     -- Declare continue handler for cursor end
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
-    -- Start the transaction
-    START TRANSACTION;
 
-        -- Clean old conflicts
-        DELETE slc
-            FROM service_length_conflicts slc
-                JOIN appo_details ad 
-                ON slc.appo_id = ad.appo_id
-            WHERE ad.date >= _scan_from;
+    -- Clean old conflicts
+    DELETE slc
+        FROM service_length_conflicts slc
+            JOIN appo_details ad 
+            ON slc.appo_id = ad.appo_id
+        WHERE ad.date >= _scan_from;
 
-        -- Open the cursor
-        OPEN cur;
-            -- Loop through every apointment found and validate them
-            read_loop: LOOP
-                FETCH cur INTO date_, start_time_, end_time_, appo_id_, employee_id_;
-                
-                IF done THEN
-                    LEAVE read_loop;
-                END IF;
+    -- Open the cursor
+    OPEN cur;
+        -- Loop through every apointment found and validate them
+        read_loop: LOOP
+            FETCH cur INTO date_, start_time_, end_time_, appo_id_, employee_id_;
+            
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
 
-                -- find a service_length_id that is conflicting this appoinment
-                SET service_length_id_ = fn_find_conflicting_length(_service_id, employee_id_, date_, start_time_, end_time_);
+            -- find a service_length_id that is conflicting this appoinment
+            SET service_length_id_ = fn_find_conflicting_length(_service_id, employee_id_, date_, start_time_, end_time_);
 
-                -- if a id is returned it means invalid appointment
-                IF service_length_id_ IS NOT NULL 
-                THEN
-                    -- create a new service_length_conflict
-                    INSERT INTO service_length_conflicts(service_length_id, appo_id) 
-                    VALUES (service_length_id_, appo_id_);
-                END IF;
-            END LOOP;
-            -- Close the cursor
-        CLOSE cur;
+            -- if a id is returned it means invalid appointment
+            IF service_length_id_ IS NOT NULL 
+            THEN
+                -- create a new service_length_conflict
+                INSERT INTO service_length_conflicts(service_length_id, appo_id) 
+                VALUES (service_length_id_, appo_id_);
+            END IF;
+        END LOOP;
+        -- Close the cursor
+    CLOSE cur;
 
-        -- Commit the transaction if everything went well
-    COMMIT;
 END;
