@@ -39,7 +39,7 @@ BEGIN
 
         -- delete any old service_length that has same effective_from
         DELETE FROM service_lengths
-            WHERE servide_id = _service_id  
+            WHERE service_id = _service_id  
                 AND effective_from = _effective_from;
 
         -- create new service length
@@ -67,7 +67,7 @@ BEGIN
         END WHILE;
 
         -- return added service_length_id
-        SELECT service_length_id_
+        SELECT service_length_id_;
      -- Commit the transaction if everything went well
     COMMIT;
 END; 
