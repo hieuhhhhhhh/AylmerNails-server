@@ -1,6 +1,6 @@
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
-from .helpers.appo_ranges_table_to_DELA import appo_ranges_table_to_DELA
+from .helpers.table_to_DELA import table_to_DELA
 from .helpers.store_DELA import store_DELA
 
 
@@ -28,9 +28,6 @@ def get_daily_DELAs(session, date, service_id, selected_AOSO, employee_ids):
             DELAs.append(DELA)
         else:
             # generate DELA
-            DELA = appo_ranges_table_to_DELA(table)
-
-            # send DELA to mysql
-            store_DELA(DELA)
+            DELA = table_to_DELA(table)
 
     return jsonify({"DELAs": DELAs}), 200

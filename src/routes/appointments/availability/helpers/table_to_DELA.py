@@ -4,7 +4,7 @@ from .store_DELA import store_DELA
 import json
 
 
-def appo_ranges_table_to_DELA(table):
+def table_to_DELA(table):
     appo_ranges = []  # a list of tuples
 
     # fetch appointment length
@@ -16,8 +16,15 @@ def appo_ranges_table_to_DELA(table):
     # fetch DELA_id
     DELA_id = table[0][4]
 
-    # fetch and merge opening time
+    # fetch opening time closing time
     opening_time = table[1][0]
+    closing_time = table[1][1]
+
+    # validate all after fetching from table (all must be not null)
+    if not all([planned_length, stored_intervals, DELA_id, opening_time, closing_time]):
+        return []
+
+    # merge opening time
     appo_ranges.append((None, opening_time))
 
     # fetch list of appointment ranges from table
@@ -30,8 +37,7 @@ def appo_ranges_table_to_DELA(table):
 
         appo_ranges.append((appo_ST, appo_ET))
 
-    # fetch and merge closing time
-    closing_time = table[1][1]
+    # merge closing time
     appo_ranges.append((closing_time, None))
 
     # filter out intervals that exceed the opening hours range
