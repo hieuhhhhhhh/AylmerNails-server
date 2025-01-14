@@ -10,8 +10,8 @@ def get_daily_DELAs(session, date, service_id, selected_AOSO, employee_ids):
     # result holder
     DELAs = []
 
-    # parse date to day of the week for Toronto timezone
-    day_of_week = get_day_of_week_toronto(date)
+    # parse date to day of the week for Toronto timezone (add half a day to shift to mid-day timestamp)
+    day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
 
     # get tables of DELAs or appo_lists
     tables = call_3D_proc(

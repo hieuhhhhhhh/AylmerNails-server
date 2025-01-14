@@ -6,11 +6,9 @@ CREATE PROCEDURE sp_add_appo_by_DELA(
     IN _service_id INT UNSIGNED,
     IN _selected_AOSO JSON,
     IN _date BIGINT,
-    IN _start_time INT,
-    IN _end_time INT,
-    IN _employees_selected VARCHAR(500)
+    IN _start_time INT
 )
-sp:BEGIN
+BEGIN
     -- placeholders
     DECLARE user_id_ INT UNSIGNED;
     DECLARE role_ VARCHAR(20);
@@ -26,7 +24,7 @@ sp:BEGIN
         OR role_ NOT IN ('client','admin', 'developer')
     THEN 
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = '401, Unauthorized';
+            SET MESSAGE_TEXT = '401, Unauthorized';
     END IF;
 
     -- calculate length from the given description
@@ -61,6 +59,7 @@ sp:BEGIN
             employee_id, 
             service_id, 
             selected_AOSO,
+            date,
             start_time, 
             end_time
         )
@@ -68,8 +67,9 @@ sp:BEGIN
             _employee_id, 
             _service_id, 
             _selected_AOSO,
+            _date,
             _start_time, 
-            _end_time
+            _start_time + planned_length_
         );
 
         -- remove the used DELAs (after a write that DELAs will be invalid)
@@ -79,8 +79,9 @@ sp:BEGIN
         -- Return the ID of the newly inserted appointment
         SELECT LAST_INSERT_ID() AS new_appo_id;
     ELSE
-        -- if description not matches any DELA slot, return null
-        SELECT NULL;
+        -- if description not matches any DELA slot, return exception
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '400, not in DELA';
     END IF;
 
 END;

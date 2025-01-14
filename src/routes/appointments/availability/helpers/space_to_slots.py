@@ -23,7 +23,8 @@ def space_to_slots(space, planned_length, stored_intervals):
         slots.append(slot)
 
         # mirrored version (right_gap swap to left_gap)
-        slot = space[0] + right_gap
-        slots.append(slot)
+        mirrored = space[0] + right_gap
+        if mirrored != slot:
+            slots.append(mirrored)
 
     return sorted(slots)
