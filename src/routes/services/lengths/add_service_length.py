@@ -2,10 +2,10 @@ from flask import jsonify
 from src.mysql.procedures.call_2D_proc import call_2D_proc
 
 
-def add_service(session, service_id, effective_from, length, SLVs):
+def add_service_length(session, service_id, effective_from, length, SLVs):
     # call mysql proc to process data
     service_length_id = call_2D_proc(
         "sp_add_service_length", session, service_id, effective_from, length, SLVs
-    )[0][0]
+    )
 
     return jsonify({"added_service_length_id": service_length_id}), 200
