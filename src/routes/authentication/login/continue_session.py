@@ -11,8 +11,15 @@ def continue_session(token):
     # Initialize Hashids with a salt and optional configuration
     hashids = Hashids(salt=current_app.config["TOKEN_SALT"], min_length=20)
 
-    # Decode token get the required information
-    session_id, session_salt = hashids.decode(token)
+    # Decode the token
+    res = hashids.decode(token)
+
+    # Check if the decoding fails (if result is empty or None)
+    if not res:
+        return {"message": "Invalid token"}, 400
+
+    # If decoding is successful, unpack the result into session_id and session_salt
+    session_id, session_salt = res
 
     # Process the retrieved data
     status, user_id, new_salt = call_2D_proc(

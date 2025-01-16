@@ -9,7 +9,7 @@ def get_all_services():
     return (
         jsonify(
             {
-                "get_all_services": services,
+                "all_services": services,
                 "list_definition": "service_id, service_name, category_id, category_name, group_id, group_name",
             }
         ),
