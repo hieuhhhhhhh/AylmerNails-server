@@ -5,9 +5,20 @@ from ..helpers.unexpected_error_response import unexpected_error_response
 from src.routes.employees.employees.add_employee import add_employee
 from src.routes.employees.employees.set_employee_last_date import set_employee_last_date
 from src.routes.employees.schedules.add_schedule import add_schedule
+from src.routes.employees.employees.get_all_employees import get_all_employees
 
 # create blueprint (group of routes)
 employees = Blueprint("employees", __name__)
+
+
+@employees.route("/get_all_employees", methods=["GET"])
+def get_all_employees_():
+    try:
+        # return employee list with some basic information
+        return get_all_employees()
+    # catch unexpected error
+    except Exception as e:
+        return unexpected_error_response(e)
 
 
 @employees.route("/add_employee", methods=["POST"])
