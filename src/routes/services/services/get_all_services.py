@@ -1,0 +1,17 @@
+from flask import jsonify
+from src.mysql.procedures.call_2D_proc import call_2D_proc
+
+
+def get_all_services():
+    # call mysql proc to process data
+    services = call_2D_proc("sp_get_all_services")
+
+    return (
+        jsonify(
+            {
+                "get_all_services": services,
+                "list_definition": "service_id, service_name, category_id, category_name, group_id, group_name",
+            }
+        ),
+        200,
+    )

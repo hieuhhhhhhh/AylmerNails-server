@@ -6,4 +6,12 @@ def get_all_employees():
     # call mysql proc to process data
     employees = call_2D_proc("sp_set_ELD")
 
-    return jsonify({"all_employees": employees}), 200
+    return (
+        jsonify(
+            {
+                "all_employees": employees,
+                "list_definition": "employee_id, alias, first_date, last_date",
+            }
+        ),
+        200,
+    )
