@@ -10,7 +10,7 @@ def get_all_services():
         jsonify(
             {
                 "all_services": services,
-                "list_definition": "service_id, service_name, category_id, category_name",
+                "list_definition": "service_id, service_name, service_last_date, category_id, category_name",
             }
         ),
         200,
