@@ -5,6 +5,7 @@ from src.routes.authentication.session.read_token import read_token
 from .services.add_service import add_service
 from .lengths.add_service_length import add_service_length
 from .services.get_all_services import get_all_services
+from .services.search_services import search_services
 
 # create blueprint (group of routes)
 services = Blueprint("services", __name__)
@@ -57,3 +58,8 @@ def add_service_length_():
     # catch unexpected error
     except Exception as e:
         return unexpected_error_response(e)
+
+
+@services.route("/search_services/<query>", methods=["GET"])
+def search_services_(query):
+    return search_services(query)

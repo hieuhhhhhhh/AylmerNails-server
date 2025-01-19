@@ -4,7 +4,8 @@ CREATE PROCEDURE sp_add_service(
     IN _session JSON,
     IN _name VARCHAR(50),
     IN _category_id INT UNSIGNED,
-    IN _AOSs JSON -- JSON array of all AOSs (add-on services) for this service
+    IN _AOSs JSON, -- JSON array of all AOSs (add-on services) for this service
+    IN _service_name_tokens JSON -- array of tokens of service's name
 )
 sp:BEGIN
     -- index to iterate json array
@@ -17,6 +18,7 @@ sp:BEGIN
     DECLARE AOS_id_ INT UNSIGNED;
     DECLARE prompt_ VARCHAR(400);
     DECLARE AOS_options_ JSON;
+    DECLARE sn_token_ VARCHAR(50);
 
     -- fetch and validate user's role from session data
     CALL sp_get_user_id_role(_session, user_id_, role_);
@@ -48,6 +50,19 @@ sp:BEGIN
 
         -- call the sp that hanlde adding AOS options
         CALL sp_add_AOS(service_id_, prompt_, AOS_options_);
+
+        -- end loop
+    END WHILE;
+
+        -- start iterating to fetch all tokens from the JSON array
+    WHILE i < JSON_LENGTH(_service_name_tokens) DO 
+        -- fetch prompt of AOS
+        SET sn_token_ = JSON_UNQUOTE(JSON_EXTRACT(_service_name_tokens, CONCAT('$[', i, ']')));
+        SET i = i + 1;
+
+        -- call the sp that hanlde adding AOS options
+        INSERT INTO service_name_tokens(token, service_id)
+            VALUES (sn_token_, service_id_);
 
         -- end loop
     END WHILE;
