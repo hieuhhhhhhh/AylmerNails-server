@@ -4,18 +4,18 @@ from ..helpers.unexpected_error_response import unexpected_error_response
 from src.routes.authentication.session.read_token import read_token
 from .services.add_service import add_service
 from .lengths.add_service_length import add_service_length
-from .services.get_all_services import get_all_services
+from .services.get_many_services import get_many_services
 from .services.search_services import search_services
 
 # create blueprint (group of routes)
 services = Blueprint("services", __name__)
 
 
-@services.route("/get_all_services", methods=["GET"])
-def get_all_employees_():
+@services.route("/get_many_services/<timestamp>", methods=["GET"])
+def get_many_services_(timestamp):
     try:
         # return service list
-        return get_all_services()
+        return get_many_services(timestamp)
     # catch unexpected error
     except Exception as e:
         return unexpected_error_response(e)
