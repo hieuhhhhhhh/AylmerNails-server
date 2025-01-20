@@ -30,7 +30,7 @@ def request_login(phone_number, password):
         # Generate session ID and salt
         session_id, session_salt = call_3D_proc(
             "sp_add_session", user_id, SESSION_EXPIRY
-        )[0]
+        )[0][0]
 
         # Encode session ID and salt to generate token
         token = hashids.encode(session_id, session_salt)

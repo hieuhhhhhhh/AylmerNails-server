@@ -3,6 +3,7 @@ DROP PROCEDURE IF EXISTS sp_add_service;
 CREATE PROCEDURE sp_add_service(
     IN _session JSON,
     IN _name VARCHAR(50),
+    IN _description VARCHAR(500),
     IN _category_id INT UNSIGNED,
     IN _AOSs JSON, -- JSON array of all AOSs (add-on services) for this service
     IN _service_name_tokens JSON -- array of tokens of service's name
@@ -32,8 +33,8 @@ sp:BEGIN
     END IF;
 
     -- create new service
-    INSERT INTO services (name, category_id)
-        VALUES (_name, _category_id);
+    INSERT INTO services (name, description, category_id)
+        VALUES (_name, _description, _category_id);
     
     -- fetch id of new service
     SET service_id_ = LAST_INSERT_ID();

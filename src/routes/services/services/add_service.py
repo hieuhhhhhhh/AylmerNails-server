@@ -1,3 +1,4 @@
+import json
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
 
@@ -15,5 +16,5 @@ def add_service(session, name, description, category_id, AOSs):
 
 
 def tokenize_service_name(name):
-    words = name.split().lower()
-    return words
+    tokens = name.lower().split()
+    return json.dumps(tokens)
