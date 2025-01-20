@@ -11,11 +11,11 @@ from .services.search_services import search_services
 services = Blueprint("services", __name__)
 
 
-@services.route("/get_many_services/<timestamp>", methods=["GET"])
-def get_many_services_(timestamp):
+@services.route("/get_many_services/<date>", methods=["GET"])
+def get_many_services_(date):
     try:
         # return service list
-        return get_many_services(timestamp)
+        return get_many_services(date)
     # catch unexpected error
     except Exception as e:
         return unexpected_error_response(e)

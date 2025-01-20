@@ -2,9 +2,9 @@ from flask import jsonify
 from src.mysql.procedures.call_2D_proc import call_2D_proc
 
 
-def get_many_services(timestamp):
+def get_many_services(date):
     # call mysql proc to process data
-    services = call_2D_proc("sp_get_many_services", timestamp)
+    services = call_2D_proc("sp_get_many_services", date)
 
     return (
         jsonify(
