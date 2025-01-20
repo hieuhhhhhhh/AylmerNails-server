@@ -1,7 +1,7 @@
 from flask import jsonify, current_app
 from twilio.rest import Client
 import random
-from src.mysql.procedures.call_2D_proc import call_2D_proc
+from src.mysql.procedures.call_3D_proc import call_3D_proc
 
 # Init lifetime of code (in sec)
 CODE_EXPIRY = 300
@@ -32,7 +32,7 @@ def generate_code(phone_number, new_password=None):
         )
 
         # Store code in db to verify in the second request
-        call_2D_proc(
+        call_3D_proc(
             "sp_store_code",
             phone_number,
             new_password,

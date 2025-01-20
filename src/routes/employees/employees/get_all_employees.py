@@ -1,10 +1,10 @@
 from flask import jsonify
-from src.mysql.procedures.call_2D_proc import call_2D_proc
+from src.mysql.procedures.call_3D_proc import call_3D_proc
 
 
 def get_all_employees():
     # call mysql proc to process data
-    employees = call_2D_proc("sp_set_ELD")
+    employees = call_3D_proc("sp_get_all_employees")[0]
 
     return (
         jsonify(
