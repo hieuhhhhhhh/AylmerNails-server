@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, request
-from ..helpers.unexpected_error_response import unexpected_error_response
+from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
 from .availability.get_daily_DELAs import get_daily_DELAs
 from .appos.add_appo_by_DELA import add_appo_by_DELA
@@ -31,7 +31,7 @@ def get_availability():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @appointments.route("/add_appo_by_DELA", methods=["POST"])
@@ -57,4 +57,4 @@ def add_appo_by_DELA_():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)

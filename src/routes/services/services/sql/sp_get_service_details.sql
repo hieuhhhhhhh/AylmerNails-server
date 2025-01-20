@@ -39,9 +39,11 @@ BEGIN
             SELECT effective_from_, length_;
 
             -- return 2nd table: all variations of the previous length
-            SELECT employee_id, length_offset
-                FROM SLVs
-                WHERE service_length_id = service_length_id_;
+            SELECT s.employee_id, e.alias, s.length_offset
+                FROM SLVs s
+                    LEFT JOIN employees e
+                        ON s.employee_id = e.employee_id
+                WHERE s.service_length_id = service_length_id_;
 
             -- Fetch next row from the cursor into variables, repeat the process on next length
             FETCH cur_ INTO service_length_id_, effective_from_, length_;            

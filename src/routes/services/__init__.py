@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, request
-from ..helpers.unexpected_error_response import unexpected_error_response
+from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
 from .services.add_service import add_service
 from .lengths.add_service_length import add_service_length
@@ -19,7 +19,7 @@ def get_many_services_(date):
         return get_many_services(date)
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @services.route("/add_service", methods=["POST"])
@@ -39,7 +39,7 @@ def add_service_():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @services.route("/add_service_length", methods=["POST"])
@@ -59,7 +59,7 @@ def add_service_length_():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @services.route("/search_services/<query>", methods=["GET"])

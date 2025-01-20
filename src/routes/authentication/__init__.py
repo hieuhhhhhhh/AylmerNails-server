@@ -4,7 +4,7 @@ from .sign_up.verify_signup import verify_signup
 from .login.request_login import request_login
 from .login.continue_session import continue_session
 
-from ..helpers.unexpected_error_response import unexpected_error_response
+from ..helpers.default_error_response import default_error_response
 
 # create blueprint (group of routes)
 authentication = Blueprint("authentication", __name__)
@@ -22,7 +22,7 @@ def request_sign_up():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @authentication.route("/verify_sign_up", methods=["POST"])
@@ -37,7 +37,7 @@ def verify_sign_up():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @authentication.route("/request_log_in", methods=["POST"])
@@ -52,7 +52,7 @@ def request_log_in():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @authentication.route("/request_continue_session")
@@ -65,4 +65,4 @@ def request_continue_session():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)

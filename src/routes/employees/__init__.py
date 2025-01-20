@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, request
 from src.routes.authentication.session.read_token import read_token
-from ..helpers.unexpected_error_response import unexpected_error_response
+from ..helpers.default_error_response import default_error_response
 from src.routes.employees.employees.add_employee import add_employee
 from src.routes.employees.employees.set_employee_last_date import set_employee_last_date
 from src.routes.employees.schedules.add_schedule import add_schedule
@@ -18,7 +18,7 @@ def get_all_employees_():
         return get_all_employees()
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @employees.route("/add_employee", methods=["POST"])
@@ -38,7 +38,7 @@ def add_employee_():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @employees.route("/set_employee_last_date", methods=["POST"])
@@ -56,7 +56,7 @@ def set_employee_last_date_():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
 
 
 @employees.route("/add_schedule", methods=["POST"])
@@ -84,4 +84,4 @@ def add_schedule_():
 
     # catch unexpected error
     except Exception as e:
-        return unexpected_error_response(e)
+        return default_error_response(e)
