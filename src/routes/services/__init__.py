@@ -6,6 +6,7 @@ from .services.add_service import add_service
 from .lengths.add_service_length import add_service_length
 from .services.get_many_services import get_many_services
 from .services.search_services import search_services
+from .services.get_service_details import get_service_details
 
 # create blueprint (group of routes)
 services = Blueprint("services", __name__)
@@ -30,10 +31,11 @@ def add_service_():
         # read json from request
         data = request.get_json()
         name = data.get("name")
+        description = data.get("description")
         category_id = data.get("category_id")
         AOSs = json.dumps(data.get("AOSs"))  # convert python list to json
 
-        return add_service(session, name, category_id, AOSs)
+        return add_service(session, name, description, category_id, AOSs)
 
     # catch unexpected error
     except Exception as e:
@@ -63,3 +65,8 @@ def add_service_length_():
 @services.route("/search_services/<query>", methods=["GET"])
 def search_services_(query):
     return search_services(query)
+
+
+@services.route("/get_service_details/<service_id>", methods=["GET"])
+def get_service_details_(service_id):
+    return get_service_details(service_id)
