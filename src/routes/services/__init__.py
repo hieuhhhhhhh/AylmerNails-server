@@ -31,11 +31,23 @@ def add_service_():
         # read json from request
         data = request.get_json()
         name = data.get("name")
-        description = data.get("description")
         category_id = data.get("category_id")
+        description = data.get("description")
+        date = data.get("date")
+        length = data.get("length")
         AOSs = json.dumps(data.get("AOSs"))  # convert python list to json
+        employee_ids = json.dumps(data.get("employee_ids"))
 
-        return add_service(session, name, description, category_id, AOSs)
+        return add_service(
+            session,
+            name,
+            category_id,
+            description,
+            date,
+            length,
+            AOSs,
+            employee_ids,
+        )
 
     # catch unexpected error
     except Exception as e:

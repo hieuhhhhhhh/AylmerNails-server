@@ -3,10 +3,13 @@ DROP PROCEDURE IF EXISTS sp_add_service;
 CREATE PROCEDURE sp_add_service(
     IN _session JSON,
     IN _name VARCHAR(50),
-    IN _description VARCHAR(500),
+    IN _service_name_tokens JSON, -- array of tokens of service's name
     IN _category_id INT UNSIGNED,
+    IN _description VARCHAR(500),
+    IN _date BIGINT,
+    IN _length INT,
     IN _AOSs JSON, -- JSON array of all AOSs (add-on services) for this service
-    IN _service_name_tokens JSON -- array of tokens of service's name
+    IN _employee_ids JSON
 )
 sp:BEGIN
     -- index to iterate json array
@@ -19,7 +22,6 @@ sp:BEGIN
     DECLARE AOS_id_ INT UNSIGNED;
     DECLARE prompt_ VARCHAR(400);
     DECLARE AOS_options_ JSON;
-    DECLARE sn_token_ VARCHAR(50);
 
     -- fetch and validate user's role from session data
     CALL sp_get_user_id_role(_session, user_id_, role_);
@@ -39,6 +41,10 @@ sp:BEGIN
     -- fetch id of new service
     SET service_id_ = LAST_INSERT_ID();
 
+    -- create first service length
+    INSERT INTO service_lengths (service_id, effective_from, length)
+        VALUES (service_id_, _date, _length);
+
     -- start iterating to fetch all AOSs from the JSON array
     WHILE i < JSON_LENGTH(_AOSs) DO 
         -- fetch prompt of AOS
@@ -55,18 +61,11 @@ sp:BEGIN
         -- end loop
     END WHILE;
 
-        -- start iterating to fetch all tokens from the JSON array
-    WHILE i < JSON_LENGTH(_service_name_tokens) DO 
-        -- fetch prompt of AOS
-        SET sn_token_ = JSON_UNQUOTE(JSON_EXTRACT(_service_name_tokens, CONCAT('$[', i, ']')));
-        SET i = i + 1;
+    -- extract and store name tokens
+    CALL sp_store_name_tokens(_service_id, _service_name_tokens);
 
-        -- call the sp that hanlde adding AOS options
-        INSERT INTO service_name_tokens(token, service_id)
-            VALUES (sn_token_, service_id_);
-
-        -- end loop
-    END WHILE;
+    -- set service list for the new employee
+    CALL sp_set_service_employees(_service_id, _employee_ids);
 
     -- return service_id
     SELECT service_id_;

@@ -9,6 +9,8 @@ def create_services_services_sps():
     exe_queries(__file__, "sp_get_many_services.sql")
     exe_queries(__file__, "sp_get_service_details.sql")
     exe_queries(__file__, "sp_scan_SLD_conflicts.sql")
+    exe_queries(__file__, "sp_set_service_employees.sql")
     exe_queries(__file__, "sp_set_SLD.sql")
+    exe_queries(__file__, "sp_store_name_tokens.sql")
 
     print()

@@ -17,7 +17,7 @@ BEGIN
         SELECT service_length_id, effective_from, length
             FROM service_lengths
             WHERE service_id = _service_id
-                ORDER BY effective_from DESC;
+                ORDER BY effective_from;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done_ = TRUE;
 
