@@ -28,6 +28,14 @@ BEGIN
                 ON s.category_id = c.category_id
         WHERE s.service_id = _service_id;
 
+    -- return table: service AOSs
+    SELECT o.option_id, o.name, o.length_offset, a.AOS_id, a.prompt
+        FROM AOS_options o
+            RIGHT JOIN add_on_services a
+                ON o.AOS_id = a.AOS_id
+        WHERE a.service_id = _service_id
+        ORDER BY o.AOS_id;
+
     -- Open the cursor
     OPEN cur_;
         -- Fetch 1st row from the cursor into variables
