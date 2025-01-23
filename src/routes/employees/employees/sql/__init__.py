@@ -7,7 +7,7 @@ def create_employees_employees_sps():
 
     exe_queries(__file__, "fn_get_stored_intervals.sql")
     exe_queries(__file__, "sp_add_employee.sql")
-    exe_queries(__file__, "sp_get_all_employees.sql")
+    exe_queries(__file__, "sp_get_employees.sql")
     exe_queries(__file__, "sp_get_service_employees.sql")
     exe_queries(__file__, "sp_scan_ELD_conflicts.sql")
     exe_queries(__file__, "sp_set_ELD.sql")
