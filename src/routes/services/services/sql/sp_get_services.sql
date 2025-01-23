@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_get_many_services;
+DROP PROCEDURE IF EXISTS sp_get_services;
 
-CREATE PROCEDURE sp_get_many_services(
+CREATE PROCEDURE sp_get_services(
     IN _date BIGINT
 )
 BEGIN

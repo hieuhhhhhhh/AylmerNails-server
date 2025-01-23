@@ -8,6 +8,7 @@ from .services.get_services import get_services
 from .services.search_services import search_services
 from .services.get_service_details import get_service_details
 from .services.update_service_info import update_service_info
+from .categories.get_categories import get_categories
 
 # create blueprint (group of routes)
 services = Blueprint("services", __name__)
@@ -18,6 +19,16 @@ def get_services_(date):
     try:
         # return service list
         return get_services(date)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/get_categories", methods=["GET"])
+def get_categories_():
+    try:
+        # return cate list
+        return get_categories()
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)
@@ -56,7 +67,7 @@ def add_service_():
 
 
 @services.route("/update_service_info", methods=["POST"])
-def update_service_info_(service_id):
+def update_service_info_():
     try:
         # read token
         session = read_token()
