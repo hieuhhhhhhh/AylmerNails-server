@@ -9,3 +9,5 @@ CREATE TABLE employee_services (
 
     PRIMARY KEY (employee_id, service_id)
 );
+
+CREATE INDEX idx_service_id ON employee_services(service_id);

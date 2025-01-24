@@ -8,6 +8,8 @@ from .services.get_services import get_services
 from .services.search_services import search_services
 from .services.get_service_details import get_service_details
 from .services.update_service_info import update_service_info
+from .services.get_SEs import get_service_employees
+from .services.update_SEs import update_service_employees
 from .categories.get_categories import get_categories
 
 # create blueprint (group of routes)
@@ -119,10 +121,33 @@ def search_services_(query):
         return default_error_response(e)
 
 
-@services.route("/get_service_details/<service_id>", methods=["GET"])
+@services.route("/get_service_details/<int:service_id>", methods=["GET"])
 def get_service_details_(service_id):
     try:
         return get_service_details(service_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/get_service_employees/<int:service_id>/<date>", methods=["GET"])
+def get_service_employees_(service_id, date):
+    try:
+        return get_service_employees(service_id, date)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/update_service_employees", methods=["POST"])
+def update_service_employees_():
+    try:
+        # read json from request
+        data = request.get_json()
+        service_id = data.get("service_id")
+        employee_ids = json.dumps(data.get("employee_ids"))
+
+        return update_service_employees(service_id, employee_ids)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

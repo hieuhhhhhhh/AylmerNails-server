@@ -62,10 +62,10 @@ sp:BEGIN
     END WHILE;
 
     -- extract and store name tokens
-    CALL sp_store_name_tokens(_service_id, _service_name_tokens);
+    CALL sp_store_name_tokens(service_id_, _service_name_tokens);
 
     -- set service list for the new employee
-    CALL sp_set_service_employees(_service_id, _employee_ids);
+    CALL sp_set_service_employees(service_id_, _employee_ids);
 
     -- return service_id
     SELECT service_id_;

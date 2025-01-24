@@ -15,6 +15,7 @@ def create_tables():
 
     exe_queries(__file__, "services/categories.sql")
     exe_queries(__file__, "services/services.sql")
+    exe_queries(__file__, "services/service_name_tokens.sql")
     exe_queries(__file__, "employees/employee_services.sql")
 
     exe_queries(__file__, "appointments/appo_details.sql")
