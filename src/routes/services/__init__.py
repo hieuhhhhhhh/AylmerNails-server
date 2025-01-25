@@ -144,12 +144,14 @@ def get_service_employees_(service_id, date):
 @services.route("/update_service_employees", methods=["POST"])
 def update_service_employees_():
     try:
+        # read token:
+        session = read_token()
         # read json from request
         data = request.get_json()
         service_id = data.get("service_id")
         employee_ids = json.dumps(data.get("employee_ids"))
 
-        return update_service_employees(service_id, employee_ids)
+        return update_service_employees(session, service_id, employee_ids)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

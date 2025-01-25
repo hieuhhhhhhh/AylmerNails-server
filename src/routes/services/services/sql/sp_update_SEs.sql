@@ -1,15 +1,18 @@
 DROP PROCEDURE IF EXISTS sp_update_SEs;
 
 CREATE PROCEDURE sp_update_SEs(
+    IN _session JSON,
     IN _service_id INT UNSIGNED,
     IN _employee_ids JSON
 )
 BEGIN
-    -- index to iterate json array
+    -- iterator
     DECLARE i TINYINT DEFAULT 0;
-
     -- variables
     DECLARE employee_id_ INT UNSIGNED;
+
+    -- validate session token
+    CALL sp_validate_admin(_session);
 
     -- clean old data
     DELETE FROM employee_services
