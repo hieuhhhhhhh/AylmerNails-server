@@ -6,4 +6,4 @@ def add_category(session, name):
     # call mysql proc to process data
     category_id = call_3D_proc("sp_add_category", session, name)[0][0][0]
 
-    return jsonify({"category_id": category_id}), 200
+    return jsonify({"added_category_id": category_id}), 200
