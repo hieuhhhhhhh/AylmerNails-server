@@ -1,8 +1,8 @@
-DROP PROCEDURE IF EXISTS sp_add_category;
+DROP PROCEDURE IF EXISTS sp_remove_category;
 
-CREATE PROCEDURE sp_add_category(
+CREATE PROCEDURE sp_remove_category(
     IN _session JSON,
-    IN _name VARCHAR(50)
+    IN _cate_id  INT UNSIGNED
 )
 BEGIN
     -- variables
@@ -20,11 +20,8 @@ BEGIN
             SET MESSAGE_TEXT = '401, Unauthorized';
     END IF;
 
-    -- Insert the new category into the categories table
-    INSERT INTO categories (name)
-        VALUES (_name);
-    
-    -- Optionally, you could return the last inserted ID
-    SELECT LAST_INSERT_ID();
+    -- delete by category_id
+    DELETE FROM categories
+        WHERE category_id = _cate_id;
 END; 
 

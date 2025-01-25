@@ -11,6 +11,8 @@ from .services.update_service_info import update_service_info
 from .services.get_SEs import get_service_employees
 from .services.update_SEs import update_service_employees
 from .categories.get_categories import get_categories
+from .categories.add_category import add_category
+from .categories.remove_category import remove_category
 
 # create blueprint (group of routes)
 services = Blueprint("services", __name__)
@@ -148,6 +150,35 @@ def update_service_employees_():
         employee_ids = json.dumps(data.get("employee_ids"))
 
         return update_service_employees(service_id, employee_ids)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/add_category", methods=["POST"])
+def add_category_():
+    try:
+        # read token:
+        session = read_token()
+        # read json from request
+        data = request.get_json()
+        name = data.get("name")
+        return add_category(session, name)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/remove_category", methods=["POST"])
+def remove_category_():
+    try:
+        # read token:
+        session = read_token()
+        # read json from request
+        data = request.get_json()
+        cate_id = data.get("cate_id")
+
+        return remove_category(session, cate_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)
