@@ -10,4 +10,7 @@ def create_authentication_session_sps():
     exe_queries(__file__, "sp_log_out_all.sql")
     exe_queries(__file__, "sp_validate_salt.sql")
     exe_queries(__file__, "read_user_info/sp_get_user_id_role.sql")
+    exe_queries(__file__, "sp_validate_admin.sql")
+    exe_queries(__file__, "sp_validate_client.sql")
+
     print()

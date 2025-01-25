@@ -2,7 +2,7 @@ from flask import jsonify
 import traceback
 
 
-def unexpected_error_response(exception):
+def default_error_response(exception):
     print(traceback.format_exc())
     return (
         jsonify(

@@ -8,7 +8,7 @@ CREATE PROCEDURE sp_scan_service_length_conflicts(
 )
 BEGIN
     -- loop breaker (escape loop when true)
-    DECLARE done BOOLEAN DEFAULT FALSE;    
+    DECLARE done_ BOOLEAN DEFAULT FALSE;    
 
     -- placeholders
     DECLARE service_length_id_ INT UNSIGNED;
@@ -27,7 +27,7 @@ BEGIN
                 AND date >= _scan_from;
 
     -- Declare continue handler for cursor end
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done_ = TRUE;
 
     -- Clean old conflicts
     DELETE slc
@@ -42,7 +42,7 @@ BEGIN
         read_loop: LOOP
             FETCH cur INTO date_, start_time_, end_time_, appo_id_, employee_id_;
             
-            IF done THEN
+            IF done_ THEN
                 LEAVE read_loop;
             END IF;
 
