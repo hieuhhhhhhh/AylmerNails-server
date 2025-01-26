@@ -9,8 +9,6 @@ BEGIN
         alias, 
         last_date, 
         (last_date IS NULL OR last_date >= _date)
-            FROM employees
-            WHERE last_date IS NULL 
-                OR last_date >= _date;
+            FROM employees;
 END;
 
