@@ -8,7 +8,7 @@ BEGIN
         service_id,
         name, 
         last_date,
-        (last_date IS NULL OR last_date >= _date),
+        (last_date IS NULL OR last_date < _date),
         category_id
             FROM services ;
 

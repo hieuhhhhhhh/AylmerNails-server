@@ -2,14 +2,17 @@ from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
 
 
-def get_employee_services(service_id, date):
+def get_ES_ids(service_id, date):
     # call mysql proc to process data
-    services = call_3D_proc("sp_get_ESs", service_id, date)[0]
+    service_ids = []
+    table = call_3D_proc("sp_get_ESs", service_id, date)[0]
+    for row in table:
+        service_ids.append(row[0])
 
     return (
         jsonify(
             {
-                "services": services,
+                "service_ids": service_ids,
                 "list_definition": " service_id, name, last_date",
             }
         ),

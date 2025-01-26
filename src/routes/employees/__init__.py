@@ -6,7 +6,7 @@ from src.routes.employees.employees.add_employee import add_employee
 from src.routes.employees.employees.set_employee_last_date import set_employee_last_date
 from src.routes.employees.schedules.add_schedule import add_schedule
 from src.routes.employees.employees.get_employees import get_employees
-from src.routes.employees.employees.get_ESs import get_employee_services
+from routes.employees.employees.get_ES_ids import get_ES_ids
 
 # create blueprint (group of routes)
 employees = Blueprint("employees", __name__)
@@ -87,10 +87,10 @@ def add_schedule_():
         return default_error_response(e)
 
 
-@employees.route("/get_employee_services/<int:emp_id>/<date>", methods=["GET"])
-def get_employee_services_(emp_id, date):
+@employees.route("/get_employee_service_ids/<int:emp_id>/<date>", methods=["GET"])
+def get_employee_service_ids_(emp_id, date):
     try:
-        return get_employee_services(emp_id, date)
+        return get_ES_ids(emp_id, date)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)
