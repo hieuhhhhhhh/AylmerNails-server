@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_set_employee_services;
+DROP PROCEDURE IF EXISTS sp_set_ESs;
 
-CREATE PROCEDURE sp_set_employee_services(
+CREATE PROCEDURE sp_set_ESs(
     IN _employee_id INT UNSIGNED,
     IN _service_ids JSON
 )

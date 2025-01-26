@@ -6,6 +6,7 @@ from src.routes.employees.employees.add_employee import add_employee
 from src.routes.employees.employees.set_employee_last_date import set_employee_last_date
 from src.routes.employees.schedules.add_schedule import add_schedule
 from src.routes.employees.employees.get_employees import get_employees
+from src.routes.employees.employees.get_ESs import get_employee_services
 
 # create blueprint (group of routes)
 employees = Blueprint("employees", __name__)
@@ -30,11 +31,10 @@ def add_employee_():
         # read json from request
         data = request.get_json()
         alias = data.get("alias")
-        first_date = data.get("first_date")
         key_intervals = data.get("key_intervals")
         service_ids = json.dumps(data.get("service_ids"))  # convert python list to json
 
-        return add_employee(session, alias, first_date, key_intervals, service_ids)
+        return add_employee(session, alias, key_intervals, service_ids)
 
     # catch unexpected error
     except Exception as e:
@@ -82,6 +82,15 @@ def add_schedule_():
             session, employee_id, effective_from, opening_times, closing_times
         )
 
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@employees.route("/get_employee_services/<int:emp_id>/<date>", methods=["GET"])
+def get_employee_services_(emp_id, date):
+    try:
+        return get_employee_services(emp_id, date)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

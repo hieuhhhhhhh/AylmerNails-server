@@ -3,12 +3,8 @@ CREATE TABLE employees(
     alias VARCHAR(50) NOT NULL,
     stored_intervals JSON,
 
-    -- the first day that this employee has appointments
-    first_date BIGINT NOT NULL, 
-
     -- the last day that this employee has appointments
     last_date BIGINT 
 );
 
-CREATE INDEX idx_first_date ON employees(first_date);
 CREATE INDEX idx_last_date ON employees(last_date);
