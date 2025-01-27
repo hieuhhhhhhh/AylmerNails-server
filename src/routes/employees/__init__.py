@@ -8,6 +8,7 @@ from src.routes.employees.schedules.add_schedule import add_schedule
 from src.routes.employees.employees.get_employees import get_employees
 from src.routes.employees.employees.get_ESs import get_employee_services
 from src.routes.employees.employees.get_employee_details import get_employee_details
+from src.routes.employees.employees.update_employee_info import update_service_info
 
 # create blueprint (group of routes)
 employees = Blueprint("employees", __name__)
@@ -101,6 +102,31 @@ def get_employee_services_(emp_id, date):
 def get_employee_details_(emp_id):
     try:
         return get_employee_details(emp_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@employees.route("/update_employee_info", methods=["POST"])
+def update_employee_info_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        employee_id = data.get("employee_id")
+        alias = data.get("alias")
+        last_date = data.get("last_date")
+        service_ids = json.dumps(data.get("service_ids"))
+
+        return update_service_info(
+            session,
+            employee_id,
+            alias,
+            last_date,
+            service_ids,
+        )
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

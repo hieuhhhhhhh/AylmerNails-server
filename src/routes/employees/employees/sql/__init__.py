@@ -13,5 +13,7 @@ def create_employees_employees_sps():
     exe_queries(__file__, "sp_scan_ELD_conflicts.sql")
     exe_queries(__file__, "sp_set_ELD.sql")
     exe_queries(__file__, "sp_set_ESs.sql")
+    exe_queries(__file__, "sp_store_alias_tokens.sql")
+    exe_queries(__file__, "sp_update_employee_info.sql")
 
     print()

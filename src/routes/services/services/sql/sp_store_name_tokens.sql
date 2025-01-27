@@ -22,7 +22,7 @@ BEGIN
         SET i = i + 1;
 
         -- call the sp that hanlde adding AOS options
-        INSERT INTO service_name_tokens(token, service_id)
+        INSERT IGNORE INTO service_name_tokens(token, service_id)
             VALUES (token_, _service_id);
 
         -- end loop
