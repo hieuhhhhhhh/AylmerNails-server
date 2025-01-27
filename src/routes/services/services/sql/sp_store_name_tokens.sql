@@ -11,6 +11,10 @@ BEGIN
     -- placeholder
     DECLARE token_ VARCHAR(50);
 
+    -- clear any old data
+    DELETE FROM service_name_tokens
+        WHERE service_id = _service_id;
+
     -- start iterating to fetch all tokens from the JSON array
     WHILE i < JSON_LENGTH(_service_name_tokens) DO 
         -- fetch prompt of AOS

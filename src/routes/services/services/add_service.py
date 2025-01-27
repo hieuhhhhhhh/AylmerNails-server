@@ -1,6 +1,6 @@
-import json
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
+from .tokenize_service_name import tokenize_service_name
 
 
 def add_service(
@@ -24,8 +24,3 @@ def add_service(
     )[0][0][0]
 
     return jsonify({"added_service_id": service_id}), 200
-
-
-def tokenize_service_name(name):
-    tokens = name.lower().split()
-    return json.dumps(tokens)

@@ -4,25 +4,14 @@ CREATE PROCEDURE sp_update_service_info(
     IN _session JSON,
     IN _service_id INT UNSIGNED, 
     IN _name VARCHAR(50),
+    IN _service_name_tokens JSON, -- array of tokens of service's name
     IN _description VARCHAR(500),
     IN _category_id INT UNSIGNED,
     IN _last_date BIGINT
 )
 BEGIN
-    -- variables
-    DECLARE user_id_ INT UNSIGNED;
-    DECLARE role_ VARCHAR(20);
-
-    -- fetch and validate user's role from session data
-    CALL sp_get_user_id_role(_session, user_id_, role_);
-
-    -- IF role is not valid return null and leave procedure
-    IF role_ IS NULL
-        OR role_ NOT IN ('admin', 'developer')
-    THEN 
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = '401, Unauthorized';
-    END IF;
+    -- validate token session
+    CALL sp_validate_admin(_session);
 
     -- Check if the employee exists
     IF NOT EXISTS (SELECT 1 FROM services WHERE service_id = _service_id) THEN
@@ -36,6 +25,9 @@ BEGIN
             description = _description,
             category_id = _category_id
         WHERE service_id = _service_id;
+        
+    -- extract and store name tokens
+    CALL sp_store_name_tokens(_service_id, _service_name_tokens);
 
     -- pre-check if last date is really new before update it
     IF NOT EXISTS(
