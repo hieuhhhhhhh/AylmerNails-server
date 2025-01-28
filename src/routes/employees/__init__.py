@@ -9,6 +9,7 @@ from src.routes.employees.employees.get_employees import get_employees
 from src.routes.employees.employees.get_ESs import get_employee_services
 from src.routes.employees.employees.get_employee_details import get_employee_details
 from src.routes.employees.employees.update_employee_info import update_service_info
+from src.routes.employees.schedules.get_employee_schedules import get_employee_schedules
 
 # create blueprint (group of routes)
 employees = Blueprint("employees", __name__)
@@ -102,6 +103,15 @@ def get_employee_services_(emp_id, date):
 def get_employee_details_(emp_id):
     try:
         return get_employee_details(emp_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@employees.route("/get_employee_schedules/<int:emp_id>", methods=["GET"])
+def get_employee_schedules_(emp_id):
+    try:
+        return get_employee_schedules(emp_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

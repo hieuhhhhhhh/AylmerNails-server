@@ -17,6 +17,11 @@ BEGIN
     -- validate session token
     CALL sp_validate_admin(_session);
 
+    -- delete any old schedule that has same effective_from
+    DELETE FROM schedules
+        WHERE employee_id = _employee_id  
+            AND effective_from = _effective_from;
+
     -- add a new schedule
     INSERT INTO schedules(employee_id, effective_from)
         VALUES (_employee_id, _effective_from);
