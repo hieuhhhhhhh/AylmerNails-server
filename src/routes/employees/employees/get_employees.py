@@ -10,7 +10,7 @@ def get_employees(date):
         jsonify(
             {
                 "all_employees": employees,
-                "list_definition": "employee_id, alias, first_date, last_date",
+                "list_definition": "employee_id, alias, last_date, is_active",
             }
         ),
         200,

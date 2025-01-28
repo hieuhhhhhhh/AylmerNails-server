@@ -1,15 +1,19 @@
 import json
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
+from .tokenize_employee_alias import tokenize_employee_alias
 
 
-def add_employee(session, alias, first_date, key_intervals, service_ids):
+def add_employee(session, alias, key_intervals, service_ids):
+    # tokenize alias
+    alias_tokens = tokenize_employee_alias(alias)
+
     # generate stored intervals
     stored_intervals = generate_stored_intervals(key_intervals, 24 * 60 * 60)
 
     # call mysql proc to process data
     employee_id = call_3D_proc(
-        "sp_add_employee", session, alias, first_date, stored_intervals, service_ids
+        "sp_add_employee", session, alias, alias_tokens, stored_intervals, service_ids
     )[0][0][0]
 
     return jsonify({"added_employee_id": employee_id}), 200

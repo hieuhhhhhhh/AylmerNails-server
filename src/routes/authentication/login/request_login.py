@@ -11,7 +11,7 @@ SESSION_EXPIRY = 60 * 60
 # return a tuple: user_id, password
 def get_stored_pw(phone_number):
     res = call_3D_proc("sp_get_stored_pw", phone_number)
-    return (res[0][0][0], res[0][0][1]) if res else (None, None)
+    return (res[0][0][0], res[0][0][1]) if res[0] else (None, None)
 
 
 # handle credentials from client side:

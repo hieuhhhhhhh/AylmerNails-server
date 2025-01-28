@@ -7,3 +7,4 @@ CREATE TABLE service_name_tokens(
     PRIMARY KEY (token, service_id)
 );
 
+CREATE INDEX idx_service_id ON service_name_tokens(service_id);

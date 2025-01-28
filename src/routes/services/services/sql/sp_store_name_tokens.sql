@@ -11,6 +11,10 @@ BEGIN
     -- placeholder
     DECLARE token_ VARCHAR(50);
 
+    -- clear any old data
+    DELETE FROM service_name_tokens
+        WHERE service_id = _service_id;
+
     -- start iterating to fetch all tokens from the JSON array
     WHILE i < JSON_LENGTH(_service_name_tokens) DO 
         -- fetch prompt of AOS
@@ -18,7 +22,7 @@ BEGIN
         SET i = i + 1;
 
         -- call the sp that hanlde adding AOS options
-        INSERT INTO service_name_tokens(token, service_id)
+        INSERT IGNORE INTO service_name_tokens(token, service_id)
             VALUES (token_, _service_id);
 
         -- end loop
