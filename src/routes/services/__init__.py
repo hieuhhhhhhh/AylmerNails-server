@@ -10,6 +10,8 @@ from .services.get_service_details import get_service_details
 from .services.update_service_info import update_service_info
 from .services.get_SEs import get_service_employees
 from .services.update_SEs import update_service_employees
+from .services.get_service_preview import get_service_preview
+
 from .categories.get_categories import get_categories
 from .categories.add_category import add_category
 from .categories.remove_category import remove_category
@@ -132,7 +134,16 @@ def get_service_details_(service_id):
         return default_error_response(e)
 
 
-@services.route("/get_service_employees/<int:service_id>/<date>", methods=["GET"])
+@services.route("/get_service_preview/<int:service_id>/<int:date>", methods=["GET"])
+def get_service_preview_(service_id, date):
+    try:
+        return get_service_preview(service_id, date)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/get_service_employees/<int:service_id>/<int:date>", methods=["GET"])
 def get_service_employees_(service_id, date):
     try:
         return get_service_employees(service_id, date)
