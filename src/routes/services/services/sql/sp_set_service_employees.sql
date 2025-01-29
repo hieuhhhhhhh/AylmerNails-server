@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_set_service_employees(
 )
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
 
     -- placeholder
     DECLARE employee_id_ INT UNSIGNED;

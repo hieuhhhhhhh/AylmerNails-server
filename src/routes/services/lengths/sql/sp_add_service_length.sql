@@ -9,7 +9,7 @@ CREATE PROCEDURE sp_add_service_length(
 )
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
     DECLARE service_length_id_ INT UNSIGNED;
     DECLARE employee_id_ INT UNSIGNED;
     DECLARE length_offset_ INT;

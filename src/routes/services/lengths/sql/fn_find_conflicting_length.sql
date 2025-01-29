@@ -14,7 +14,7 @@ RETURNS INT UNSIGNED
 DETERMINISTIC
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
 
     -- other place holders
     DECLARE service_length_id_ INT UNSIGNED;

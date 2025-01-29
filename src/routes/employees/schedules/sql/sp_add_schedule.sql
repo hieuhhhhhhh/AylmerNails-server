@@ -9,7 +9,7 @@ CREATE PROCEDURE sp_add_schedule(
 )
 BEGIN    
     -- placeholders
-    DECLARE i TINYINT DEFAULT 0; 
+    DECLARE i INT DEFAULT 0; 
     DECLARE opening_time_ INT;
     DECLARE closing_time_ INT;
     DECLARE schedule_id_ INT UNSIGNED;
@@ -21,6 +21,11 @@ BEGIN
     DELETE FROM schedules
         WHERE employee_id = _employee_id  
             AND effective_from = _effective_from;
+
+    -- delete any DELAs of this employee beyond effective_from
+    DELETE FROM DELAs
+        WHERE employee_id = _employee_id  
+            AND date >= _effective_from - 24*60*60;
 
     -- add a new schedule
     INSERT INTO schedules(employee_id, effective_from)

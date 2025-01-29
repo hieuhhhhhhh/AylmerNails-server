@@ -13,7 +13,7 @@ CREATE PROCEDURE sp_add_service(
 )
 sp:BEGIN
     -- iterator
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
     -- variables
     DECLARE service_id_ INT UNSIGNED;
     DECLARE AOS_id_ INT UNSIGNED;

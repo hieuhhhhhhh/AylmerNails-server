@@ -7,7 +7,7 @@ CREATE PROCEDURE sp_update_SEs(
 )
 BEGIN
     -- iterator
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
     -- variables
     DECLARE employee_id_ INT UNSIGNED;
 

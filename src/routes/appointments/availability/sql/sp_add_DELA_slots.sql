@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_add_DELA_slots(
 )
 BEGIN
     -- placeholders
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
     DECLARE slot_ INT;
 
     -- iterate every slot from a json array

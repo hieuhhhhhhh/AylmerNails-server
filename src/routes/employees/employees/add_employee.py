@@ -27,6 +27,9 @@ def generate_stored_intervals(key_intervals, threshold):
     key1 = key_intervals[0]
     key2 = key_intervals[1]
 
+    if key1 < 300 or key2 < 300:
+        raise Exception("keys are too small (less than 5 mins)")
+
     # generate stored intervals with formula x*key1 + y*key2 <= threshold
     # x and y are integers that increment from 0,1,2, .etc
     max_x = threshold // key1

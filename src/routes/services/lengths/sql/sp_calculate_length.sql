@@ -10,7 +10,7 @@ CREATE PROCEDURE sp_calculate_length(
 )
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
 
     -- other place holders
     DECLARE offset_ INT;
@@ -29,7 +29,7 @@ BEGIN
     -- if no service_length found, throw an exception
     IF _planned_length IS NULL THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = '400, no service_length found';
+            SET MESSAGE_TEXT = '400, no default length found';
     END IF;
 
     -- fetch and merge offset of employee to current length

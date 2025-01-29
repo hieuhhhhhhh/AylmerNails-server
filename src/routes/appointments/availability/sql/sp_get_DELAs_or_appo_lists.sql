@@ -3,14 +3,14 @@ DROP PROCEDURE IF EXISTS sp_get_DELAs_or_appo_lists;
 CREATE PROCEDURE sp_get_DELAs_or_appo_lists(
     IN _session JSON,
     IN _date BIGINT,
-    IN _day_of_week TINYINT, -- start at monday = 1, end at sunday = 7
+    IN _day_of_week INT, -- start at monday = 1, end at sunday = 7
     IN _service_id INT UNSIGNED,
     IN _selected_AOSO JSON, 
     IN _employee_ids JSON
 )
 BEGIN    
     -- iterator
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
     -- variables
     DECLARE planned_length_ INT;
     DECLARE service_length_id_ INT UNSIGNED;
