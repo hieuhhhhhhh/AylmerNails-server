@@ -55,7 +55,7 @@ BEGIN
 
         ELSE -- if DELA empty
             -- fetch opening time and closing time
-            CALL sp_get_opening_hours(employee_id_, _day_of_week, opening_time_, closing_time_);
+            CALL sp_get_opening_hours(employee_id_, _date, _day_of_week, opening_time_, closing_time_);
 
             -- clean the old DELA 
             DELETE FROM DELAs

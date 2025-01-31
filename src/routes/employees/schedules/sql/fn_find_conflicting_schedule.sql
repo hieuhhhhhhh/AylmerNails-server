@@ -16,7 +16,7 @@ BEGIN
     DECLARE day_of_week_ INT;
 
     -- fetch the opening and closing time of that day_of_week
-    CALL sp_get_opening_hours(_employee_id, _date, opening_time_, closing_time_);
+    CALL sp_get_opening_hours(_employee_id,_date, day_of_week_, opening_time_, closing_time_);
 
     -- Return an schedule_id with which the appointment violates
     IF _start_time >= opening_time_ AND _end_time <= closing_time_ THEN

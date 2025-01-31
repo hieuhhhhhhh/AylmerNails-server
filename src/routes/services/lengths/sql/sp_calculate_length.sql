@@ -18,12 +18,15 @@ BEGIN
     DECLARE option_id_ INT UNSIGNED;
 
     -- fetch service's default length and its id
-    SELECT service_length_id, length
+    SELECT sl.service_length_id, sl.length
         INTO _service_length_id, _planned_length
-        FROM service_lengths
-        WHERE service_id = _service_id
-            AND effective_from <= _date
-        ORDER BY effective_from DESC
+        FROM service_lengths sl
+            JOIN services s
+                ON sl.service_id = s.service_id
+                    AND s.last_date >= _date
+        WHERE sl.service_id = _service_id
+            AND sl.effective_from <= _date
+        ORDER BY sl.effective_from DESC
         LIMIT 1;
 
     -- if no service_length found, throw an exception
