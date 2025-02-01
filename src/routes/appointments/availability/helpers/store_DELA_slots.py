@@ -4,10 +4,10 @@ from src.mysql.procedures.thread_pool import job_queue
 
 
 # send DELA to the mysql server
-def store_DELA(DELA, DELA_id):
+def store_DELA_slots(slots, DELA_id):
     # if empty, ignore
-    if len(DELA) > 0:
+    if len(slots) > 0:
         # call mysql proc to process data in another thread
         job_queue.put(
-            lambda: call_3D_proc("sp_add_DELA_slots", DELA_id, json.dumps(DELA))
+            lambda: call_3D_proc("sp_add_DELA_slots", DELA_id, json.dumps(slots))
         )

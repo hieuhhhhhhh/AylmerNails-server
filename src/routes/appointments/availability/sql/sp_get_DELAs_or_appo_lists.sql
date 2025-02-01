@@ -1,7 +1,6 @@
 DROP PROCEDURE IF EXISTS sp_get_DELAs_or_appo_lists;
 
 CREATE PROCEDURE sp_get_DELAs_or_appo_lists(
-    IN _session JSON,
     IN _date BIGINT,
     IN _day_of_week INT, -- start at monday = 1, end at sunday = 7
     IN _service_id INT UNSIGNED,
@@ -18,9 +17,6 @@ BEGIN
     DECLARE opening_time_ INT;
     DECLARE closing_time_ INT;
     DECLARE DELA_id_ INT UNSIGNED;
-    
-    -- validate session token
-    CALL sp_validate_client(_session);
 
     -- iterate every employee_id from _employee_ids (json array)
     WHILE i < JSON_LENGTH(_employee_ids) DO 
@@ -40,7 +36,7 @@ BEGIN
 
         -- temporary table: fetch DELA via date & employee & planned length
         CREATE TEMPORARY TABLE DELA_ AS
-            SELECT ds.slot
+            SELECT ds.slot, planned_length_
                 FROM DELAs d
                     JOIN DELA_slots ds
                     ON d.DELA_id = ds.DELA_id

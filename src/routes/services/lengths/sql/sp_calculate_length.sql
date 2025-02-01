@@ -23,7 +23,8 @@ BEGIN
         FROM service_lengths sl
             JOIN services s
                 ON sl.service_id = s.service_id
-                    AND s.last_date >= _date
+                    AND (s.last_date IS NULL
+                        OR s.last_date >= _date)
         WHERE sl.service_id = _service_id
             AND sl.effective_from <= _date
         ORDER BY sl.effective_from DESC

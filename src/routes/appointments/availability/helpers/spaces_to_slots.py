@@ -2,9 +2,9 @@ from .space_to_slots import space_to_slots
 from .space_to_prioritized_slots import space_to_prioritized_slots
 
 
-def spaces_to_DELA(spaces, planned_length, stored_intervals):
+def spaces_to_slots(spaces, planned_length, stored_intervals):
     # result holder
-    DELA = []
+    slots = []
 
     # flag
     all_spaces_are_ideal = True
@@ -16,9 +16,9 @@ def spaces_to_DELA(spaces, planned_length, stored_intervals):
     for space in spaces[:-1]:
         if space not in ideal_gaps:
             all_spaces_are_ideal = False
-            DELA.extend(space_to_slots(space, planned_length, stored_intervals))
+            slots.extend(space_to_slots(space, planned_length, stored_intervals))
         else:
-            DELA.extend(
+            slots.extend(
                 space_to_prioritized_slots(
                     space, planned_length, stored_intervals, ideal_gaps
                 )
@@ -29,13 +29,13 @@ def spaces_to_DELA(spaces, planned_length, stored_intervals):
 
     # specially process the last space (which is also the largest length, cause the list is sorted)
     if all_spaces_are_ideal or last_space not in ideal_gaps:
-        DELA.extend(space_to_slots(last_space, planned_length, stored_intervals))
+        slots.extend(space_to_slots(last_space, planned_length, stored_intervals))
     else:
-        DELA.extend(
+        slots.extend(
             space_to_prioritized_slots(
                 last_space, planned_length, stored_intervals, ideal_gaps
             )
         )
 
     # return result
-    return DELA
+    return slots

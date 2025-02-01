@@ -39,6 +39,12 @@ BEGIN
         SET opening_time_ = JSON_UNQUOTE(JSON_EXTRACT(_opening_times, CONCAT('$[', i, ']')));
         SET closing_time_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
 
+        -- validate times
+        IF opening_time_ >= closing_time_ THEN
+            SET opening_time_ = NULL;
+            SET closing_time_ = NULL;
+        END IF;
+
         -- store values to opening_hours table
         INSERT INTO opening_hours (schedule_id, day_of_week, opening_time, closing_time)
             VALUES (schedule_id_, i + 1, opening_time_, closing_time_);
