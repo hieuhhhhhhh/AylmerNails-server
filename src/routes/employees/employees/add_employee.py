@@ -4,7 +4,7 @@ from src.mysql.procedures.call_3D_proc import call_3D_proc
 from .tokenize_employee_alias import tokenize_employee_alias
 
 
-def add_employee(session, alias, key_intervals, service_ids):
+def add_employee(session, alias, key_intervals, interval_percent, service_ids):
     # tokenize alias
     alias_tokens = tokenize_employee_alias(alias)
 
@@ -13,7 +13,13 @@ def add_employee(session, alias, key_intervals, service_ids):
 
     # call mysql proc to process data
     employee_id = call_3D_proc(
-        "sp_add_employee", session, alias, alias_tokens, stored_intervals, service_ids
+        "sp_add_employee",
+        session,
+        alias,
+        alias_tokens,
+        stored_intervals,
+        interval_percent,
+        service_ids,
     )[0][0][0]
 
     return jsonify({"added_employee_id": employee_id}), 200

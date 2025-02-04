@@ -35,9 +35,12 @@ def add_employee_():
         data = request.get_json()
         alias = data.get("alias")
         key_intervals = data.get("key_intervals")
+        interval_percent = data.get("interval_percent")
         service_ids = json.dumps(data.get("service_ids"))  # convert python list to json
 
-        return add_employee(session, alias, key_intervals, service_ids)
+        return add_employee(
+            session, alias, key_intervals, interval_percent, service_ids
+        )
 
     # catch unexpected error
     except Exception as e:

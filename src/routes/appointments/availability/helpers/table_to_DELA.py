@@ -8,14 +8,15 @@ def table_to_DELA(table, DELA):
     appo_ranges = []  # list of 2 endpoint of every appointment
 
     # fetch appointment length
-    planned_length = table[0][3]
+    planned_length = table[0][4]
     DELA["length"] = planned_length
 
     # fetch list of favorable intervals (this list is supposed to be ascending)
     stored_intervals = json.loads(table[0][2])
+    interval_percent = table[0][3]
 
     # fetch DELA_id
-    DELA_id = table[0][4]
+    DELA_id = table[0][5]
 
     # fetch opening time closing time
     opening_time = table[1][0]
@@ -25,7 +26,16 @@ def table_to_DELA(table, DELA):
         return DELA
 
     # validate all after fetching from table (all must be not null)
-    if not all([planned_length, stored_intervals, DELA_id, opening_time, closing_time]):
+    if not all(
+        [
+            planned_length,
+            stored_intervals,
+            interval_percent,
+            DELA_id,
+            opening_time,
+            closing_time,
+        ]
+    ):
         return DELA
 
     # merge opening time
@@ -49,7 +59,12 @@ def table_to_DELA(table, DELA):
 
     # create and return  DELA
     spaces = appo_ranges_to_spaces(appo_ranges)
-    slots = spaces_to_slots(spaces, planned_length, stored_intervals)
+    slots = spaces_to_slots(
+        spaces,
+        planned_length,
+        stored_intervals,
+        (closing_time - opening_time) * interval_percent / 100,
+    )
 
     # send DELA to mysql
     store_DELA_slots(slots, DELA_id)

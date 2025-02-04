@@ -72,7 +72,8 @@ BEGIN
                     end_time AS c2,
                     NULL AS c3,
                     NULL AS c4,
-                    NULL AS c5
+                    NULL AS c5,
+                    NULL AS c6
                         FROM appo_details 
                         WHERE date = _date 
                             AND employee_id = employee_id_
@@ -81,16 +82,18 @@ BEGIN
                 SELECT 
                     NULL AS c1,
                     NULL AS c2,
-                    fn_get_stored_intervals(employee_id_) AS c3,
-                    planned_length_ AS c4,
-                    DELA_id_ AS c5
+                    fn_get_stored_intervals(employee_id_) AS c3,                    
+                    fn_get_interval_percent AS c4,
+                    planned_length_ AS c5,
+                    DELA_id_ AS c6
             UNION ALL
                 SELECT 
                     opening_time_ AS c1,
                     closing_time_ AS c2,
                     NULL AS c3,
                     NULL AS c4,
-                    NULL AS c5
+                    NULL AS c5,
+                    NULL AS c6
             UNION ALL
                 SELECT * FROM sorted_appos;
            

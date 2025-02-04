@@ -5,6 +5,7 @@ CREATE PROCEDURE sp_add_employee(
     IN _alias VARCHAR(50),
     IN _alias_tokens JSON,
     IN _stored_intervals JSON,
+    IN _interval_percent SMALLINT,
     IN _service_ids JSON
 )
 sp:BEGIN 
@@ -14,8 +15,8 @@ sp:BEGIN
     CALL sp_validate_admin(_session);
 
     -- create new employee
-    INSERT INTO employees (alias, stored_intervals )
-        VALUES (_alias, _stored_intervals);
+    INSERT INTO employees (alias, stored_intervals, interval_percent )
+        VALUES (_alias, _stored_intervals, _interval_percent);
     
     -- fetch id of new service
     SET emp_id_ = LAST_INSERT_ID();
