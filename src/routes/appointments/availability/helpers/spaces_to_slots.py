@@ -19,23 +19,26 @@ def spaces_to_slots(spaces, planned_length, stored_intervals, ideal_cap):
             all_spaces_are_ideal = False
             non_ideals.append(space)
         else:
-            slots.append(
+            slots.extend(
                 space_to_prioritized_slots(
                     space, planned_length, stored_intervals, ideal_gaps
                 )
             )
 
+    # fetch last element is space list
+    last_space = spaces[-1]
+
     # specially process the last space (which is also the largest length, cause the list is sorted)
     if all_spaces_are_ideal or last_space not in ideal_gaps:
-        non_ideals.append(space)
+        non_ideals.append(last_space)
     else:
-        slots.append(
+        slots.extend(
             space_to_prioritized_slots(
                 last_space, planned_length, stored_intervals, ideal_gaps
             )
         )
 
-    # iterate non-ideal list
+    # handle non-ideal list
     ideal_size = calculate_ideal_size(spaces, non_ideals)
     non_ideal_cap = ideal_cap - ideal_size
     still_short = len(slots) <= 1
@@ -43,10 +46,7 @@ def spaces_to_slots(spaces, planned_length, stored_intervals, ideal_cap):
     limited_SIs = get_SI_for_non_ideal(stored_intervals, non_ideal_cap, still_short)
 
     for space in non_ideals:
-        slots.append(space_to_slots(space, planned_length, limited_SIs))
-
-    # fetch last element is space list
-    last_space = spaces[-1]
+        slots.extend(space_to_slots(space, planned_length, limited_SIs))
 
     # return result
     return slots

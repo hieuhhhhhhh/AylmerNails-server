@@ -130,6 +130,7 @@ def update_employee_info_():
         data = request.get_json()
         employee_id = data.get("employee_id")
         alias = data.get("alias")
+        interval_percent = data.get("interval_percent")
         last_date = data.get("last_date")
         service_ids = json.dumps(data.get("service_ids"))
 
@@ -137,6 +138,7 @@ def update_employee_info_():
             session,
             employee_id,
             alias,
+            interval_percent,
             last_date,
             service_ids,
         )

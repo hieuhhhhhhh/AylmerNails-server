@@ -83,7 +83,7 @@ BEGIN
                     NULL AS c1,
                     NULL AS c2,
                     fn_get_stored_intervals(employee_id_) AS c3,                    
-                    fn_get_interval_percent AS c4,
+                    fn_get_interval_percent(employee_id_) AS c4,
                     planned_length_ AS c5,
                     DELA_id_ AS c6
             UNION ALL

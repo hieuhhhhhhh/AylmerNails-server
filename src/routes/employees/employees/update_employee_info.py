@@ -7,6 +7,7 @@ def update_service_info(
     session,
     employee_id,
     alias,
+    interval_percent,
     last_date,
     service_ids,
 ):
@@ -20,6 +21,7 @@ def update_service_info(
         employee_id,
         alias,
         alias_tokens,
+        interval_percent,
         last_date,
         service_ids,
     )

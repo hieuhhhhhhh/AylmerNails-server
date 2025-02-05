@@ -10,7 +10,7 @@ def get_employee_details(emp_id):
         jsonify(
             {
                 "emp_info": emp_info,
-                "list_definition": "employee_id, alias, stored_intervals, last_date",
+                "list_definition": "employee_id, alias, stored_intervals, interval_percent, last_date",
             }
         ),
         200,
