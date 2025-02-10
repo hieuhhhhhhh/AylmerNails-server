@@ -4,6 +4,7 @@ from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
 from .availability.get_availability_list import get_availability_list
 from .appos.add_appo_by_DELA import add_appo_by_DELA
+from .appos.add_appo_by_chain import add_appo_by_chain
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -44,6 +45,24 @@ def add_appo_by_DELA_():
         return add_appo_by_DELA(
             session, employee_id, service_id, selected_AOSO, date, start_time
         )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/add_appo_by_chain", methods=["POST"])
+def add_appo_by_chain_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        chain = data.get("chain")
+
+        # process input and return result
+        return add_appo_by_chain(session, chain)
 
     # catch unexpected error
     except Exception as e:
