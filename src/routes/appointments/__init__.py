@@ -59,10 +59,11 @@ def add_appo_by_chain_():
 
         # read json from request
         data = request.get_json()
-        chain = data.get("chain")
+        slots = data.get("slots")
+        date = data.get("date")
 
         # process input and return result
-        return add_appo_by_chain(session, chain)
+        return add_appo_by_chain(session, slots, date)
 
     # catch unexpected error
     except Exception as e:

@@ -17,7 +17,7 @@ def rollback_connection(connection):
         connection.close()
 
 
-def call_3D_proc(sp_name, *params_list):
+def multi_call_3D_proc(sp_name, params_list):
     # print statement
     print(f"\033[34mMultiple-calling: \033[0m{sp_name}")
 
