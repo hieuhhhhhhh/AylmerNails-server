@@ -9,6 +9,7 @@ def update_service_info(
     alias,
     interval_percent,
     last_date,
+    color_id,
     service_ids,
 ):
     # tokenize the name of the new employee
@@ -23,6 +24,7 @@ def update_service_info(
         alias_tokens,
         interval_percent,
         last_date,
+        color_id,
         service_ids,
     )
 

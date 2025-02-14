@@ -9,6 +9,9 @@ def create_tables():
     exe_queries(__file__, "authentication/user_sessions.sql")
     exe_queries(__file__, "authentication/unconfirmed_salts.sql")
 
+    exe_queries(__file__, "accounts/colors.sql")
+    exe_queries(__file__, "accounts/profiles.sql")
+
     exe_queries(__file__, "employees/employees.sql")
     exe_queries(__file__, "employees/employee_alias_tokens.sql")
     exe_queries(__file__, "employees/schedules.sql")

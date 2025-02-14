@@ -10,6 +10,7 @@ from src.routes.employees.employees.get_ESs import get_employee_services
 from src.routes.employees.employees.get_employee_details import get_employee_details
 from src.routes.employees.employees.update_employee_info import update_service_info
 from src.routes.employees.schedules.get_employee_schedules import get_employee_schedules
+from src.routes.employees.employees.get_colors import get_colors
 
 # create blueprint (group of routes)
 employees = Blueprint("employees", __name__)
@@ -36,10 +37,11 @@ def add_employee_():
         alias = data.get("alias")
         key_intervals = data.get("key_intervals")
         interval_percent = data.get("interval_percent")
+        color_id = data.get("color_id")
         service_ids = json.dumps(data.get("service_ids"))  # convert python list to json
 
         return add_employee(
-            session, alias, key_intervals, interval_percent, service_ids
+            session, alias, key_intervals, interval_percent, color_id, service_ids
         )
 
     # catch unexpected error
@@ -132,6 +134,7 @@ def update_employee_info_():
         alias = data.get("alias")
         interval_percent = data.get("interval_percent")
         last_date = data.get("last_date")
+        color_id = data.get("color_id")
         service_ids = json.dumps(data.get("service_ids"))
 
         return update_service_info(
@@ -140,8 +143,18 @@ def update_employee_info_():
             alias,
             interval_percent,
             last_date,
+            color_id,
             service_ids,
         )
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@employees.route("/get_colors", methods=["GET"])
+def get_colors_():
+    try:
+        return get_colors()
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

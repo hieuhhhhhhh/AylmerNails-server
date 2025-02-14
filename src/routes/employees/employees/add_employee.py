@@ -4,7 +4,9 @@ from src.mysql.procedures.call_3D_proc import call_3D_proc
 from .tokenize_employee_alias import tokenize_employee_alias
 
 
-def add_employee(session, alias, key_intervals, interval_percent, service_ids):
+def add_employee(
+    session, alias, key_intervals, interval_percent, color_id, service_ids
+):
     # tokenize alias
     alias_tokens = tokenize_employee_alias(alias)
 
@@ -19,6 +21,7 @@ def add_employee(session, alias, key_intervals, interval_percent, service_ids):
         alias_tokens,
         stored_intervals,
         interval_percent,
+        color_id,
         service_ids,
     )[0][0][0]
 
