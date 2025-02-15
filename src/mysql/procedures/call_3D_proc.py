@@ -1,3 +1,4 @@
+import time
 import mysql.connector
 from src.mysql.db_config import DATABASE_CONFIG
 from .thread_pool import job_queue
@@ -17,16 +18,39 @@ def rollback_connection(connection):
         connection.close()
 
 
+# rollback and close connection:
+def timeout_connection(connection):
+    lifetime = 60
+
+    # check every second if the connection is still alive
+    for i in range(lifetime):
+        # if connection is closed, function end
+        time.sleep(1)
+        if not connection.is_connected():
+            return
+        else:
+            print("waiting.")
+
+    # If the connection is still alive after 60 seconds, force close
+    connection.rollback()
+    connection.close()
+    print("\nConnection rolled back and closed because time-out.")
+
+
 def call_3D_proc(sp_name, *params):
     print(f"\033[34mCalling: \033[0m{sp_name}")
 
     # results is a 3D list, so it's called a matrix [table][row][column]
     matrix = []
     connection = None
+
     try:
         # Connect to the database
         connection = mysql.connector.connect(**DATABASE_CONFIG)
         connection.autocommit = False
+
+        # Set time out so connection will always close
+        job_queue.put(lambda: timeout_connection(connection))
 
         # Use a cursor within a context manager to handle its closing
         with connection.cursor() as cursor:

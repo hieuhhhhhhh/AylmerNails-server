@@ -14,7 +14,7 @@ def worker():
 
 
 # Start multiple worker threads to handle connection closures
-num_workers = 3  # Specify how many worker threads you want
+num_workers = 10  # Specify how many worker threads you want
 for _ in range(num_workers):
     worker_thread = threading.Thread(target=worker, daemon=True)
     worker_thread.start()

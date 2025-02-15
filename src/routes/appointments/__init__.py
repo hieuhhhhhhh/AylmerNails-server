@@ -5,6 +5,7 @@ from src.routes.authentication.session.read_token import read_token
 from .availability.get_availability_list import get_availability_list
 from .appos.add_appo_by_DELA import add_appo_by_DELA
 from .appos.add_appo_by_chain import add_appo_by_chain
+from .appos.get_daily_appos import get_daily_appos
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -64,6 +65,20 @@ def add_appo_by_chain_():
 
         # process input and return result
         return add_appo_by_chain(session, slots, date)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_daily_appos/<date>", methods=["GET"])
+def get_daily_appos_(date):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_daily_appos(session, date)
 
     # catch unexpected error
     except Exception as e:
