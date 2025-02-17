@@ -10,5 +10,6 @@ CREATE PROCEDURE sp_add_appo_manually(
     IN _employees_selected VARCHAR(500)
 )
 sp:BEGIN
+
 END;
 

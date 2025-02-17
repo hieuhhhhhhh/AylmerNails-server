@@ -6,6 +6,8 @@ from .availability.get_availability_list import get_availability_list
 from .appos.add_appo_by_DELA import add_appo_by_DELA
 from .appos.add_appo_by_chain import add_appo_by_chain
 from .appos.get_daily_appos import get_daily_appos
+from .appos.get_appo_length import get_appo_length
+
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -79,6 +81,29 @@ def get_daily_appos_(date):
 
         # process input and return result
         return get_daily_appos(session, date)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_appo_length", methods=["POST"])
+def get_appo_length_():
+    try:
+        # read json from request
+        data = request.get_json()
+        service_id = data.get("service_id")
+        employee_id = data.get("employee_id")
+        date = data.get("date")
+        AOSOs = data.get("AOSOs")
+
+        # process input and return result
+        return get_appo_length(
+            service_id,
+            employee_id,
+            date,
+            AOSOs,
+        )
 
     # catch unexpected error
     except Exception as e:

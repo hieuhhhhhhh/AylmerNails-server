@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS sp_get_opening_hours;
 CREATE PROCEDURE sp_get_opening_hours(
     IN _employee_id INT UNSIGNED,
     IN _date BIGINT,
-    IN _day_of_week BIGINT,  -- start at monday = 1, end at sunday = 7
+    IN _day_of_week INT,  -- start at monday = 1, end at sunday = 7
     OUT _opening_time INT, 
     OUT _closing_time INT  
 )
