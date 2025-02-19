@@ -4,7 +4,7 @@ CREATE PROCEDURE sp_get_appo_length(
     IN _service_id INT UNSIGNED,
     IN _employee_id INT UNSIGNED,
     IN _date BIGINT,  -- Unix timestamp (BIGINT)
-    IN _selected_AOSO JSON, -- list of selected add-on-service options for the selected service    
+    IN _selected_AOSO JSON -- list of selected add-on-service options for the selected service    
 )
 BEGIN
     -- result holder

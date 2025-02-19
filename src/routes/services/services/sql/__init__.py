@@ -6,6 +6,7 @@ def create_services_services_sps():
     print("\033[36m" + "create_services_services_sps" + "\033[0m")
     exe_queries(__file__, "sp_add_AOS.sql")
     exe_queries(__file__, "sp_add_service.sql")
+    exe_queries(__file__, "sp_get_AOSs.sql")
     exe_queries(__file__, "sp_get_services.sql")
     exe_queries(__file__, "sp_get_SEs.sql")
     exe_queries(__file__, "sp_get_service_details.sql")

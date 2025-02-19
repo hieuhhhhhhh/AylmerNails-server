@@ -11,6 +11,7 @@ from .services.update_service_info import update_service_info
 from .services.get_SEs import get_service_employees
 from .services.update_SEs import update_service_employees
 from .services.get_service_preview import get_service_preview
+from .services.get_AOSs import get_AOSs
 
 from .categories.get_categories import get_categories
 from .categories.add_category import add_category
@@ -192,6 +193,15 @@ def remove_category_():
         cate_id = data.get("cate_id")
 
         return remove_category(session, cate_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/get_add_on_services/<service_id>", methods=["GET"])
+def get_add_on_services_(service_id):
+    try:
+        return get_AOSs(service_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)
