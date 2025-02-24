@@ -16,7 +16,8 @@ def add_appo_by_chain(session, slots, date):
         start = slot.get("start")
         empId = slot.get("empId")
         serviceId = slot.get("serviceId")
-        params = [session, empId, serviceId, json.dumps([]), date, start]
+        AOSOs = slot.get("AOSOs")
+        params = [session, empId, serviceId, json.dumps(AOSOs), date, start]
         paramsList.append(params)
 
     # start calling procedure

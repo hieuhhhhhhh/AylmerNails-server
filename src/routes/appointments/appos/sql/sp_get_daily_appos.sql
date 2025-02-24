@@ -10,8 +10,10 @@ sp:BEGIN
     CALL sp_validate_admin(_session);
     
     -- 1st table: return all appos of that date, sorted by employee_id
-    SELECT *
-        FROM appo_details 
+    SELECT ad.*, s.name
+        FROM appo_details ad
+            JOIN services s
+                ON s.service_id = ad.service_id
         WHERE date = _date
         ORDER BY employee_id, start_time;  
 

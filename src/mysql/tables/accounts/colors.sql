@@ -5,12 +5,12 @@ CREATE TABLE colors (
 );
 
 INSERT INTO colors (name, code) VALUES
-('Red', 'rgb(157, 0, 0)'),
-('Brown', 'rgb(157, 94, 0)'),
-('Green', 'rgb(11, 92, 0)'),
-('Mint', 'rgb(1, 140, 150)'),
-('Blue', 'rgb(0, 46, 171)'),
-('Pink', 'rgb(161, 0, 121)'),
-('Purple', 'rgb(58, 0, 157)'),
-('Orange', 'rgb(214, 82, 0)'),
-('Grass', 'rgb(114, 142, 0)');
+('Red', 'rgb(234, 89, 89)'),
+('Brown', 'rgb(200, 146, 66)'),
+('Green', 'rgb(133, 255, 117)'),
+('Mint', 'rgb(94, 244, 255)'),
+('Blue', 'rgb(108, 147, 255)'),
+('Pink', 'rgb(254, 162, 231)'),
+('Purple', 'rgb(183, 143, 252)'),
+('Orange', 'rgb(255, 159, 99)'),
+('Grass', 'rgb(209, 255, 27)');
