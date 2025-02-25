@@ -7,7 +7,7 @@ from .appos.add_appo_by_DELA import add_appo_by_DELA
 from .appos.add_appo_by_chain import add_appo_by_chain
 from .appos.get_daily_appos import get_daily_appos
 from .appos.get_appo_length import get_appo_length
-
+from .appos.get_appo_details import get_appo_details
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -103,6 +103,23 @@ def get_appo_length_():
             employee_id,
             date,
             AOSOs,
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_appo_details/<appo_id>", methods=["GET"])
+def get_appo_details_(appo_id):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_appo_details(
+            session,
+            appo_id,
         )
 
     # catch unexpected error
