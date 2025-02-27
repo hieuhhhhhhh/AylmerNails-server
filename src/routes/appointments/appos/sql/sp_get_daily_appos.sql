@@ -48,8 +48,7 @@ sp:BEGIN
             JOIN opening_hours_ oh
                 ON e.employee_id = oh.employee_id
         WHERE e.last_date IS NULL 
-            OR e.last_date > _date;
-
+            OR _date <= e.last_date;
         
 END;
 

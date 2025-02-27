@@ -8,6 +8,7 @@ from .appos.add_appo_by_chain import add_appo_by_chain
 from .appos.get_daily_appos import get_daily_appos
 from .appos.get_appo_length import get_appo_length
 from .appos.get_appo_details import get_appo_details
+from .appos.update_appo import update_appo
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -120,6 +121,33 @@ def get_appo_details_(appo_id):
         return get_appo_details(
             session,
             appo_id,
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/update_appointment", methods=["POST"])
+def update_appointment():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        appo_id = data.get("appo_id")
+        emp_id = data.get("emp_id")
+        service_id = data.get("service_id")
+        AOSOs = json.dumps(data.get("AOSOs"))
+        date = data.get("date")
+        start = data.get("start")
+        end = data.get("end")
+        note = data.get("note")
+
+        # process input and return result
+        return update_appo(
+            session, appo_id, emp_id, service_id, AOSOs, date, start, end, note
         )
 
     # catch unexpected error
