@@ -20,8 +20,22 @@ def add_appo_by_chain(session, slots, date):
         params = [session, empId, serviceId, json.dumps(AOSOs), date, start]
         paramsList.append(params)
 
+    # list of locking tables
+    tables = [
+        "user_sessions us",
+        "authentication a",
+        "service_lengths sl",
+        "services s",
+        "SLVs",
+        "AOS_options ao",
+        "add_on_services aos",
+        "DELAs",
+        "DELA_slots",
+        "appo_details",
+    ]
+
     # start calling procedure
-    res = multi_call_3D_proc("sp_add_appo_by_DELA", paramsList)
+    res = multi_call_3D_proc("sp_add_appo_by_DELA", tables, paramsList)
 
     # read result
     for table in res:

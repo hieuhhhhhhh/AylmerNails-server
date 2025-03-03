@@ -34,7 +34,8 @@ BEGIN
         WHERE date = _date
             AND date >= UNIX_TIMESTAMP() - 24*60*60
             AND employee_id = _employee_id
-            AND planned_length = planned_length_;
+            AND planned_length = planned_length_
+        FOR UPDATE; 
 
     -- check if the start time is valid to a DELA slot
     IF EXISTS(
@@ -44,6 +45,10 @@ BEGIN
                 AND slot = _start_time
     ) 
     THEN 
+        -- remove the used DELA (after a write that DELAs will be invalid)
+        DELETE FROM DELAs
+            WHERE DELA_id = DELA_id_;
+
         -- if the start time matches a DELA slot, add the new appointment
         INSERT INTO appo_details (
             employee_id, 
@@ -61,10 +66,6 @@ BEGIN
             _start_time, 
             _start_time + planned_length_
         );
-
-        -- remove the used DELAs (after a write that DELAs will be invalid)
-        DELETE FROM DELAs
-            WHERE DELA_id = DELA_id_;
             
         -- Return the ID of the newly inserted appointment
         SELECT LAST_INSERT_ID() AS new_appo_id;

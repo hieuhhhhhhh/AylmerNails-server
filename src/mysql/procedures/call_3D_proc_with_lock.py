@@ -37,12 +37,12 @@ def timeout_connection(connection):
     print("\nConnection rolled back and closed because time-out.")
 
 
-def multi_call_3D_proc(sp_name, tables, params_list):
-    # print statement
-    print(f"\033[34mMultiple-calling: \033[0m{sp_name}")
+def call_3D_proc_with_lock(sp_name, tables, *params):
+    print(f"\033[34mCalling: \033[0m{sp_name}")
 
-    # results is a 4D list, so it's called a matrices [call][table][row][column]
-    matrices = []
+    # results is a 3D list, so it's called a matrix [table][row][column]
+    matrix = []
+    connection = None
 
     try:
         # Connect to the database
@@ -52,28 +52,20 @@ def multi_call_3D_proc(sp_name, tables, params_list):
         # Set time out so connection will always close
         job_queue.put(lambda: timeout_connection(connection))
 
-        # lock all necessary tables
+        # Use a cursor within a context manager to handle its closing
         with connection.cursor() as cursor:
             # lock all necessary tables
             lock_statement = "LOCK TABLES " + ", ".join(
                 [f"{table} WRITE" for table in tables]
             )
-            cursor.execute(lock_statement)
+            cursor.execute(lock_statement)  # Lock all tables in the list
 
-        # iterate list of parameters and run procedure
-        for params in params_list:
-            # Use a cursor within a context manager to handle its closing
-            with connection.cursor() as cursor:
-                # Call the stored procedure with parameters
-                cursor.callproc(sp_name, params)
+            # Call the stored procedure with dynamic parameters
+            cursor.callproc(sp_name, params)
 
-                # Store result of every call
-                matrix = []
-                for table in cursor.stored_results():
-                    matrix.append(table.fetchall())  # each table is a 2D list
-
-                # add to matrix list
-                matrices.append(matrix)
+            # Stack every table returned to matrix
+            for table in cursor.stored_results():
+                matrix.append(table.fetchall())  # each table is a 2D list
 
         job_queue.put(lambda: commit_connection(connection))
 
@@ -83,4 +75,4 @@ def multi_call_3D_proc(sp_name, tables, params_list):
         raise
 
     print()
-    return matrices  # Return the matrix to the caller
+    return matrix  # Return the matrix to the caller
