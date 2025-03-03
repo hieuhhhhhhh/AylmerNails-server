@@ -24,4 +24,5 @@ CREATE INDEX idx_employee_id_date ON appo_details(employee_id, date);
 -- index on date -> employee_id -> start_time
 CREATE INDEX idx_date_employee_id_start_time ON appo_details(date, employee_id, start_time);
 
-
+-- index on date -> employee_id -> end_time
+CREATE INDEX idx_date_employee_id_end_time ON appo_details(date, employee_id, end_time);

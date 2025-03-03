@@ -9,6 +9,7 @@ from .appos.get_daily_appos import get_daily_appos
 from .appos.get_appo_length import get_appo_length
 from .appos.get_appo_details import get_appo_details
 from .appos.update_appo import update_appo
+from .appos.add_appo_manually import add_appo_manually
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -148,6 +149,32 @@ def update_appointment():
         # process input and return result
         return update_appo(
             session, appo_id, emp_id, service_id, AOSOs, date, start, end, note
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/add_appointment_manually", methods=["POST"])
+def add_appointment_manually_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        emp_id = data.get("emp_id")
+        service_id = data.get("service_id")
+        AOSOs = json.dumps(data.get("AOSOs"))
+        date = data.get("date")
+        start = data.get("start")
+        end = data.get("end")
+        note = data.get("note")
+
+        # process input and return result
+        return add_appo_manually(
+            session, emp_id, service_id, AOSOs, date, start, end, note
         )
 
     # catch unexpected error
