@@ -10,12 +10,14 @@ def get_appo_length(
 ):
 
     # call mysql proc to process data
-    appo_id = call_3D_proc(
+    length = call_3D_proc(
         "sp_get_appo_length",
         service_id,
         employee_id,
         date,
         AOSOs,
-    )[0]
+    )[
+        0
+    ][0][0]
 
-    return jsonify({"length": appo_id}), 200
+    return jsonify({"length": length}), 200

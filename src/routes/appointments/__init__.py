@@ -97,7 +97,7 @@ def get_appo_length_():
         service_id = data.get("service_id")
         employee_id = data.get("employee_id")
         date = data.get("date")
-        AOSOs = data.get("AOSOs")
+        AOSOs = json.dumps(data.get("AOSOs"))
 
         # process input and return result
         return get_appo_length(
