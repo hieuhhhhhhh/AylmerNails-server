@@ -13,7 +13,7 @@ BEGIN
     DECLARE i INT DEFAULT 0;
 
     -- other place holders
-    DECLARE offset_ INT;
+    DECLARE offset_ INT DEFAULT 0;
     DECLARE AOS_id_ INT UNSIGNED;
     DECLARE option_id_ INT UNSIGNED;
 
@@ -37,7 +37,6 @@ BEGIN
     END IF;
 
     -- fetch and merge offset of employee to current length
-    SET offset_ = 0;
     SELECT length_offset
         INTO offset_
         FROM SLVs
@@ -45,7 +44,7 @@ BEGIN
             AND employee_id = _employee_id
         LIMIT 1;
 
-    SET _planned_length = _planned_length + offset_;
+    SET _planned_length = _planned_length + IFNULL(offset_, 0);
 
     -- iterate _selected_AOSO, fetch and merge offset of every AOSO 
     WHILE i < JSON_LENGTH(_selected_AOSO) DO 
@@ -58,8 +57,6 @@ BEGIN
         SET i = i + 1;
 
         -- fetch and merge offset of that option
-        SET offset_ = 0;
-    
         SELECT length_offset
             INTO offset_
             FROM AOS_options ao
@@ -70,7 +67,7 @@ BEGIN
                 AND ao.option_id = option_id_
             LIMIT 1;
 
-        SET _planned_length = _planned_length + offset_;
+        SET _planned_length = _planned_length + IFNULL(offset_, 0);
 
         -- end loop
     END WHILE;

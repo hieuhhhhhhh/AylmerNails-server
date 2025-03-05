@@ -7,6 +7,7 @@ def update_appo(session, appo_id, emp_id, service_id, AOSOs, date, start, end, n
     # locking tables
     tables = [
         "user_sessions us",
+        "unconfirmed_salts",
         "authentication a",
         "appo_details",
         "opening_hours oh",

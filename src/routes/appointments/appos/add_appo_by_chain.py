@@ -23,6 +23,7 @@ def add_appo_by_chain(session, slots, date):
     # list of locking tables
     tables = [
         "user_sessions us",
+        "unconfirmed_salts",
         "authentication a",
         "service_lengths sl",
         "services s",

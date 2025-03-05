@@ -13,6 +13,11 @@ BEGIN
         VALUES (_session_id, new_salt_)
         ON DUPLICATE KEY UPDATE new_salt = new_salt_;
 
+    -- refresh age
+    UPDATE user_sessions
+        SET created_at = UNIX_TIMESTAMP()
+        WHERE id = _session_id;
+
     -- return that new salt
     SET _session_salt = new_salt_;
 END;
