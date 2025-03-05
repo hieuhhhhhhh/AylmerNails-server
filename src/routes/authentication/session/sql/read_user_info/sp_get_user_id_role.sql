@@ -9,6 +9,7 @@ BEGIN
     -- placeholders
     DECLARE session_id_ INT UNSIGNED;
     DECLARE session_salt_ INT;
+
     DECLARE expiry_ INT;      
     DECLARE created_at_ BIGINT;
 
@@ -24,7 +25,10 @@ BEGIN
             JOIN authentication a
             ON us.user_id = a.user_id
         WHERE us.id = session_id_
-            AND us.session_salt = session_salt_;
+            AND (
+                session_salt_ = fn_get_unconfirmed_salt(session_id_)
+                OR us.session_salt = session_salt_
+            );
 
     -- if expired, set outputs back to NULL
     IF (created_at_ + expiry_) < UNIX_TIMESTAMP() THEN

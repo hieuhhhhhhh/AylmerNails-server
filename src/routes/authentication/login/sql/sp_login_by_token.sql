@@ -33,13 +33,16 @@ sp:BEGIN
 
     -- if session has not expired 
     IF UNIX_TIMESTAMP() <= (created_at_ + expiry_) THEN
-        -- if session is not expired
-        SELECT 200, user_id_, NULL;
+        -- refresh token
+        CALL sp_generate_salt(_session_id, new_salt);
+        -- return green http status, with a new salt
+        SELECT 205, user_id_, new_salt;
         LEAVE sp;
     END IF;
 
     -- if session has expired but remember_me is turned on
     IF remember_me_ THEN 
+        -- refresh token
         CALL sp_generate_salt(_session_id, new_salt);
         -- return green http status, with a new salt
         SELECT 205, user_id_, new_salt;
