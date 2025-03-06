@@ -4,7 +4,7 @@ from .tokenize_service_name import tokenize_service_name
 
 
 def add_service(
-    session, name, category_id, description, date, length, AOSs, employee_ids
+    session, name, category_id, description, date, duration, AOSs, employee_ids
 ):
     # tokenize the name of the new service
     sn_tokens = tokenize_service_name(name)
@@ -18,7 +18,7 @@ def add_service(
         category_id,
         description,
         date,
-        length,
+        duration,
         AOSs,
         employee_ids,
     )[0][0][0]

@@ -7,7 +7,7 @@ CREATE PROCEDURE sp_add_service(
     IN _category_id INT UNSIGNED,
     IN _description VARCHAR(500),
     IN _date BIGINT,
-    IN _length INT,
+    IN _duration INT,
     IN _AOSs JSON, -- JSON array of all AOSs (add-on services) for this service
     IN _employee_ids JSON
 )
@@ -23,16 +23,12 @@ sp:BEGIN
     -- validate session token
     CALL sp_validate_admin(_session);
 
-    -- create new service
-    INSERT INTO services (name, description, category_id)
-        VALUES (_name, _description, _category_id);
-    
+    -- create new service with duration_id
+    INSERT INTO services (name, description, category_id, first_date, duration)
+        VALUES (_name, _description, _category_id, date, _duration);
+
     -- fetch id of new service
     SET service_id_ = LAST_INSERT_ID();
-
-    -- create first service length
-    INSERT INTO service_lengths (service_id, effective_from, length)
-        VALUES (service_id_, _date, _length);
 
     -- start iterating to fetch all AOSs from the JSON array
     WHILE i < JSON_LENGTH(_AOSs) DO 

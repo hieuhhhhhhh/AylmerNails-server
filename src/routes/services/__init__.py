@@ -53,7 +53,7 @@ def add_service_():
         category_id = data.get("category_id")
         description = data.get("description")
         date = data.get("date")
-        length = data.get("length")
+        duration = data.get("duration")
         AOSs = json.dumps(data.get("AOSs"))  # convert python list to json
         employee_ids = json.dumps(data.get("employee_ids"))
 
@@ -63,7 +63,7 @@ def add_service_():
             category_id,
             description,
             date,
-            length,
+            duration,
             AOSs,
             employee_ids,
         )
