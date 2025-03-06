@@ -11,4 +11,4 @@ CREATE TABLE duration_conflicts(
 );
 
 -- index on appo_id
-CREATE INDEX idx_appo_id ON duration_conflicts(appo_id);
+CREATE INDEX idx_appo_id ON duration_conflicts(appo_id);    

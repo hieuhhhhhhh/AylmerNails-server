@@ -32,10 +32,9 @@ BEGIN
         INTO DELA_id_
         FROM DELAs
         WHERE date = _date
-            AND date >= UNIX_TIMESTAMP() - 24*60*60
+            AND date > UNIX_TIMESTAMP() - 24*60*60
             AND employee_id = _employee_id
-            AND planned_length = planned_length_
-        FOR UPDATE; 
+            AND planned_length = planned_length_; 
 
     -- check if the start time is valid to a DELA slot
     IF EXISTS(
