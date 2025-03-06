@@ -25,13 +25,10 @@ BEGIN
         SET i = i + 1;
 
         -- calculate planned length
-        CALL sp_calculate_length(
+        SET planned_length_ = fn_calculate_duration(
             _service_id, 
-            employee_id_, 
-            _date, 
-            _selected_AOSO, 
-            service_length_id_, 
-            planned_length_
+            employee_id_,             
+            _selected_AOSO
         );
 
         -- temporary table: fetch DELA via date & employee & planned length

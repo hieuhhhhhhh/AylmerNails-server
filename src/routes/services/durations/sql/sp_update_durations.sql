@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_add_service_length;
+DROP PROCEDURE IF EXISTS sp_update_durations;
 
-CREATE PROCEDURE sp_add_service_length(
+CREATE PROCEDURE sp_update_durations(
     IN _session JSON,
     IN _service_id INT UNSIGNED,    
     IN _default_duration INT,

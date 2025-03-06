@@ -8,7 +8,7 @@ BEGIN
     DECLARE duration_id_ INT UNSIGNED;
 
     -- return table: service details
-    SELECT s.service_id, s.name, s.description, s.first_date, s.last_date, s.category_id, s.duration, c.name
+    SELECT s.service_id, s.name, s.description, s.first_date, s.last_date, s.duration, s.category_id, c.name
         FROM services s 
             LEFT JOIN categories c
                 ON s.category_id = c.category_id
@@ -19,4 +19,13 @@ BEGIN
         FROM durations d
             JOIN employees e
         WHERE d.service_id = service_id;
+
+    -- return table: service AOSs
+    SELECT o.option_id, o.name, o.length_offset, a.AOS_id, a.prompt
+        FROM AOS_options o
+            RIGHT JOIN add_on_services a
+                ON o.AOS_id = a.AOS_id
+        WHERE a.service_id = _service_id
+        ORDER BY o.AOS_id;
+
 END;

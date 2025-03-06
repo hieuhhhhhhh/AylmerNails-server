@@ -3,7 +3,6 @@ from flask import Blueprint, request
 from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
 from .services.add_service import add_service
-from .lengths.add_service_length import add_service_length
 from .services.get_services import get_services
 from .services.search_services import search_services
 from .services.get_service_details import get_service_details
@@ -12,6 +11,7 @@ from .services.get_SEs import get_service_employees
 from .services.update_SEs import update_service_employees
 from .services.get_service_preview import get_service_preview
 from .services.get_AOSs import get_AOSs
+from .durations.update_durations import update_durations
 
 from .categories.get_categories import get_categories
 from .categories.add_category import add_category
@@ -96,8 +96,8 @@ def update_service_info_():
         return default_error_response(e)
 
 
-@services.route("/add_service_length", methods=["POST"])
-def add_service_length_():
+@services.route("/update_durations", methods=["POST"])
+def update_durations_():
     try:
         # read token
         session = read_token()
@@ -105,11 +105,10 @@ def add_service_length_():
         # read json from request
         data = request.get_json()
         service_id = data.get("service_id")
-        effective_from = data.get("effective_from")
-        length = data.get("length")
-        SLVs = json.dumps(data.get("SLVs"))  # convert python list to json
+        default_duration = data.get("default_duration")
+        durations = json.dumps(data.get("durations"))  # convert python list to json
 
-        return add_service_length(session, service_id, effective_from, length, SLVs)
+        return update_durations(session, service_id, default_duration, durations)
 
     # catch unexpected error
     except Exception as e:

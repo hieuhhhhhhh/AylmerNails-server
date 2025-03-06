@@ -18,14 +18,12 @@ BEGIN
     CALL sp_validate_client(_session);
 
     -- calculate length from the given description
-    CALL sp_calculate_length(
+    SET planned_length_ = fn_calculate_duration(
         _service_id, 
-        _employee_id, 
-        _date, 
-        _selected_AOSO, 
-        service_length_id_, 
-        planned_length_
+        _employee_id,             
+        _selected_AOSO
     );
+
 
     -- fetch the DELA_id that matches the length, date, employee
     SELECT DELA_id

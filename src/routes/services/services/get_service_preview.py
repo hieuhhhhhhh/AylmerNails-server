@@ -10,7 +10,7 @@ def get_service_preview(service_id, date):
         jsonify(
             {
                 "preview": preview,
-                "list_definition": "service_id, name, description, last_date, cate_id, cate_name, length",
+                "list_definition": "service_id, name, description, last_date, cate_id, cate_name, duration",
             }
         ),
         200,

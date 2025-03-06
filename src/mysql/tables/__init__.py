@@ -30,11 +30,10 @@ def create_tables():
     exe_queries(__file__, "services/add_ons/add_on_services.sql")
     exe_queries(__file__, "services/add_ons/AOS_options.sql")
 
-    exe_queries(__file__, "services/lengths/service_lengths.sql")
-    exe_queries(__file__, "services/lengths/SLVs.sql")
+    exe_queries(__file__, "services/durations/duration_conflicts.sql")
+    exe_queries(__file__, "services/durations/durations.sql")
 
     # conflicts
     exe_queries(__file__, "employees/schedule_conflicts.sql")
     exe_queries(__file__, "employees/ELD_conflicts.sql")
     exe_queries(__file__, "services/SLD_conflicts.sql")
-    exe_queries(__file__, "services/lengths/service_length_conflicts.sql")
