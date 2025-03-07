@@ -18,6 +18,6 @@ BEGIN
         WHERE appo_id = _appo_id;
 
     -- calculate and return result
-    RETURN fn_calculate_duration(service_id_, emp_id_, AOSOs_)
+    RETURN fn_calculate_duration(service_id_, emp_id_, AOSOs_);
 END;
 

@@ -6,6 +6,7 @@ CREATE PROCEDURE sp_add_appo_by_DELA(
     IN _service_id INT UNSIGNED,
     IN _selected_AOSO JSON,
     IN _date BIGINT,
+    IN _day_of_week INT,
     IN _start_time INT
 )
 BEGIN
@@ -52,6 +53,7 @@ BEGIN
             service_id, 
             selected_AOSO,
             date,
+            day_of_week,
             start_time, 
             end_time
         )
@@ -60,6 +62,7 @@ BEGIN
             _service_id, 
             _selected_AOSO,
             _date,
+            _day_of_week,
             _start_time, 
             _start_time + planned_length_
         );

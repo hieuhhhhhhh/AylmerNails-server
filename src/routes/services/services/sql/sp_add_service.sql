@@ -25,7 +25,7 @@ sp:BEGIN
 
     -- create new service with duration_id
     INSERT INTO services (name, description, category_id, first_date, duration)
-        VALUES (_name, _description, _category_id, date, _duration);
+        VALUES (_name, _description, _category_id, _date, _duration);
 
     -- fetch id of new service
     SET service_id_ = LAST_INSERT_ID();

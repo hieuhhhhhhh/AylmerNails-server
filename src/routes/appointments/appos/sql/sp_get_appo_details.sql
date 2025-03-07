@@ -18,7 +18,7 @@ sp:BEGIN
     CALL sp_validate_admin(_session);
 
     -- 1st table
-    SELECT ad.*, an.note, c.code, e.alias, s.name, ca.name
+    SELECT ad.appo_id, ad.employee_id, ad.service_id, ad.selected_AOSO, ad.date, ad.start_time, ad.end_time, an.note, c.code, e.alias, s.name, ca.name
         FROM appo_details ad
             LEFT JOIN appo_notes an
                 ON an.appo_id = ad.appo_id

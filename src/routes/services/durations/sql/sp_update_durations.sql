@@ -3,12 +3,14 @@ DROP PROCEDURE IF EXISTS sp_update_durations;
 CREATE PROCEDURE sp_update_durations(
     IN _session JSON,
     IN _service_id INT UNSIGNED,    
-    IN _default_duration INT,
+    IN _duration INT,
     IN _durations JSON 
 )
 BEGIN
+    -- variables
     DECLARE emp_id_ INT UNSIGNED;
     DECLARE duration_ INT;
+    DECLARE i INT DEFAULT 0;
 
     -- validate session token
     CALL sp_validate_admin(_session);

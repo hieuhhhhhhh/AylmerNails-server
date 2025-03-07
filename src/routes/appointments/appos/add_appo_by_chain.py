@@ -1,6 +1,7 @@
 import json
 from flask import jsonify
 from src.mysql.procedures.multi_call_3D_proc import multi_call_3D_proc
+from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
 
 
 def add_appo_by_chain(session, slots, date):
@@ -8,7 +9,9 @@ def add_appo_by_chain(session, slots, date):
     paramsList = []
     # result holder
     appo_ids = []
-    print(slots)
+
+    # fetch day of week
+    day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
 
     # parse slots to procedure params
     for slot in slots:
@@ -17,7 +20,17 @@ def add_appo_by_chain(session, slots, date):
         empId = slot.get("empId")
         serviceId = slot.get("serviceId")
         AOSOs = slot.get("AOSOs")
-        params = [session, empId, serviceId, json.dumps(AOSOs), date, start]
+
+        # create, append param list
+        params = [
+            session,
+            empId,
+            serviceId,
+            json.dumps(AOSOs),
+            date,
+            day_of_week,
+            start,
+        ]
         paramsList.append(params)
 
     # list of locking tables
@@ -25,9 +38,8 @@ def add_appo_by_chain(session, slots, date):
         "user_sessions us",
         "unconfirmed_salts",
         "authentication a",
-        "service_lengths sl",
-        "services s",
-        "SLVs",
+        "durations",
+        "services",
         "AOS_options ao",
         "add_on_services aos",
         "DELAs",

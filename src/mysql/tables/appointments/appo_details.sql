@@ -6,6 +6,7 @@ CREATE TABLE appo_details (
     service_id INT UNSIGNED,
     selected_AOSO JSON, -- list of selected add-on-service options for the selected service
     date BIGINT NOT NULL, -- date in unix time (in seconds)
+    day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), -- start from monday = 1, end at sunday = 7
     start_time INT NOT NULL, -- clock time when the appointment starts on that day (in seconds)
     end_time INT NOT NULL,
 

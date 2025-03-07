@@ -5,52 +5,41 @@ CREATE PROCEDURE sp_scan_schedule_conflicts(
     IN _scan_from BIGINT
 )
 BEGIN
-    -- loop breaker (escape loop when true)
-    DECLARE done_ BOOLEAN DEFAULT FALSE;
+    -- variables
+    DECLARE scan_to_ INT;
 
-    -- placeholders
-    DECLARE schedule_id_ INT UNSIGNED;
-    DECLARE appo_id_ INT UNSIGNED;
-    DECLARE date_ BIGINT;
-    DECLARE start_time_ INT;
-    DECLARE end_time_ INT;
+    -- fetch scan_to by next schedule
+    SELECT effective_from
+        INTO scan_to_
+        FROM schedules
+        WHERE employee_id = _employee_id
+            AND effective_from > _scan_from
+        ORDER BY effective_from
+        LIMIT 1;
 
     -- Declare the cursor for fetching the appointment details
-    DECLARE cur CURSOR FOR
-        SELECT date, start_time, end_time, appo_id
+    CREATE TEMPORARY TABLE conflicts_ AS 
+        SELECT appo_id, fn_find_conflicting_schedule(appo_id) AS schedule_id
             FROM appo_details
             WHERE employee_id = _employee_id
-                AND date >= (UNIX_TIMESTAMP() - 24*60*60)
-                AND date >= _scan_from;
+                AND date > (UNIX_TIMESTAMP() - 24*60*60)
+                AND date >= _scan_from
+                AND date < scan_to_ OR scan_to_ IS NULL;
+    
 
-    -- Declare continue handler for cursor end
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done_ = TRUE;
+    -- delete old conflicts from last schedules
+    DELETE sc
+        FROM schedule_conflicts sc
+            JOIN appo_details ad 
+            ON sc.appo_id = ad.appo_id
+        WHERE ad.employee_id = _employee_id 
+            AND ad.date >= _scan_from
+            AND ad.date < scan_to_ OR scan_to_ IS NULL;
 
-    -- clean old conflicts from last schedules
-    CALL sp_clean_old_schedule_conflicts(_employee_id, _scan_from);
-
-    -- Open the cursor
-    OPEN cur;
-        -- Loop through every apointment found and validate them
-        read_loop: LOOP
-            FETCH cur INTO date_, start_time_, end_time_, appo_id_;
-            
-            IF done_ THEN
-                LEAVE read_loop;
-            END IF;
-
-            -- find a schedule_id that conflict with this appoinment
-            SET schedule_id_ = fn_find_conflicting_schedule(_employee_id, date_, start_time_, end_time_);
-
-            -- if a schedule_id returned it means invalid
-            IF schedule_id_ IS NOT NULL THEN
-                -- create a new schedule_conflict
-                INSERT INTO schedule_conflicts(schedule_id, appo_id)
-                    VALUES (schedule_id_, appo_id_);
-            END IF;
-        END LOOP;
-
-        -- Close the cursor
-    CLOSE cur;
+    -- create a new schedule_conflict
+    INSERT INTO schedule_conflicts(schedule_id, appo_id)
+        SELECT schedule_id, appo_id
+            FROM conflicts_
+            WHERE schedule_id IS NOT NULL;
 
 END;

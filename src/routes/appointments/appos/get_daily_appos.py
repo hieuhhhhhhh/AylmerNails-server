@@ -17,7 +17,7 @@ def get_daily_appos(session, date):
         jsonify(
             {
                 "appos": appos,
-                "appos_def": "[{appoId, empId, serviceId, AOSOs, date, start, end, serviceName},]",
+                "appos_def": "[{appoId, empId, serviceId, AOSOs, date, day_of_week, start, end, serviceName},]",
                 "employees": employees,
                 "emp_def": "[{empId, alias, colorId, colorCode, openTime, closeTime, dayOfWeek, scheduleId, effectiveFrom},]",
             }

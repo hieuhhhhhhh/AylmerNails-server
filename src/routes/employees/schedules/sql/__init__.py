@@ -7,7 +7,6 @@ def create_employees_schedules_sps():
     exe_queries(__file__, "sp_get_opening_hours.sql")
     exe_queries(__file__, "fn_find_conflicting_schedule.sql")
     exe_queries(__file__, "sp_add_schedule.sql")
-    exe_queries(__file__, "sp_clean_old_schedule_conflicts.sql")
     exe_queries(__file__, "sp_get_employee_schedules.sql")
     exe_queries(__file__, "sp_scan_schedule_conflicts.sql")
 
