@@ -29,18 +29,15 @@ BEGIN
     -- extract and store name tokens
     CALL sp_store_name_tokens(_service_id, _service_name_tokens);
 
-    -- pre-check if last date is really new before update it
-    IF NOT EXISTS(
-        SELECT 1 FROM services 
-            WHERE service_id = _service_id 
-                AND last_date = _last_date
-    )THEN
-        UPDATE services
-            SET last_date = _last_date
-            WHERE service_id = _service_id;
+    -- update last_date
+    UPDATE services
+        SET last_date = _last_date
+        WHERE service_id = _service_id;
 
-        -- Call sp_scan_SLD_conflicts to find any appointments that conflict the update
+    -- if last_date changed scan conflicts
+    IF ROW_COUNT() > 0 THEN        
         CALL sp_scan_SLD_conflicts(_service_id);
     END IF;
+
 
 END;
