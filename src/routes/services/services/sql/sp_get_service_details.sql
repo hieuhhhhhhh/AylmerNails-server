@@ -27,5 +27,15 @@ BEGIN
                 ON o.AOS_id = a.AOS_id
         WHERE a.service_id = _service_id
         ORDER BY o.AOS_id;
+    
+    -- return last date conflicts count
+    SELECT COUNT(*)
+        FROM sld_conflicts    
+        WHERE service_id = _service_id;
 
+    -- return duration conflicts count
+    SELECT COUNT(*)
+        FROM duration_conflicts    
+        WHERE service_id = _service_id;
+        
 END;

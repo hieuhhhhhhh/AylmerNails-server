@@ -10,6 +10,8 @@ def get_service_details(service_id):
     info = res[0][0]
     durations = res[1]
     AOSs = res[2]
+    ld_conflicts = res[3][0][0]
+    duration_conflicts = res[4][0][0]
 
     return (
         jsonify(
@@ -20,6 +22,8 @@ def get_service_details(service_id):
                 "durations_def": "[[emp_id, alias, duration],]",
                 "AOSs": AOSs,
                 "AOSs_def": "[answer_id, answer, offset, question_id, question]",
+                "ld_conflicts": ld_conflicts,
+                "duration_conflicts": duration_conflicts,
             }
         ),
         200,
