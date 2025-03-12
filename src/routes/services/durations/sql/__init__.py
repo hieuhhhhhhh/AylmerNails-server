@@ -7,6 +7,5 @@ def create_services_durations_procs():
     exe_queries(__file__, "fn_calculate_appo_duration.sql")
     exe_queries(__file__, "fn_calculate_duration.sql")
     exe_queries(__file__, "sp_get_appo_duration.sql")
-    exe_queries(__file__, "sp_scan_duration_conflicts.sql")
     exe_queries(__file__, "sp_update_durations.sql")
     print()
