@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_get_last_date_conflicts;
+DROP PROCEDURE IF EXISTS sp_get_service_ld_conflicts;
 
-CREATE PROCEDURE sp_get_last_date_conflicts(
+CREATE PROCEDURE sp_get_service_ld_conflicts(
     IN _service_id INT UNSIGNED
 )
 BEGIN    
@@ -11,6 +11,6 @@ BEGIN
             JOIN employees e
                 ON e.employee_id = ad.employee_id
             JOIN services s
-                ON e.service_id = ad.service_id
+                ON s.service_id = ad.service_id
         WHERE sc.service_id = _service_id;
 END;

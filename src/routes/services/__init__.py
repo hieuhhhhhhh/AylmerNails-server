@@ -17,6 +17,9 @@ from .categories.get_categories import get_categories
 from .categories.add_category import add_category
 from .categories.remove_category import remove_category
 
+from .conflicts.get_last_date_conflicts import get_last_date_conflicts
+from .conflicts.get_duration_conflicts import get_duration_conflicts
+
 # create blueprint (group of routes)
 services = Blueprint("services", __name__)
 
@@ -201,6 +204,24 @@ def remove_category_():
 def get_add_on_services_(service_id):
     try:
         return get_AOSs(service_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/get_duration_conflicts/<service_id>", methods=["GET"])
+def get_duration_conflicts_(service_id):
+    try:
+        return get_duration_conflicts(service_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/get_service_ld_conflicts/<service_id>", methods=["GET"])
+def get_service_ld_conflicts_(service_id):
+    try:
+        return get_last_date_conflicts(service_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

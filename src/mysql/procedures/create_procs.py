@@ -8,6 +8,7 @@ from src.routes.authentication.session.sql import create_authentication_session_
 from src.routes.services.categories.sql import create_services_categories_sps
 from src.routes.services.durations.sql import create_services_durations_procs
 from src.routes.services.services.sql import create_services_services_sps
+from src.routes.services.conflicts.sql import create_conflicts_procs
 
 from src.routes.employees.employees.sql import create_employees_employees_sps
 from src.routes.employees.schedules.sql import create_employees_schedules_sps
@@ -32,6 +33,7 @@ def create_procedures():
     create_services_categories_sps()
     create_services_durations_procs()
     create_services_services_sps()
+    create_conflicts_procs()
 
     # from employees routes
     create_employees_employees_sps()
