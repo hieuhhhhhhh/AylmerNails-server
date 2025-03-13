@@ -54,7 +54,7 @@ sp:BEGIN
 
     -- Update the password if new_password column is not null
     IF new_password_ IS NOT NULL THEN
-        CALL sp_new_auth(_phone_number, new_password_);
+        CALL sp_add_user(_phone_number, new_password_);
     END IF;
 
     -- If everything is valid, return success and delete the record

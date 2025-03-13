@@ -3,6 +3,7 @@ from flask import Blueprint, request
 from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
 from .availability.get_availability_list import get_availability_list
+
 from .appos.add_appo_by_chain import add_appo_by_chain
 from .appos.get_daily_appos import get_daily_appos
 from .appos.get_appo_length import get_appo_length
@@ -10,6 +11,9 @@ from .appos.get_appo_details import get_appo_details
 from .appos.update_appo import update_appo
 from .appos.add_appo_manually import add_appo_manually
 from .appos.remove_appo import remove_appo
+
+from .contacts.add_contact import add_contact
+from .contacts.search_contacts import search_contacts
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -162,6 +166,36 @@ def remove_appointment(appo_id):
 
         # process input and return result
         return remove_appo(session, appo_id)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/add_contact", methods=["POST"])
+def add_contact_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        phone_num = data.get("phone_num")
+        name = data.get("name")
+
+        # process input and return result
+        return add_contact(session, phone_num, name)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/search_contacts/<phone_num>", methods=["GET"])
+def search_contacts_(phone_num):
+    try:
+        # process input and return result
+        return search_contacts(phone_num)
 
     # catch unexpected error
     except Exception as e:

@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_new_auth;
+DROP PROCEDURE IF EXISTS sp_add_user;
 
-CREATE PROCEDURE sp_new_auth(
+CREATE PROCEDURE sp_add_user(
     IN _phone_number VARCHAR(15),
     IN _hashed_password VARCHAR(60)
 ) 

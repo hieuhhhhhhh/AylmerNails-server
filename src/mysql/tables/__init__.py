@@ -4,6 +4,7 @@ from src.mysql.execute_sql_file.many_queries import exe_queries
 def create_tables():
     print("\033[94m" + "create_tables" + "\033[0m")
 
+    exe_queries(__file__, "authentication/phone_numbers.sql")
     exe_queries(__file__, "authentication/authentication.sql")
     exe_queries(__file__, "authentication/sms_verify_codes.sql")
     exe_queries(__file__, "authentication/user_sessions.sql")
@@ -11,7 +12,7 @@ def create_tables():
 
     exe_queries(__file__, "accounts/colors.sql")
     exe_queries(__file__, "accounts/profiles.sql")
-    exe_queries(__file__, "accounts/phonebook.sql")
+    exe_queries(__file__, "accounts/contacts.sql")
 
     exe_queries(__file__, "employees/employees.sql")
     exe_queries(__file__, "employees/employee_alias_tokens.sql")
