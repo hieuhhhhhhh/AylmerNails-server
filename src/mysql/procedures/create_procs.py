@@ -17,6 +17,7 @@ from src.routes.appointments.appos.sql import create_appointments_appos_sps
 from src.routes.appointments.availability.sql import (
     create_appointments_availability_sps,
 )
+from src.routes.appointments.contacts.sql import create_contacts_procs
 from src.routes.appointments.other_sql import create_appointments_other_sql_sps
 
 
@@ -42,4 +43,5 @@ def create_procedures():
     # from appointments routes
     create_appointments_appos_sps()
     create_appointments_availability_sps()
+    create_contacts_procs()
     create_appointments_other_sql_sps()

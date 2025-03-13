@@ -12,17 +12,10 @@ BEGIN
     -- validate session
     CALL sp_validate_admin(_session);
 
-    -- insert or ignore phone number
-    INSERT IGNORE INTO phone_numbers (value)
-        VALUES (_phone_num);
+    -- get phone number id
+    CALL sp_get_phone_num_id (_phone_num, phone_num_id_);
 
-    -- fetch phone number id
-    SELECT phone_num_id
-        INTO phone_num_id_
-        FROM phone_numbers
-        WHERE value = _phone_num;
-
-    -- insert to phone book
+    -- insert to new contact
     INSERT INTO contacts (phone_num_id, name)
         VALUES (phone_num_id_, _name)
         ON DUPLICATE KEY UPDATE
