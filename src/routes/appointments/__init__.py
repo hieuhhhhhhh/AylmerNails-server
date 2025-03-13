@@ -9,6 +9,7 @@ from .appos.get_appo_length import get_appo_length
 from .appos.get_appo_details import get_appo_details
 from .appos.update_appo import update_appo
 from .appos.add_appo_manually import add_appo_manually
+from .appos.remove_appo import remove_appo
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -147,6 +148,20 @@ def add_appointment_manually_():
         return add_appo_manually(
             session, emp_id, service_id, AOSOs, date, start, end, note
         )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/remove_appointment/<appo_id>", methods=["POST"])
+def remove_appointment(appo_id):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return remove_appo(session, appo_id)
 
     # catch unexpected error
     except Exception as e:
