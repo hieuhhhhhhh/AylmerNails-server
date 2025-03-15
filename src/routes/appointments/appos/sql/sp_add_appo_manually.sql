@@ -2,6 +2,9 @@ DROP PROCEDURE IF EXISTS sp_add_appo_manually;
 
 CREATE PROCEDURE sp_add_appo_manually(
     IN _session JSON,
+    IN _phone_num VARCHAR(15),
+    IN _name VARCHAR(200),
+    IN _name_tokens JSON,
     IN _emp_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
     IN _AOSOs JSON,
@@ -22,6 +25,9 @@ sp:BEGIN
 
     -- validate session token
     CALL sp_validate_admin(_session);
+
+    -- update contact 
+    CALL sp_update_contact (_phone_num, _name, _name_tokens);
 
     -- check overlaps 
     SELECT appo_id, start_time, end_time

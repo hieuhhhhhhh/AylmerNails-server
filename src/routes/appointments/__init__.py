@@ -12,7 +12,6 @@ from .appos.update_appo import update_appo
 from .appos.add_appo_manually import add_appo_manually
 from .appos.remove_appo import remove_appo
 
-from .contacts.add_contact import add_contact
 from .contacts.search_contacts import search_contacts
 
 # create blueprint (group of routes)
@@ -166,25 +165,6 @@ def remove_appointment(appo_id):
 
         # process input and return result
         return remove_appo(session, appo_id)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/add_contact", methods=["POST"])
-def add_contact_():
-    try:
-        # read token
-        session = read_token()
-
-        # read json
-        data = request.get_json()
-        phone_num = data.get("phone_num")
-        name = data.get("name")
-
-        # process input and return result
-        return add_contact(session, phone_num, name)
 
     # catch unexpected error
     except Exception as e:
