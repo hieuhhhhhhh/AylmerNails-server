@@ -39,6 +39,6 @@ def create_tables():
     exe_queries(__file__, "services/SLD_conflicts.sql")
 
     # tokens
-    exe_queries(__file__, "token/contact_tokens.sql")
+    exe_queries(__file__, "tokens/contact_tokens.sql")
     exe_queries(__file__, "tokens/employee_alias_tokens.sql")
     exe_queries(__file__, "tokens/service_name_tokens.sql")

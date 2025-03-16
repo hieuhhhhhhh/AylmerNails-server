@@ -22,12 +22,13 @@ sp:BEGIN
     DECLARE schedule_id_ INT UNSIGNED;
     DECLARE day_start_ INT;
     DECLARE day_end_ INT;
+    DECLARE phone_num_id_ INT UNSIGNED;
 
     -- validate session token
     CALL sp_validate_admin(_session);
 
     -- update contact 
-    CALL sp_update_contact (_phone_num, _name, _name_tokens);
+    CALL sp_update_contact (_phone_num, _name, _name_tokens, phone_num_id_);
 
     -- check overlaps 
     SELECT appo_id, start_time, end_time
@@ -69,8 +70,8 @@ sp:BEGIN
     END IF;
 
     -- create new appointment if all validations passed
-    INSERT INTO appo_details (employee_id, service_id, selected_AOSO, date, day_of_week, start_time, end_time)
-        VALUES (_emp_id, _service_id, _AOSOs, _date, _day_of_week, _start, _end);
+    INSERT INTO appo_details (employee_id, service_id, phone_num_id, selected_AOSO, date, day_of_week, start_time, end_time)
+        VALUES (_emp_id, _service_id, phone_num_id_, _AOSOs, _date, _day_of_week, _start, _end);
 
     -- return created appo_id
     SELECT LAST_INSERT_ID();

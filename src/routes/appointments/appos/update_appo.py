@@ -1,11 +1,17 @@
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc_with_lock import call_3D_proc_with_lock
 from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
+from src.routes.helpers.tokenize_name import tokenize_name
 
 
-def update_appo(session, appo_id, emp_id, service_id, AOSOs, date, start, end, note):
+def update_appo(
+    session, appo_id, phone_num, name, emp_id, service_id, AOSOs, date, start, end, note
+):
     # locking tables
     tables = [
+        "phone_numbers",
+        "contact_tokens",
+        "contacts",
         "user_sessions us",
         "unconfirmed_salts",
         "authentication a",
@@ -13,6 +19,9 @@ def update_appo(session, appo_id, emp_id, service_id, AOSOs, date, start, end, n
         "opening_hours oh",
         "schedules s",
     ]
+
+    # tokenize client's name
+    name_tokens = tokenize_name(name)
 
     # parse date to day of the week for Toronto timezone (add half a day to shift to mid-day timestamp)
     day_of_week = get_day_of_week_toronto(int(date) + 12 * 60 * 60)
@@ -23,6 +32,9 @@ def update_appo(session, appo_id, emp_id, service_id, AOSOs, date, start, end, n
         tables,
         session,
         appo_id,
+        phone_num,
+        name,
+        name_tokens,
         emp_id,
         service_id,
         AOSOs,

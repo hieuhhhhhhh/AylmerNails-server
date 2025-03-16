@@ -3,6 +3,9 @@ DROP PROCEDURE IF EXISTS sp_update_appo;
 CREATE PROCEDURE sp_update_appo(
     IN _session JSON,
     IN _appo_id INT UNSIGNED,
+    IN _phone_num VARCHAR(15),
+    IN _name VARCHAR(200),
+    IN _name_tokens JSON,
     IN _emp_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
     IN _AOSOs JSON,
@@ -20,12 +23,16 @@ sp:BEGIN
     DECLARE schedule_id_ INT UNSIGNED;
     DECLARE day_start_ INT;
     DECLARE day_end_ INT;
+    DECLARE phone_num_id_ INT UNSIGNED;
 
     -- validate session token
     CALL sp_validate_admin(_session);
 
     -- save
     SAVEPOINT s1;
+
+    -- update contact 
+    CALL sp_update_contact (_phone_num, _name, _name_tokens, phone_num_id_);
 
     -- remove last appointment
     DELETE FROM appo_details
@@ -73,8 +80,8 @@ sp:BEGIN
     END IF;
 
     -- create new appointment if all validations passed
-    INSERT INTO appo_details (employee_id, service_id, selected_AOSO, date, start_time, end_time)
-        VALUES (_emp_id, _service_id, _AOSOs, _date, _start, _end);
+    INSERT INTO appo_details (employee_id, service_id, phone_num_id, selected_AOSO, date, start_time, end_time)
+        VALUES (_emp_id, _service_id, phone_num_id_, _AOSOs, _date, _start, _end);
 
     -- return created appo_id
     SELECT LAST_INSERT_ID();

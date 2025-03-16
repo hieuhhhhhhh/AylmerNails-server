@@ -113,6 +113,8 @@ def update_appointment():
         # read json
         data = request.get_json()
         appo_id = data.get("appo_id")
+        phone_num = data.get("phone_num")
+        name = data.get("name")
         emp_id = data.get("emp_id")
         service_id = data.get("service_id")
         AOSOs = json.dumps(data.get("AOSOs"))
@@ -123,7 +125,17 @@ def update_appointment():
 
         # process input and return result
         return update_appo(
-            session, appo_id, emp_id, service_id, AOSOs, date, start, end, note
+            session,
+            appo_id,
+            phone_num,
+            name,
+            emp_id,
+            service_id,
+            AOSOs,
+            date,
+            start,
+            end,
+            note,
         )
 
     # catch unexpected error
@@ -139,6 +151,8 @@ def add_appointment_manually_():
 
         # read json
         data = request.get_json()
+        phone_num = data.get("phone_num")
+        name = data.get("name")
         emp_id = data.get("emp_id")
         service_id = data.get("service_id")
         AOSOs = json.dumps(data.get("AOSOs"))
@@ -149,7 +163,7 @@ def add_appointment_manually_():
 
         # process input and return result
         return add_appo_manually(
-            session, emp_id, service_id, AOSOs, date, start, end, note
+            session, phone_num, name, emp_id, service_id, AOSOs, date, start, end, note
         )
 
     # catch unexpected error
@@ -171,11 +185,11 @@ def remove_appointment(appo_id):
         return default_error_response(e)
 
 
-@appointments.route("/search_contacts/<phone_num>", methods=["GET"])
-def search_contacts_(phone_num):
+@appointments.route("/search_contacts/<query>", methods=["GET"])
+def search_contacts_(query):
     try:
         # process input and return result
-        return search_contacts(phone_num)
+        return search_contacts(query)
 
     # catch unexpected error
     except Exception as e:

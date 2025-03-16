@@ -7,4 +7,5 @@ CREATE TABLE contact_tokens(
     PRIMARY KEY (token, phone_num_id)
 );
 
+-- index on phone number id
 CREATE INDEX idx_phone_num_id ON contact_tokens(phone_num_id);
