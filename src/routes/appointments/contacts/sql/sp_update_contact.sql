@@ -14,7 +14,8 @@ BEGIN
     INSERT INTO contacts (phone_num_id, name)
         VALUES (_phone_num_id, _name)
         ON DUPLICATE KEY UPDATE
-            name = _name;     
+            name = _name,
+            time = UNIX_TIMESTAMP();     
 
     -- store tokens
     CALL sp_store_contact_tokens (_phone_num_id, _name_tokens);

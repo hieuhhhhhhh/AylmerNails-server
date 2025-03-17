@@ -194,3 +194,14 @@ def search_contacts_(query):
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)
+
+
+@appointments.route("/search_contacts", methods=["GET"])
+def search_contacts_no_query():
+    try:
+        # process input and return result
+        return search_contacts("")
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
