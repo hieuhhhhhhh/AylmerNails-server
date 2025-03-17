@@ -14,6 +14,8 @@ from .appos.remove_appo import remove_appo
 
 from .contacts.search_contacts import search_contacts
 
+from .notifications.get_notifications import get_notifications
+
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
 
@@ -201,6 +203,20 @@ def search_contacts_no_query():
     try:
         # process input and return result
         return search_contacts("")
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_notifications/<limit>", methods=["GET"])
+def get_notifications_(limit):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_notifications(session, limit)
 
     # catch unexpected error
     except Exception as e:

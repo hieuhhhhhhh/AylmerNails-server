@@ -3,6 +3,7 @@ CREATE TABLE appo_notifications (
     time BIGINT NOT NULL DEFAULT (UNIX_TIMESTAMP()), -- created time
     FOREIGN KEY (appo_id)
         REFERENCES appo_details (appo_id)        
+        ON DELETE CASCADE
 );
 
 -- index on time
