@@ -2,58 +2,205 @@ import json
 from flask import Blueprint, request
 from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
-from .availability.get_daily_DELAs import get_daily_DELAs
-from .appos.add_appo_by_DELA import add_appo_by_DELA
+from .availability.get_availability_list import get_availability_list
+
+from .appos.add_appo_by_chain import add_appo_by_chain
+from .appos.get_daily_appos import get_daily_appos
+from .appos.get_appo_length import get_appo_length
+from .appos.get_appo_details import get_appo_details
+from .appos.update_appo import update_appo
+from .appos.add_appo_manually import add_appo_manually
+from .appos.remove_appo import remove_appo
+
+from .contacts.search_contacts import search_contacts
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
 
 
-@appointments.route("/get_availability", methods=["POST"])
+@appointments.route("/get_availability_list", methods=["POST"])
 def get_availability():
     try:
-        # read token
-        session = read_token()
-
         # read json from request
         data = request.get_json()
-        date = data.get("date")
-        service_id = data.get("service_id")
-        selected_AOSO = json.dumps(
-            data.get("selected_AOSO")
-        )  # convert python list to json
-        employee_ids = json.dumps(
-            data.get("employee_ids")
-        )  # convert python list to json
+        DELAs_requests = data.get("DELAs_requests")
 
         # process input and return result
-        return get_daily_DELAs(session, date, service_id, selected_AOSO, employee_ids)
+        return get_availability_list(DELAs_requests)
 
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)
 
 
-@appointments.route("/add_appo_by_DELA", methods=["POST"])
-def add_appo_by_DELA_():
+@appointments.route("/add_appo_by_chain", methods=["POST"])
+def add_appo_by_chain_():
     try:
         # read token
         session = read_token()
 
         # read json from request
         data = request.get_json()
-        employee_id = data.get("employee_id")
-        service_id = data.get("service_id")
-        selected_AOSO = json.dumps(
-            data.get("selected_AOSO")
-        )  # convert python list to json
+        slots = data.get("slots")
         date = data.get("date")
-        start_time = data.get("start_time")
 
         # process input and return result
-        return add_appo_by_DELA(
-            session, employee_id, service_id, selected_AOSO, date, start_time
+        return add_appo_by_chain(session, slots, date)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_daily_appos/<date>", methods=["GET"])
+def get_daily_appos_(date):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_daily_appos(session, date)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_appo_length", methods=["POST"])
+def get_appo_length_():
+    try:
+        # read json from request
+        data = request.get_json()
+        service_id = data.get("service_id")
+        employee_id = data.get("employee_id")
+        AOSOs = json.dumps(data.get("AOSOs"))
+
+        # process input and return result
+        return get_appo_length(
+            service_id,
+            employee_id,
+            AOSOs,
         )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_appo_details/<appo_id>", methods=["GET"])
+def get_appo_details_(appo_id):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_appo_details(
+            session,
+            appo_id,
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/update_appointment", methods=["POST"])
+def update_appointment():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        appo_id = data.get("appo_id")
+        phone_num = data.get("phone_num")
+        name = data.get("name")
+        emp_id = data.get("emp_id")
+        service_id = data.get("service_id")
+        AOSOs = json.dumps(data.get("AOSOs"))
+        date = data.get("date")
+        start = data.get("start")
+        end = data.get("end")
+        note = data.get("note")
+
+        # process input and return result
+        return update_appo(
+            session,
+            appo_id,
+            phone_num,
+            name,
+            emp_id,
+            service_id,
+            AOSOs,
+            date,
+            start,
+            end,
+            note,
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/add_appointment_manually", methods=["POST"])
+def add_appointment_manually_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        phone_num = data.get("phone_num")
+        name = data.get("name")
+        emp_id = data.get("emp_id")
+        service_id = data.get("service_id")
+        AOSOs = json.dumps(data.get("AOSOs"))
+        date = data.get("date")
+        start = data.get("start")
+        end = data.get("end")
+        note = data.get("note")
+
+        # process input and return result
+        return add_appo_manually(
+            session, phone_num, name, emp_id, service_id, AOSOs, date, start, end, note
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/remove_appointment/<appo_id>", methods=["POST"])
+def remove_appointment(appo_id):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return remove_appo(session, appo_id)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/search_contacts/<query>", methods=["GET"])
+def search_contacts_(query):
+    try:
+        # process input and return result
+        return search_contacts(query)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/search_contacts", methods=["GET"])
+def search_contacts_no_query():
+    try:
+        # process input and return result
+        return search_contacts("")
 
     # catch unexpected error
     except Exception as e:

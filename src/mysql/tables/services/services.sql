@@ -3,11 +3,11 @@ CREATE TABLE services(
     name VARCHAR(50) NOT NULL,
     description VARCHAR(500),
     category_id INT UNSIGNED,
+    first_date BIGINT NOT NULL,
     last_date BIGINT,
+    duration INT NOT NULL,
     
     FOREIGN KEY (category_id) 
-        REFERENCES categories(category_id)
+        REFERENCES categories(category_id)    
 );
 
--- index on last_date
-CREATE INDEX idx_last_date ON services(last_date);

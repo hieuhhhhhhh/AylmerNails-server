@@ -1,28 +1,42 @@
 from .appo_ranges_to_spaces import appo_ranges_to_spaces
-from .spaces_to_DELA import spaces_to_DELA
-from .store_DELA import store_DELA
+from .spaces_to_slots import spaces_to_slots
+from .store_DELA_slots import store_DELA_slots
 import json
 
 
-def table_to_DELA(table):
-    appo_ranges = []  # a list of tuples
+def table_to_DELA(table, DELA):
+    appo_ranges = []  # list of 2 endpoint of every appointment
 
     # fetch appointment length
-    planned_length = table[0][3]
+    planned_length = table[0][4]
+    DELA["length"] = planned_length
 
     # fetch list of favorable intervals (this list is supposed to be ascending)
     stored_intervals = json.loads(table[0][2])
+    interval_percent = table[0][3]
 
     # fetch DELA_id
-    DELA_id = table[0][4]
+    DELA_id = table[0][5]
 
     # fetch opening time closing time
     opening_time = table[1][0]
     closing_time = table[1][1]
 
+    if opening_time is None or closing_time is None or closing_time <= opening_time:
+        return DELA
+
     # validate all after fetching from table (all must be not null)
-    if not all([planned_length, stored_intervals, DELA_id, opening_time, closing_time]):
-        return []
+    if not all(
+        [
+            planned_length,
+            stored_intervals,
+            interval_percent,
+            DELA_id,
+            opening_time,
+            closing_time,
+        ]
+    ):
+        return DELA
 
     # merge opening time
     appo_ranges.append((None, opening_time))
@@ -45,12 +59,17 @@ def table_to_DELA(table):
 
     # create and return  DELA
     spaces = appo_ranges_to_spaces(appo_ranges)
-    DELA = spaces_to_DELA(spaces, planned_length, stored_intervals)
+    slots = spaces_to_slots(
+        spaces,
+        planned_length,
+        stored_intervals,
+        (closing_time - opening_time) * interval_percent / 100,
+    )
 
     # send DELA to mysql
-    store_DELA(DELA, DELA_id)
+    store_DELA_slots(slots, DELA_id)
 
-    return DELA
+    DELA["slots"] = slots
 
 
 # to slice ascending list with a ceiling

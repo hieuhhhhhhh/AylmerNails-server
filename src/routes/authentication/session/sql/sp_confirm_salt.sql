@@ -7,7 +7,7 @@ CREATE PROCEDURE sp_confirm_salt(
 BEGIN
     -- write the new salt and new birth time on the session (refreshing session)
     UPDATE user_sessions
-        SET session_salt = _session_salt, created_at = UNIX_TIMESTAMP()
+        SET session_salt = _session_salt
         WHERE id = _session_id;
 
     -- clean up that new salt on the other table (salt has been confirmed)

@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_store_name_tokens(
 )
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
 
     -- placeholder
     DECLARE token_ VARCHAR(50);

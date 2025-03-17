@@ -11,17 +11,21 @@ sp:BEGIN
     DECLARE created_at_ BIGINT;
     DECLARE expiry_ INT;
     DECLARE new_password_ VARCHAR(60);
+    DECLARE phone_num_id_ INT UNSIGNED;
+    
+    -- get phone number id
+    CALL sp_get_phone_num_id (_phone_number, phone_num_id_);
 
     -- Decrement the attempts left
     UPDATE sms_verify_codes
         SET attempts_left = attempts_left - 1
-        WHERE phone_number = _phone_number;
+        WHERE phone_num_id = phone_num_id_;
 
     -- Get the current timestamp and record details
     SELECT new_password, code, attempts_left, created_at, expiry
         INTO new_password_, code_, attempts_left_, created_at_, expiry_
         FROM sms_verify_codes
-        WHERE phone_number = _phone_number
+        WHERE phone_num_id = phone_num_id_
         LIMIT 1;
 
     -- If the phone number doesn't exist or other failure conditions
@@ -54,12 +58,12 @@ sp:BEGIN
 
     -- Update the password if new_password column is not null
     IF new_password_ IS NOT NULL THEN
-        CALL sp_new_auth(_phone_number, new_password_);
+        CALL sp_add_user(_phone_number, new_password_);
     END IF;
 
     -- If everything is valid, return success and delete the record
     SELECT TRUE AS success, 'Verification successful.' AS msg;
     
     -- After the return, remove the verification code from database (1 time use)
-    DELETE FROM sms_verify_codes WHERE phone_number = _phone_number;
+    DELETE FROM sms_verify_codes WHERE phone_num_id = phone_num_id_;
 END;

@@ -1,16 +1,15 @@
 DROP PROCEDURE IF EXISTS sp_get_DELAs_or_appo_lists;
 
 CREATE PROCEDURE sp_get_DELAs_or_appo_lists(
-    IN _session JSON,
     IN _date BIGINT,
-    IN _day_of_week TINYINT, -- start at monday = 1, end at sunday = 7
+    IN _day_of_week INT, -- start at monday = 1, end at sunday = 7
     IN _service_id INT UNSIGNED,
     IN _selected_AOSO JSON, 
     IN _employee_ids JSON
 )
 BEGIN    
     -- iterator
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
     -- variables
     DECLARE planned_length_ INT;
     DECLARE service_length_id_ INT UNSIGNED;
@@ -18,9 +17,6 @@ BEGIN
     DECLARE opening_time_ INT;
     DECLARE closing_time_ INT;
     DECLARE DELA_id_ INT UNSIGNED;
-    
-    -- validate session token
-    CALL sp_validate_client(_session);
 
     -- iterate every employee_id from _employee_ids (json array)
     WHILE i < JSON_LENGTH(_employee_ids) DO 
@@ -29,18 +25,15 @@ BEGIN
         SET i = i + 1;
 
         -- calculate planned length
-        CALL sp_calculate_length(
+        SET planned_length_ = fn_calculate_duration(
             _service_id, 
-            employee_id_, 
-            _date, 
-            _selected_AOSO, 
-            service_length_id_, 
-            planned_length_
+            employee_id_,             
+            _selected_AOSO
         );
 
         -- temporary table: fetch DELA via date & employee & planned length
         CREATE TEMPORARY TABLE DELA_ AS
-            SELECT ds.slot
+            SELECT ds.slot, planned_length_
                 FROM DELAs d
                     JOIN DELA_slots ds
                     ON d.DELA_id = ds.DELA_id
@@ -55,7 +48,7 @@ BEGIN
 
         ELSE -- if DELA empty
             -- fetch opening time and closing time
-            CALL sp_get_opening_hours(employee_id_, _day_of_week, opening_time_, closing_time_);
+            CALL sp_get_opening_hours(employee_id_, _date, _day_of_week, opening_time_, closing_time_);
 
             -- clean the old DELA 
             DELETE FROM DELAs
@@ -76,7 +69,8 @@ BEGIN
                     end_time AS c2,
                     NULL AS c3,
                     NULL AS c4,
-                    NULL AS c5
+                    NULL AS c5,
+                    NULL AS c6
                         FROM appo_details 
                         WHERE date = _date 
                             AND employee_id = employee_id_
@@ -85,16 +79,18 @@ BEGIN
                 SELECT 
                     NULL AS c1,
                     NULL AS c2,
-                    fn_get_stored_intervals(employee_id_) AS c3,
-                    planned_length_ AS c4,
-                    DELA_id_ AS c5
+                    fn_get_stored_intervals(employee_id_) AS c3,                    
+                    fn_get_interval_percent(employee_id_) AS c4,
+                    planned_length_ AS c5,
+                    DELA_id_ AS c6
             UNION ALL
                 SELECT 
                     opening_time_ AS c1,
                     closing_time_ AS c2,
                     NULL AS c3,
                     NULL AS c4,
-                    NULL AS c5
+                    NULL AS c5,
+                    NULL AS c6
             UNION ALL
                 SELECT * FROM sorted_appos;
            

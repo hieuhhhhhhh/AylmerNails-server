@@ -9,7 +9,7 @@ CREATE PROCEDURE sp_add_schedule(
 )
 BEGIN    
     -- placeholders
-    DECLARE i TINYINT DEFAULT 0; 
+    DECLARE i INT DEFAULT 0; 
     DECLARE opening_time_ INT;
     DECLARE closing_time_ INT;
     DECLARE schedule_id_ INT UNSIGNED;
@@ -22,6 +22,11 @@ BEGIN
         WHERE employee_id = _employee_id  
             AND effective_from = _effective_from;
 
+    -- delete any DELAs of this employee beyond effective_from
+    DELETE FROM DELAs
+        WHERE employee_id = _employee_id  
+            AND date >= _effective_from - 24*60*60;
+
     -- add a new schedule
     INSERT INTO schedules(employee_id, effective_from)
         VALUES (_employee_id, _effective_from);
@@ -33,6 +38,12 @@ BEGIN
     WHILE i < 7 DO 
         SET opening_time_ = JSON_UNQUOTE(JSON_EXTRACT(_opening_times, CONCAT('$[', i, ']')));
         SET closing_time_ = JSON_UNQUOTE(JSON_EXTRACT(_closing_times, CONCAT('$[', i, ']')));
+
+        -- validate times
+        IF opening_time_ >= closing_time_ THEN
+            SET opening_time_ = NULL;
+            SET closing_time_ = NULL;
+        END IF;
 
         -- store values to opening_hours table
         INSERT INTO opening_hours (schedule_id, day_of_week, opening_time, closing_time)

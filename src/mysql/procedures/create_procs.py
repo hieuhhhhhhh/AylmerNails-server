@@ -6,8 +6,9 @@ from src.routes.authentication.login.sql import create_authentication_login_sps
 from src.routes.authentication.session.sql import create_authentication_session_sps
 
 from src.routes.services.categories.sql import create_services_categories_sps
-from src.routes.services.lengths.sql import create_services_lengths_sps
+from src.routes.services.durations.sql import create_services_durations_procs
 from src.routes.services.services.sql import create_services_services_sps
+from src.routes.services.conflicts.sql import create_conflicts_procs
 
 from src.routes.employees.employees.sql import create_employees_employees_sps
 from src.routes.employees.schedules.sql import create_employees_schedules_sps
@@ -16,6 +17,7 @@ from src.routes.appointments.appos.sql import create_appointments_appos_sps
 from src.routes.appointments.availability.sql import (
     create_appointments_availability_sps,
 )
+from src.routes.appointments.contacts.sql import create_contacts_procs
 from src.routes.appointments.other_sql import create_appointments_other_sql_sps
 
 
@@ -30,8 +32,9 @@ def create_procedures():
 
     # from services routes
     create_services_categories_sps()
-    create_services_lengths_sps()
+    create_services_durations_procs()
     create_services_services_sps()
+    create_conflicts_procs()
 
     # from employees routes
     create_employees_employees_sps()
@@ -40,4 +43,5 @@ def create_procedures():
     # from appointments routes
     create_appointments_appos_sps()
     create_appointments_availability_sps()
+    create_contacts_procs()
     create_appointments_other_sql_sps()

@@ -5,10 +5,13 @@ CREATE PROCEDURE sp_get_employees(
 )
 BEGIN
     SELECT 
-        employee_id, 
-        alias, 
-        last_date, 
-        (last_date IS NULL OR last_date >= _date)
-            FROM employees;
+        e.employee_id, 
+        e.alias, 
+        e.last_date, 
+        (e.last_date IS NULL OR e.last_date >= _date),
+        c.code
+            FROM employees e
+                JOIN colors c
+                    ON c.color_id = e.color_id;
 END;
 

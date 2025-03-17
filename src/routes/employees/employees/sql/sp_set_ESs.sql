@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_set_ESs(
 )
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
 
     -- placeholder
     DECLARE service_id_ INT UNSIGNED;

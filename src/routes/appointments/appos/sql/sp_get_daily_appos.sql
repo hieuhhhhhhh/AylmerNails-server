@@ -1,0 +1,58 @@
+DROP PROCEDURE IF EXISTS sp_get_daily_appos;
+
+CREATE PROCEDURE sp_get_daily_appos(
+    IN _session JSON,
+    IN _date BIGINT,
+    IN _day_of_week INT 
+)
+sp:BEGIN    
+    -- validate session token
+    CALL sp_validate_admin(_session);
+    
+    -- 1st table: return all appos of that date, sorted by employee_id
+    SELECT ad.*, s.name, p.value, c.name
+        FROM appo_details ad
+            LEFT JOIN services s
+                ON s.service_id = ad.service_id
+            LEFT JOIN phone_numbers p    
+                ON p.phone_num_id = ad.phone_num_id
+            LEFT JOIN contacts c
+                ON c.phone_num_id = ad.phone_num_id
+        WHERE date = _date
+        ORDER BY employee_id, start_time;  
+
+    -- get most recent schedule of every employee
+    CREATE TEMPORARY TABLE emp_max_ef_ AS
+        SELECT employee_id, MAX(effective_from) AS max_ef
+            FROM schedules
+            WHERE effective_from <= _date
+            GROUP BY employee_id; 
+
+    CREATE TEMPORARY TABLE schedules_ AS
+        SELECT s.schedule_id, e.employee_id, e.max_ef
+            FROM schedules s
+                JOIN emp_max_ef_ e
+                    ON e.employee_id = s.employee_id
+                        AND e.max_ef = s.effective_from;
+
+    -- get opening hours of all available employees
+    CREATE TEMPORARY TABLE opening_hours_ AS
+        SELECT oh.opening_time, oh.closing_time, oh.day_of_week, oh.schedule_id, s.employee_id, s.max_ef
+            FROM opening_hours oh
+                JOIN schedules_ s 
+                    ON s.schedule_id = oh.schedule_id
+            WHERE oh.day_of_week = _day_of_week;
+            
+
+    -- 2nd table: return all employees and their info
+    SELECT e.employee_id, e.alias, e.color_id, c.code, oh.opening_time, oh.closing_time, oh.day_of_week, oh.schedule_id, oh.max_ef
+        FROM employees e
+            JOIN colors c 
+                ON e.color_id = c.color_id
+            JOIN opening_hours_ oh
+                ON e.employee_id = oh.employee_id
+        WHERE e.last_date IS NULL 
+            OR _date <= e.last_date;
+        
+END;
+

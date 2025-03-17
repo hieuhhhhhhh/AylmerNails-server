@@ -14,5 +14,5 @@ BEGIN
                 JOIN schedules s
                     ON oh.schedule_id = s.schedule_id
             WHERE s.employee_id = _employee_id
-            ORDER BY s.effective_from,oh.day_of_week;
+            ORDER BY s.effective_from, oh.day_of_week;
 END;

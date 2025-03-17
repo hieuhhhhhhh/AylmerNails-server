@@ -8,26 +8,32 @@ CREATE PROCEDURE sp_store_code (
     IN _expiry INT
 )
 BEGIN
+    -- variable
+    DECLARE phone_num_id_ INT UNSIGNED;
+
+    -- get phone number id
+    CALL sp_get_phone_num_id (_phone_number, phone_num_id_);
+
     INSERT INTO sms_verify_codes (
-        phone_number,
+        phone_num_id,
         new_password,
         code,
         attempts_left,
         created_at,
         expiry
     )
-    VALUES (
-        _phone_number,
-        _new_password, 
-        _code,
-        _attempts_left,
-        UNIX_TIMESTAMP(),
-        _expiry
-    )
-    ON DUPLICATE KEY UPDATE
-        new_password = VALUES(new_password), 
-        code = VALUES(code),
-        attempts_left = VALUES(attempts_left),
-        created_at = VALUES(created_at),
-        expiry = VALUES(expiry);
+        VALUES (
+            phone_num_id_,
+            _new_password, 
+            _code,
+            _attempts_left,
+            UNIX_TIMESTAMP(),
+            _expiry
+        )
+        ON DUPLICATE KEY UPDATE
+            new_password = _new_password, 
+            code = _code,
+            attempts_left = _attempts_left,
+            created_at =  UNIX_TIMESTAMP(),
+            expiry = _expiry;
 END;

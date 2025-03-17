@@ -9,7 +9,7 @@ CREATE PROCEDURE sp_add_AOS(
 )
 BEGIN
     -- index to iterate json array
-    DECLARE i TINYINT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
 
     -- other place holders
     DECLARE AOS_id_ INT UNSIGNED;

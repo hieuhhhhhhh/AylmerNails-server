@@ -5,7 +5,9 @@ CREATE PROCEDURE sp_update_employee_info(
     IN _employee_id INT UNSIGNED, 
     IN _alias VARCHAR(50),
     IN _alias_tokens JSON,
+    IN _interval_percent SMALLINT,
     IN _last_date BIGINT,
+    IN _color_id INT UNSIGNED,
     IN _service_ids JSON
 )
 BEGIN
@@ -18,10 +20,16 @@ BEGIN
         SET MESSAGE_TEXT = '400, Invalid employee_id, no such employee exists';
     END IF;
 
+    -- remove DELAs
+    DELETE FROM DELAs
+        WHERE employee_id = _employee_id;
+
     -- update first alias and last_date
     UPDATE employees
         SET alias = _alias,
-            last_date = _last_date
+            interval_percent = _interval_percent,
+            last_date = _last_date,
+            color_id = _color_id
         WHERE employee_id = _employee_id;
 
     -- update tokens of employee by new alias
