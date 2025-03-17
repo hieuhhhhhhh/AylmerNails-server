@@ -66,6 +66,10 @@ BEGIN
             _start_time, 
             _start_time + planned_length_
         );
+
+        -- create new notification
+        INSERT INTO appo_notifications (appo_id)
+            VALUES (LAST_INSERT_ID());
             
         -- Return the ID of the newly inserted appointment
         SELECT LAST_INSERT_ID() AS new_appo_id;
