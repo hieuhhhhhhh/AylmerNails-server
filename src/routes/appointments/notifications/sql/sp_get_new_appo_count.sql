@@ -8,10 +8,10 @@ BEGIN
     DECLARE last_tracked_ BIGINT;
     DECLARE user_id_ INT UNSIGNED;
     DECLARE role_ VARCHAR(20);
-    DECLARE now_ BIGINT DEFAULT (UNIX_TIMESTAMP());
+    DECLARE now_ BIGINT DEFAULT UNIX_TIMESTAMP();
 
     -- fetch user id 
-    CALL sp_get_user_id_role (_session, user_id_, role_);
+    CALL sp_get_user_id_role(_session, user_id_, role_);
 
     -- fetch last tracked time of user
     SELECT time
@@ -22,7 +22,7 @@ BEGIN
     -- check null
     IF last_tracked_ IS NULL
     THEN 
-        SET last_tracked_ = now_
+        SET last_tracked_ = now_;
     END IF;
 
     -- return new appointment count

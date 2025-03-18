@@ -31,7 +31,7 @@ BEGIN
         LIMIT _limit;
 
     -- fetch user's id
-    CALL sp_get_user_id_role(_session ,user_id_, role_)
+    CALL sp_get_user_id_role(_session ,user_id_, role_);
 
     -- return user's last track 
     SELECT time

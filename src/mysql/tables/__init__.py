@@ -25,10 +25,10 @@ def create_tables():
 
     exe_queries(__file__, "appointments/appo_details.sql")
     exe_queries(__file__, "appointments/appo_notes.sql")
-    exe_queries(__file__, "authentication/appo_notifications.sql")
+    exe_queries(__file__, "appointments/appo_notifications.sql")
     exe_queries(__file__, "appointments/DELAs.sql")
     exe_queries(__file__, "appointments/DELA_slots.sql")
-    exe_queries(__file__, "authentication/appos_trackers.sql")
+    exe_queries(__file__, "appointments/appos_trackers.sql")
 
     exe_queries(__file__, "services/add_ons/add_on_services.sql")
     exe_queries(__file__, "services/add_ons/AOS_options.sql")
