@@ -23,16 +23,14 @@ BEGIN
     IF last_tracked_ IS NULL
     THEN 
         SET last_tracked_ = now_;
+        INSERT INTO appos_trackers (user_id, time)
+            VALUES (user_id_, now_);
+
     END IF;
 
     -- return new appointment count
     SELECT COUNT(*) 
         FROM appo_notifications             
         WHERE time >= last_tracked_;
-
-    -- update user's last track
-    UPDATE appos_trackers
-        SET time = now_
-        WHERE user_id = user_id_;
 
 END;

@@ -4,7 +4,7 @@ from src.routes.authentication import authentication
 from src.routes.services import services
 from src.routes.employees import employees
 from src.routes.appointments import appointments
-
+from src.socketio import create_socket
 from src.mysql.setup_db import setup_db_on_mysql
 from dotenv import load_dotenv
 import os
@@ -56,6 +56,10 @@ def catch_all(any):
     return app.send_static_file("index.html")
 
 
+# create socket
+socketio = create_socket(app)
+
+
 # start the app:
 if __name__ == "__main__":
-    app.run(debug=False)
+    socketio.run(app, debug=False)

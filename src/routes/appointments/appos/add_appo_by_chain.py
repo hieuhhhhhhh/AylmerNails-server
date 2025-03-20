@@ -2,6 +2,7 @@ import json
 from flask import jsonify
 from src.mysql.procedures.multi_call_3D_proc import multi_call_3D_proc
 from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
+from src.socketio import emit_booking
 
 
 def add_appo_by_chain(session, slots, date):
@@ -45,6 +46,7 @@ def add_appo_by_chain(session, slots, date):
         "DELAs",
         "DELA_slots",
         "appo_details",
+        "appo_notifications",
     ]
 
     # start calling procedure
@@ -54,6 +56,9 @@ def add_appo_by_chain(session, slots, date):
     for table in res:
         appo_id = table[0][0][0]
         appo_ids.append(appo_id)
+
+    # push notification to some clients
+    emit_booking()
 
     # return result
     return jsonify({"added_appo_ids": appo_ids}), 200
