@@ -14,9 +14,16 @@ BEGIN
     DECLARE service_length_id_ INT UNSIGNED;
     DECLARE planned_length_ INT;
     DECLARE DELA_id_ INT UNSIGNED;
+    DECLARE phone_num_id_ INT UNSIGNED;
 
     -- validate session token
     CALL sp_validate_client(_session);
+
+    -- fetch phone number id
+    SELECT phone_num_id
+        INTO phone_num_id_
+        FROM authentication
+        WHERE user_id = fn_session_to_user_id(_session);
 
     -- calculate length from the given description
     SET planned_length_ = fn_calculate_duration(
@@ -24,7 +31,6 @@ BEGIN
         _employee_id,             
         _selected_AOSO
     );
-
 
     -- fetch the DELA_id that matches the length, date, employee
     SELECT DELA_id
@@ -51,6 +57,7 @@ BEGIN
         INSERT INTO appo_details (
             employee_id, 
             service_id, 
+            phone_num_id,
             selected_AOSO,
             date,
             day_of_week,
@@ -59,7 +66,8 @@ BEGIN
         )
         VALUES (
             _employee_id, 
-            _service_id, 
+            _service_id,
+            phone_num_id_,
             _selected_AOSO,
             _date,
             _day_of_week,
@@ -67,12 +75,13 @@ BEGIN
             _start_time + planned_length_
         );
 
-        -- create new notification
-        INSERT INTO appo_notifications (appo_id)
-            VALUES (LAST_INSERT_ID());
-            
         -- Return the ID of the newly inserted appointment
         SELECT LAST_INSERT_ID() AS new_appo_id;
+
+        -- create new notification
+        INSERT INTO appo_notifications (appo_id)
+            VALUES (LAST_INSERT_ID());    
+
     ELSE
         -- if description not matches any DELA slot, return exception
         SIGNAL SQLSTATE '45000'

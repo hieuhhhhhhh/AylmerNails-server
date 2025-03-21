@@ -7,7 +7,6 @@ CREATE PROCEDURE sp_get_appo_notifications(
 BEGIN    
     -- variables
     DECLARE user_id_ INT UNSIGNED;
-    DECLARE role_ VARCHAR(20);
     
     -- validate session token
     CALL sp_validate_admin(_session);    
@@ -33,7 +32,7 @@ BEGIN
         LIMIT _limit;
 
     -- fetch user's id
-    CALL sp_get_user_id_role(_session ,user_id_, role_);
+    SET user_id_ = fn_session_to_user_id(_session);
 
     -- return user's last track 
     SELECT time

@@ -7,11 +7,13 @@ BEGIN
     -- variables
     DECLARE last_tracked_ BIGINT;
     DECLARE user_id_ INT UNSIGNED;
-    DECLARE role_ VARCHAR(20);
     DECLARE now_ BIGINT DEFAULT UNIX_TIMESTAMP();
 
-    -- fetch user id 
-    CALL sp_get_user_id_role(_session, user_id_, role_);
+    -- validate session token
+    CALL sp_validate_admin(_session);    
+
+    -- fetch user's id
+    SET user_id_ = fn_session_to_user_id(_session);
 
     -- fetch last tracked time of user
     SELECT time
