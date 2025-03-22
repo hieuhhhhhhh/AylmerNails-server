@@ -4,6 +4,8 @@ from src.routes.authentication import authentication
 from src.routes.services import services
 from src.routes.employees import employees
 from src.routes.appointments import appointments
+from src.routes.users import users
+
 from src.socketio import create_socket
 from src.mysql.setup_db import setup_db_on_mysql
 from dotenv import load_dotenv
@@ -30,6 +32,7 @@ app.register_blueprint(authentication, url_prefix="/api/authentication")
 app.register_blueprint(services, url_prefix="/api/services")
 app.register_blueprint(employees, url_prefix="/api/employees")
 app.register_blueprint(appointments, url_prefix="/api/appointments")
+app.register_blueprint(users, url_prefix="/api/users")
 
 
 # add route

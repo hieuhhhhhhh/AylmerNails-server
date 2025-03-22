@@ -12,6 +12,7 @@ BEGIN
             LEFT JOIN profiles p
                 ON p.user_id = a.user_id
             LEFT JOIN contacts c
+                ON c.phone_num_id = a.phone_num_id
         WHERE a.user_id = _user_id;
 
     -- return user's appointments
@@ -25,5 +26,5 @@ BEGIN
                 ON e.employee_id = ad.employee_id
             LEFT JOIN colors c
                 ON c.color_id = e.color_id                                    
-        ORDER BY ad.time, ad.start_time;        
+        ORDER BY ad.date, ad.start_time;        
 END;

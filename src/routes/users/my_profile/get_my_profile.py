@@ -5,7 +5,7 @@ from src.mysql.procedures.call_3D_proc import call_3D_proc
 def get_my_profile(session):
     # call mysql proc to process data
     res = call_3D_proc("sp_get_my_profile", session)
-    info = res[0]
+    info = res[0][0]
     appos = res[1]
 
     return (
