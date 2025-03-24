@@ -17,7 +17,7 @@ BEGIN
     -- Fetch and return user id
     SELECT user_id
         INTO user_id_
-        FROM user_sessions
+        FROM user_sessions us
         WHERE id = session_id_;
 
     RETURN user_id_;

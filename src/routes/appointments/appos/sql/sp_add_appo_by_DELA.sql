@@ -22,7 +22,7 @@ BEGIN
     -- fetch phone number id
     SELECT phone_num_id
         INTO phone_num_id_
-        FROM authentication
+        FROM authentication a
         WHERE user_id = fn_session_to_user_id(_session);
 
     -- calculate length from the given description
