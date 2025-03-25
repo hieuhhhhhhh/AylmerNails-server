@@ -29,6 +29,8 @@ def create_tables():
     exe_queries(__file__, "appointments/DELAs.sql")
     exe_queries(__file__, "appointments/DELA_slots.sql")
     exe_queries(__file__, "appointments/appos_trackers.sql")
+    exe_queries(__file__, "appointments/canceled_appos.sql")
+    exe_queries(__file__, "appointments/canceled_trackers.sql")
 
     exe_queries(__file__, "services/add_ons/add_on_services.sql")
     exe_queries(__file__, "services/add_ons/AOS_options.sql")

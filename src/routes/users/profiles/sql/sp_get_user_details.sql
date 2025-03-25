@@ -16,7 +16,7 @@ BEGIN
         WHERE a.user_id = _user_id;
 
     -- return user's appointments
-    SELECT ad.employee_id, e.alias, c.code, ad.service_id, s.name, ca.name, ad.date, ad.start_time, ad.end_time
+    SELECT ad.appo_id, ad.employee_id, e.alias, c.code, ad.service_id, s.name, ca.name, ad.date, ad.start_time, ad.end_time
         FROM appo_details ad                                    
             LEFT JOIN services s
                 ON s.service_id = ad.service_id
