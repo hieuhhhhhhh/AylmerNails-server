@@ -10,7 +10,10 @@ from .appos.get_appo_length import get_appo_length
 from .appos.get_appo_details import get_appo_details
 from .appos.update_appo import update_appo
 from .appos.add_appo_manually import add_appo_manually
-from .appos.remove_appo import remove_appo
+
+from .delete_appo.admin_remove_appo import admin_remove_appo
+from .delete_appo.cancel_appo import cancel_appo
+
 
 from .contacts.search_contacts import search_contacts
 
@@ -218,6 +221,42 @@ def get_notifications_(limit):
 
         # process input and return result
         return get_notifications(session, limit)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/admin_remove_appo", methods=["POST"])
+def admin_remove_appo_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        appo_id = data.get("appo_id")
+
+        # process input and return result
+        return admin_remove_appo(session, appo_id)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/cancel_appo", methods=["POST"])
+def cancel_appo_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        appo_id = data.get("appo_id")
+
+        # process input and return result
+        return cancel_appo(session, appo_id)
 
     # catch unexpected error
     except Exception as e:
