@@ -9,3 +9,8 @@ CREATE TABLE contacts (
 -- index on time
 CREATE INDEX idx_time ON contacts (time);
 
+-- some default phone numbers
+INSERT INTO aylmer_nails.contacts (phone_num_id, name)
+    VALUES
+        (1,'Henry Duong');
+        

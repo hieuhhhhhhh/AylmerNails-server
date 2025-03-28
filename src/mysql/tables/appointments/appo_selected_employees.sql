@@ -9,4 +9,4 @@ CREATE TABLE appo_selected_employees(
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE CASCADE,
     PRIMARY KEY (appo_id, employee_id)
-)
+);

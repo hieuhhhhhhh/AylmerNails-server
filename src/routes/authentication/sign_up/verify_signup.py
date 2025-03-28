@@ -3,7 +3,7 @@ from flask import jsonify
 
 
 def verify_signup(phone_num, code):
-    print("\033[94m" + "verify_new_password" + "\033[0m")
+    print("\033[94m" + "verify_signup" + "\033[0m")
 
     # check if verification code is correct
     success, msg = verify_code(phone_num, code)

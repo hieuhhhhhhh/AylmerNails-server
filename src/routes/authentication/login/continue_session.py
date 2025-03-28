@@ -31,13 +31,19 @@ def continue_session(token):
         # Encode session ID with new salt to generate new token
         token = hashids.encode(session_id, new_salt)
 
+        # fetch log-in information
+        user_role = call_3D_proc("sp_get_login_info", user_id)[0][0][0]
+
         return response_with_token(
-            jsonify({"user_id": user_id, "new_token": token}), status, token
+            jsonify({"user_role": user_role, "token": token}), 200, token
         )
 
     # if token is valid
     if status == 200:
-        return jsonify({"user_id": user_id}), status
+        # fetch log-in information
+        user_role = call_3D_proc("sp_get_login_info", user_id)[0][0][0]
+
+        return jsonify({"user_role": user_role, "token": token}), 200
 
     # if the token is invalid
     return jsonify({"message": "Invalid token"}), status

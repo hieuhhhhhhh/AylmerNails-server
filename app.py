@@ -4,7 +4,10 @@ from src.routes.authentication import authentication
 from src.routes.services import services
 from src.routes.employees import employees
 from src.routes.appointments import appointments
+from src.routes.users import users
+from src.routes.business_links import business_links
 
+from src.socketio import create_socket
 from src.mysql.setup_db import setup_db_on_mysql
 from dotenv import load_dotenv
 import os
@@ -30,6 +33,8 @@ app.register_blueprint(authentication, url_prefix="/api/authentication")
 app.register_blueprint(services, url_prefix="/api/services")
 app.register_blueprint(employees, url_prefix="/api/employees")
 app.register_blueprint(appointments, url_prefix="/api/appointments")
+app.register_blueprint(users, url_prefix="/api/users")
+app.register_blueprint(business_links, url_prefix="/api/business_links")
 
 
 # add route
@@ -56,6 +61,10 @@ def catch_all(any):
     return app.send_static_file("index.html")
 
 
+# create socket
+socketio = create_socket(app)
+
+
 # start the app:
 if __name__ == "__main__":
-    app.run(debug=False)
+    socketio.run(app, debug=False)
