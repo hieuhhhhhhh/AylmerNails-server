@@ -7,7 +7,7 @@ def get_employee_details(emp_id):
     res = call_3D_proc("sp_get_employee_details", emp_id)
     emp_info = res[0][0]
     ld_conflicts = res[1][0][0]
-    schedule_conflicts = res[2]
+    schedule_conflicts = res[2][0][0]
 
     return (
         jsonify(

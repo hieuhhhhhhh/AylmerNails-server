@@ -3,7 +3,6 @@ from flask import Blueprint, request
 from src.routes.authentication.session.read_token import read_token
 from ..helpers.default_error_response import default_error_response
 from src.routes.employees.employees.add_employee import add_employee
-from src.routes.employees.employees.set_employee_last_date import set_employee_last_date
 from src.routes.employees.schedules.add_schedule import add_schedule
 from src.routes.employees.employees.get_employees import get_employees
 from src.routes.employees.employees.get_ESs import get_employee_services
@@ -11,6 +10,11 @@ from src.routes.employees.employees.get_employee_details import get_employee_det
 from src.routes.employees.employees.update_employee_info import update_service_info
 from src.routes.employees.schedules.get_employee_schedules import get_employee_schedules
 from src.routes.employees.employees.get_colors import get_colors
+from src.routes.employees.conflicts.get_last_date_conflicts import (
+    get_last_date_conflicts,
+)
+from src.routes.employees.conflicts.get_schedule_conflicts import get_schedule_conflicts
+
 
 # create blueprint (group of routes)
 employees = Blueprint("employees", __name__)
@@ -43,24 +47,6 @@ def add_employee_():
         return add_employee(
             session, alias, key_intervals, interval_percent, color_id, service_ids
         )
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@employees.route("/set_employee_last_date", methods=["POST"])
-def set_employee_last_date_():
-    try:
-        # read token
-        session = read_token()
-
-        # read json from request
-        data = request.get_json()
-        employee_id = data.get("employee_id")
-        last_date = data.get("last_date")
-
-        return set_employee_last_date(session, employee_id, last_date)
 
     # catch unexpected error
     except Exception as e:
@@ -155,6 +141,24 @@ def update_employee_info_():
 def get_colors_():
     try:
         return get_colors()
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@employees.route("/get_schedule_conflicts/<emp_id>", methods=["GET"])
+def get_schedule_conflicts_(emp_id):
+    try:
+        return get_schedule_conflicts(emp_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@employees.route("/get_employee_ld_conflicts/<emp_id>", methods=["GET"])
+def get_employee_ld_conflicts(emp_id):
+    try:
+        return get_last_date_conflicts(emp_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

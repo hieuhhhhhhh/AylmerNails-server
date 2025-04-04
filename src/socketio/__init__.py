@@ -1,5 +1,7 @@
 from flask_socketio import SocketIO
 from .get_new_appo_count import get_new_appo_count
+from .get_new_canceled_count import get_new_canceled_count
+from .get_new_user_count import get_new_user_count
 
 socketio = SocketIO()
 
@@ -7,7 +9,7 @@ socketio = SocketIO()
 def create_socket(app):
     socketio.init_app(app, cors_allowed_origins="*")
 
-    # event: client connects
+    # event
     @socketio.on("get_new_appo_count")
     def get_new_appo_count_(data):
         # fetch token from the client
@@ -18,6 +20,29 @@ def create_socket(app):
         count = get_new_appo_count(token)
         socketio.emit("new_appo_count", {"count": count})
 
+    # event
+    @socketio.on("get_new_canceled_count")
+    def get_new_canceled_count_(data):
+        # fetch token from the client
+        token = data.get("token", None)
+        print(f"Client requested, token: {token}")
+
+        # fetch and return result
+        count = get_new_canceled_count(token)
+        socketio.emit("new_canceled_count", {"count": count})
+
+    # event
+    @socketio.on("get_new_user_count")
+    def get_new_user_count_(data):
+        # fetch token from the client
+        token = data.get("token", None)
+        print(f"Client requested, token: {token}")
+
+        # fetch and return result
+        count = get_new_user_count(token)
+        socketio.emit("new_user_count", {"count": count})
+
+    # event
     @socketio.on("disconnect")
     def disconnect():
         print("client gone")
@@ -27,3 +52,11 @@ def create_socket(app):
 
 def emit_booking():
     socketio.emit("new_appo_booked")
+
+
+def emit_canceling():
+    socketio.emit("new_appo_canceled")
+
+
+def emit_signing_up():
+    socketio.emit("new_user_created")

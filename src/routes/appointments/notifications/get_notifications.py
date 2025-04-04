@@ -6,7 +6,7 @@ def get_notifications(session, limit):
     # call mysql proc to process data
     res = call_3D_proc("sp_get_appo_notifications", session, limit)
     appos = res[0]
-    last_tracked = res[1]
+    last_tracked = res[1][0][0]
 
     return (
         jsonify(

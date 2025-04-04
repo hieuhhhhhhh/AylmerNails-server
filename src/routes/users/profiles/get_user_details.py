@@ -7,7 +7,7 @@ def get_user_details(session, user_id):
     call_3D_proc("sp_validate_admin", session)
     res = call_3D_proc("sp_get_user_details", user_id)
 
-    info = res[0]
+    info = res[0][0]
     appos = res[1]
 
     return (

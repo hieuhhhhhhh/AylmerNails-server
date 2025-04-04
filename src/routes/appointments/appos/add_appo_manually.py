@@ -45,7 +45,7 @@ def add_appo_manually(
     )
 
     overlap = res[0][0]
-    if overlap[0] is not None:
+    if len(res) == 1:
         ov_start = overlap[1]
         ov_end = overlap[2]
         return (
@@ -61,7 +61,7 @@ def add_appo_manually(
         )
 
     conflict_schedule = res[1][0]
-    if conflict_schedule[0] is not None:
+    if len(res) == 2:
         day_start = conflict_schedule[1]
         day_end = conflict_schedule[2]
         return (

@@ -10,7 +10,7 @@ def get_duration_conflicts(service_id):
         jsonify(
             {
                 "conflicts": conflicts,
-                "conflicts_def": "serviceId, appoId,  appoDate, appoDOW, appoStart, appoEnd, empAlias, serviceName",
+                "conflicts_def": "serviceId, appoId,  appoDate, appoDOW, appoStart, appoEnd, empAlias, serviceName, contactName, phoneNumId, phoneNum, color",
             }
         ),
         200,

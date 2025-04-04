@@ -1,6 +1,6 @@
-DROP FUNCTION IF EXISTS fn_find_conflicting_schedule;
+DROP FUNCTION IF EXISTS fn_get_conflicting_schedule_id;
 
-CREATE FUNCTION fn_find_conflicting_schedule(
+CREATE FUNCTION fn_get_conflicting_schedule_id(
     _appo_id INT UNSIGNED
 )
 RETURNS INT UNSIGNED
@@ -16,13 +16,13 @@ BEGIN
     DECLARE emp_id_ INT UNSIGNED;
 
 
-    -- fetch appointment info
+    -- fetch appointment comparing information
     SELECT date, day_of_week, start_time, end_time, employee_id
         INTO date_, day_of_week_, start_, end_, emp_id_
         FROM appo_details
         WHERE appo_id = _appo_id;
 
-    -- fetch latest schedule info
+    -- fetch latest schedule id
     SELECT schedule_id
         INTO schedule_id_
         FROM schedules
@@ -37,8 +37,12 @@ BEGIN
         FROM opening_hours
         WHERE schedule_id = schedule_id_
             AND day_of_week = day_of_week_
-            AND start_ < opening_time
-            OR end_ > closing_time;
+            AND (
+                start_ < opening_time
+                OR end_ > closing_time
+                OR opening_time IS NULL
+                OR closing_time IS NULL
+            );
 
     RETURN conflict_id_;
 END;

@@ -3,6 +3,7 @@ CREATE TABLE appos_trackers (
     time BIGINT NOT NULL DEFAULT (UNIX_TIMESTAMP()), -- user's last track on appointments  
     FOREIGN KEY (user_id)
         REFERENCES authentication (user_id)        
+        ON DELETE CASCADE
 );
 
 -- index on time

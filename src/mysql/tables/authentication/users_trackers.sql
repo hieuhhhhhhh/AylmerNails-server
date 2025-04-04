@@ -3,6 +3,7 @@ CREATE TABLE users_trackers (
     time BIGINT NOT NULL DEFAULT (UNIX_TIMESTAMP()), -- user's last track on user list  
     FOREIGN KEY (user_id)
         REFERENCES authentication (user_id)        
+        ON DELETE CASCADE
 );
 
 -- index on time

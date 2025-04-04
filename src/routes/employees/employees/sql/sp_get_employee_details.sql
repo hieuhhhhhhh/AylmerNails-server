@@ -16,12 +16,11 @@ BEGIN
         FROM ELD_conflicts
         WHERE employee_id = _employee_id;
 
-    -- return schedule conflict count
-    SELECT sc.schedule_id, COUNT(*) 
+    -- return schedule conflict count    
+    SELECT COUNT(*) 
         FROM schedule_conflicts sc
             JOIN schedules s 
             ON sc.schedule_id = s.schedule_id
-        WHERE s.employee_id = _employee_id
-        GROUP BY sc.schedule_id;
+        WHERE s.employee_id = _employee_id;
   
 END;

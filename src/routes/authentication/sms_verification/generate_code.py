@@ -22,7 +22,9 @@ def generate_code(phone_number, new_password=None):
         code = random.randint(100, 999)
 
         # write a message to send client code
-        msg_body = f"Your verification code: {code}\n- Aylmer Nails & Spa -"
+        msg_body = (
+            f"Aylmer Nails & Spa (no-reply inbox):\nYour verification code: {code} "
+        )
 
         # Send a message
         client.messages.create(

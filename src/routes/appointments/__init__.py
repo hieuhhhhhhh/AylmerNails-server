@@ -18,6 +18,11 @@ from .delete_appo.cancel_appo import cancel_appo
 from .contacts.search_contacts import search_contacts
 
 from .notifications.get_notifications import get_notifications
+from .notifications.get_canceled_appos import get_canceled_appos
+from .notifications.search_bookings import search_bookings
+from .notifications.get_bookings_last_tracked import get_bookings_last_tracked
+from .notifications.search_canceled_appos import search_canceled_appos
+from .notifications.get_canceled_last_tracked import get_canceled_last_tracked
 
 
 # create blueprint (group of routes)
@@ -177,20 +182,6 @@ def add_appointment_manually_():
         return default_error_response(e)
 
 
-@appointments.route("/remove_appointment/<appo_id>", methods=["POST"])
-def remove_appointment(appo_id):
-    try:
-        # read token
-        session = read_token()
-
-        # process input and return result
-        return remove_appo(session, appo_id)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
 @appointments.route("/search_contacts/<query>", methods=["GET"])
 def search_contacts_(query):
     try:
@@ -207,20 +198,6 @@ def search_contacts_no_query():
     try:
         # process input and return result
         return search_contacts("")
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/get_notifications/<limit>", methods=["GET"])
-def get_notifications_(limit):
-    try:
-        # read token
-        session = read_token()
-
-        # process input and return result
-        return get_notifications(session, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -257,6 +234,94 @@ def cancel_appointment():
 
         # process input and return result
         return cancel_appo(session, appo_id)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_notifications/<limit>", methods=["GET"])
+def get_notifications_(limit):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_notifications(session, limit)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_canceled_appointments/<limit>", methods=["GET"])
+def get_canceled_appointments(limit):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_canceled_appos(session, limit)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/search_bookings", methods=["POST"])
+def search_bookings_():
+    try:
+        # read json
+        data = request.get_json()
+        query = data.get("query")
+        limit = data.get("limit")
+
+        # process input and return result
+        return search_bookings(query, limit)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_last_tracked", methods=["GET"])
+def get_last_tracked():
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_bookings_last_tracked(session)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/search_canceled_appointments", methods=["POST"])
+def search_canceled_appointments():
+    try:
+        # read json
+        data = request.get_json()
+        query = data.get("query")
+        limit = data.get("limit")
+
+        # process input and return result
+        return search_canceled_appos(query, limit)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_canceled_last_tracked", methods=["GET"])
+def get_canceled_last_tracked_():
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_canceled_last_tracked(session)
 
     # catch unexpected error
     except Exception as e:

@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_get_all_users;
+DROP PROCEDURE IF EXISTS sp_get_users;
 
-CREATE PROCEDURE sp_get_all_users(
+CREATE PROCEDURE sp_get_users(
     IN _session JSON,
     IN _limit INT
 )
@@ -11,13 +11,15 @@ BEGIN
     -- validate session token
     CALL sp_validate_admin(_session);    
 
-    -- return all users with limit
-    SELECT a.role, a.created_at, pn.value, p.first_name, p.last_name, p.notes
+    -- return appointment notifications with limit
+    SELECT a.user_id, a.phone_num_id, pn.value, a.role, p.first_name, p.last_name, a.created_at, c.name     
         FROM authentication a
             LEFT JOIN phone_numbers pn
                 ON pn.phone_num_id = a.phone_num_id
             LEFT JOIN profiles p
-                ON p.user_id = a.user_id            
+                ON p.user_id = a.user_id
+            LEFT JOIN contacts c
+                ON c.phone_num_id = a.phone_num_id
         ORDER BY a.created_at DESC
         LIMIT _limit;
 
@@ -30,7 +32,7 @@ BEGIN
         WHERE user_id = user_id_;
 
     -- -- update user's last track
-    -- UPDATE users_trackers
+    -- UPDATE appos_trackers
     --     SET time = now_
     --     WHERE user_id = user_id_;
 

@@ -80,8 +80,8 @@ sp:BEGIN
     END IF;
 
     -- create new appointment if all validations passed
-    INSERT INTO appo_details (employee_id, service_id, phone_num_id, selected_AOSO, date, start_time, end_time)
-        VALUES (_emp_id, _service_id, phone_num_id_, _AOSOs, _date, _start, _end);
+    INSERT INTO appo_details (employee_id, service_id, phone_num_id, selected_AOSO, date, day_of_week, start_time, end_time)
+        VALUES (_emp_id, _service_id, phone_num_id_, _AOSOs, _date, _day_of_week, _start, _end);
 
     -- return created appo_id
     SELECT LAST_INSERT_ID();

@@ -39,4 +39,8 @@ BEGIN
     DELETE FROM employee_services
         WHERE employee_id = _employee_id;
     CALL sp_set_ESs(_employee_id, _service_ids);
+
+    -- scan conflicts on employee's last date
+    CALL sp_scan_ELD_conflicts(_employee_id);
+
 END;

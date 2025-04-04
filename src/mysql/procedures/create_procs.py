@@ -12,6 +12,7 @@ from src.routes.services.conflicts.sql import create_conflicts_procs
 
 from src.routes.employees.employees.sql import create_employees_employees_sps
 from src.routes.employees.schedules.sql import create_employees_schedules_sps
+from src.routes.employees.conflicts.sql import create_employee_conflicts_procs
 
 from src.routes.appointments.appos.sql import create_appointments_appos_sps
 from src.routes.appointments.availability.sql import (
@@ -19,7 +20,6 @@ from src.routes.appointments.availability.sql import (
 )
 from src.routes.appointments.contacts.sql import create_contacts_procs
 from src.routes.appointments.delete_appo.sql import create_delete_appo_procs
-from src.routes.appointments.other_sql import create_appointments_other_sql_sps
 from src.routes.appointments.notifications.sql import create_appo_notifications_procs
 
 from src.routes.users.my_profile.sql import create_my_profile_procs
@@ -46,13 +46,13 @@ def create_procedures():
     # from employees routes
     create_employees_employees_sps()
     create_employees_schedules_sps()
+    create_employee_conflicts_procs()
 
     # from appointments routes
     create_appointments_appos_sps()
     create_appointments_availability_sps()
     create_contacts_procs()
     create_delete_appo_procs()
-    create_appointments_other_sql_sps()
     create_appo_notifications_procs()
 
     # from users routes
