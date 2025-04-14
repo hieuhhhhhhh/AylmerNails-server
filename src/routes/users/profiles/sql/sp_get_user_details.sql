@@ -4,6 +4,9 @@ CREATE PROCEDURE sp_get_user_details(
     IN _user_id INT UNSIGNED
 )
 BEGIN    
+    -- variables
+    DECLARE yesterday_ BIGINT DEFAULT UNIX_TIMESTAMP() - 24*60*60;
+
     -- return user info
     SELECT a.role, a.created_at, pn.value, p.first_name, p.last_name, p.notes, c.name
         FROM authentication a
@@ -26,5 +29,9 @@ BEGIN
                 ON e.employee_id = ad.employee_id
             LEFT JOIN colors c
                 ON c.color_id = e.color_id                                    
+            LEFT JOIN authentication au
+                ON au.phone_num_id = ad.phone_num_id
+        WHERE au.user_id = _user_id
+            AND ad.date > yesterday_
         ORDER BY ad.date, ad.start_time;        
 END;

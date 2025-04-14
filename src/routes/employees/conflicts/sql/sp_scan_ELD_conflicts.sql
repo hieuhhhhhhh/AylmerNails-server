@@ -9,6 +9,7 @@ CREATE PROCEDURE sp_scan_ELD_conflicts(
 BEGIN
     
     DECLARE last_date_ BIGINT;
+    DECLARE yesterday_ BIGINT DEFAULT UNIX_TIMESTAMP() - 24*60*60;
 
     -- fetch last_date
     SELECT last_date
@@ -26,6 +27,6 @@ BEGIN
         SELECT appo_id, _employee_id
             FROM appo_details
             WHERE employee_id = _employee_id
-                AND date > (UNIX_TIMESTAMP() - 24*60*60)
+                AND date > yesterday_
                 AND date > last_date_;
 END;

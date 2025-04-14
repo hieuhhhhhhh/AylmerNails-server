@@ -6,17 +6,22 @@ CREATE PROCEDURE sp_search_blacklist(
 )
 BEGIN    
     -- return saved appos with limit
-    SELECT c.canceled_id, c.user_id, c.details, c.time, p.first_name, p.last_name, pn.value
-        FROM canceled_appos c
-            LEFT JOIN profiles p
-                ON p.user_id = c.user_id
+    SELECT pn.value, bl.time, p.first_name, p.last_name, ct.name
+        FROM blacklist bl
             LEFT JOIN authentication a
-                ON a.user_id = c.user_id
+                ON a.phone_num_id = bl.phone_num_id
+            LEFT JOIN profiles p
+                ON p.user_id = a.user_id
+            LEFT JOIN contacts ct
+                ON ct.phone_num_id = bl.phone_num_id
+            LEFT JOIN contact_tokens to
+                ON to.phone_num_id = bl.phone_num_id
             LEFT JOIN phone_numbers pn
-                ON pn.phone_num_id = a.phone_num_id
+                ON pn.phone_num_id = bl.phone_num_id
         WHERE pn.value LIKE CONCAT('+1', _query , '%')
+            OR to.token LIKE CONCAT(_query , '%')
             OR p.first_name LIKE CONCAT(_query , '%')
             OR p.last_name LIKE CONCAT(_query , '%')        
-        ORDER BY c.time DESC
+        ORDER BY bl.time DESC
         LIMIT _limit;
 END;

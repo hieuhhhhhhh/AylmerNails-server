@@ -1,4 +1,4 @@
 CREATE TABLE blacklist(
     phone_num_id INT UNSIGNED PRIMARY KEY,
-    created_at BIGINT DEFAULT UNIX_TIMESTAMP()
+    time BIGINT DEFAULT UNIX_TIMESTAMP()
 )
