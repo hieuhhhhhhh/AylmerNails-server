@@ -10,7 +10,7 @@ def search_blacklist(query, limit):
         jsonify(
             {
                 "appos": appos,
-                "def": "[[cancelId, userId, details, time, firstName, lastName, phoneNum], ]",
+                "def": "[[phoneNum, bannedOn, firstName, lastName, contactName], ]",
             }
         ),
         200,

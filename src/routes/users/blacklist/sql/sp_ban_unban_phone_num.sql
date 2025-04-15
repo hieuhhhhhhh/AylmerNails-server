@@ -7,23 +7,20 @@ CREATE PROCEDURE sp_ban_unban_phone_num(
 )
 BEGIN    
     -- variables
-    DECLARE _phone_num_id INT UNSIGNED;
+    DECLARE phone_num_id_ INT UNSIGNED;
 
     -- validate session token
     CALL sp_validate_admin(_session);    
 
     -- fetch phone number id
-    SELECT phone_num_id
-        INTO _phone_num_id 
-        FROM phone_numbers
-        WHERE value = _phone_num;
+    CALL sp_get_phone_num_id(_phone_num, phone_num_id_);
 
     -- insert or delete row
     IF _boolean THEN
         INSERT INTO blacklist (phone_num_id)    
-            VALUES (_phone_num_id);
+            VALUES (phone_num_id_);
     ELSE
         DELETE FROM blacklist
-            WHERE phone_num_id = _phone_num_id;
+            WHERE phone_num_id = phone_num_id_;
     END IF;
 END;

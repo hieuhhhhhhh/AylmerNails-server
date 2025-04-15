@@ -15,7 +15,7 @@ def get_user_details(session, user_id):
             {
                 "info": info,
                 "appos": appos,
-                "info_def": "[role, birth, phoneNum, firstName, lastName, notes, contactName]",
+                "info_def": "[role, birth, phoneNum, firstName, lastName, notes, contactName, bannedOn]",
                 "appos_def": "[[appoId, empId, empAlias, color, serviceId, serviceName, category, date, start, end], ]",
             }
         ),

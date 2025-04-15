@@ -144,9 +144,10 @@ def ban_unban_phone_number():
         # read json from request
         data = request.get_json()
         phone_num = data.get("phone_num")
+        boolean = data.get("boolean")
 
         # process input and return result
-        return ban_unban_phone_num(session, phone_num)
+        return ban_unban_phone_num(session, phone_num, boolean)
 
     # catch unexpected error
     except Exception as e:

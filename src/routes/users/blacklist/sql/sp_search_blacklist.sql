@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_search_blacklist(
 )
 BEGIN    
     -- return saved appos with limit
-    SELECT pn.value, bl.time, p.first_name, p.last_name, ct.name
+    SELECT DISTINCT pn.value, bl.time, p.first_name, p.last_name, ct.name
         FROM blacklist bl
             LEFT JOIN authentication a
                 ON a.phone_num_id = bl.phone_num_id

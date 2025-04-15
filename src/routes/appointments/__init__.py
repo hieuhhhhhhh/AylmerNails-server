@@ -27,6 +27,7 @@ from .notifications.get_canceled_last_tracked import get_canceled_last_tracked
 from .saved.search_saved_appos import search_saved_appos
 from .saved.get_saved_last_tracked import get_saved_last_tracked
 from .saved.save_unsave_appo import save_unsave_appo
+from .saved.unsave_all_appos import unsave_all_appos
 
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
@@ -374,6 +375,20 @@ def save_unsave_appo_():
 
         # process input and return result
         return save_unsave_appo(session, appo_id, boolean)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/unsave_all_appointments", methods=["POST"])
+def unsave_all_appointments():
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return unsave_all_appos(session)
 
     # catch unexpected error
     except Exception as e:

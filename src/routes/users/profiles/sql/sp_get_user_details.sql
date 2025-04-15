@@ -8,7 +8,7 @@ BEGIN
     DECLARE yesterday_ BIGINT DEFAULT UNIX_TIMESTAMP() - 24*60*60;
 
     -- return user info
-    SELECT a.role, a.created_at, pn.value, p.first_name, p.last_name, p.notes, c.name
+    SELECT a.role, a.created_at, pn.value, p.first_name, p.last_name, p.notes, c.name, bl.time
         FROM authentication a
             LEFT JOIN phone_numbers pn
                 ON pn.phone_num_id = a.phone_num_id
@@ -16,6 +16,8 @@ BEGIN
                 ON p.user_id = a.user_id
             LEFT JOIN contacts c
                 ON c.phone_num_id = a.phone_num_id
+            LEFT JOIN blacklist bl
+                ON bl.phone_num_id = a.phone_num_id
         WHERE a.user_id = _user_id;
 
     -- return user's appointments

@@ -16,7 +16,7 @@ BEGIN
         SET i = i + 1;
 
         -- create new DELA_slot
-        INSERT INTO DELA_slots(DELA_id, slot)
+        INSERT IGNORE INTO DELA_slots(DELA_id, slot)
             VALUES (_DELA_id, slot_);
 
         -- end body

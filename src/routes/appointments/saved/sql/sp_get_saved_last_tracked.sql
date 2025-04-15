@@ -18,4 +18,8 @@ BEGIN
         FROM saved_trackers
         WHERE user_id = user_id_;
 
+    -- update user's last track
+    UPDATE saved_trackers
+        SET time = UNIX_TIMESTAMP()
+        WHERE user_id = user_id_;
 END;
