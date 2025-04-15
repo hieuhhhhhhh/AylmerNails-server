@@ -14,12 +14,12 @@ BEGIN
                 ON p.user_id = a.user_id
             LEFT JOIN contacts ct
                 ON ct.phone_num_id = bl.phone_num_id
-            LEFT JOIN contact_tokens to
-                ON to.phone_num_id = bl.phone_num_id
+            LEFT JOIN contact_tokens tk
+                ON tk.phone_num_id = bl.phone_num_id
             LEFT JOIN phone_numbers pn
                 ON pn.phone_num_id = bl.phone_num_id
         WHERE pn.value LIKE CONCAT('+1', _query , '%')
-            OR to.token LIKE CONCAT(_query , '%')
+            OR tk.token LIKE CONCAT(_query , '%')
             OR p.first_name LIKE CONCAT(_query , '%')
             OR p.last_name LIKE CONCAT(_query , '%')        
         ORDER BY bl.time DESC

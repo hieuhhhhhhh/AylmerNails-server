@@ -18,7 +18,7 @@ sp:BEGIN
     CALL sp_validate_admin(_session);
 
     -- 1st table
-    SELECT ad.appo_id, ad.employee_id, ad.service_id, ad.selected_AOSO, ad.date, ad.start_time, ad.end_time, an.note, c.code, e.alias, s.name, ca.name, ad.phone_num_id, p.value, co.name, at.user_id
+    SELECT ad.appo_id, ad.employee_id, ad.service_id, ad.selected_AOSO, ad.date, ad.start_time, ad.end_time, an.note, c.code, e.alias, s.name, ca.name, ad.phone_num_id, p.value, co.name, at.user_id, sa.time
         FROM appo_details ad
             LEFT JOIN appo_notes an
                 ON an.appo_id = ad.appo_id
@@ -36,6 +36,8 @@ sp:BEGIN
                 ON co.phone_num_id = ad.phone_num_id
             LEFT JOIN authentication at
                 ON at.phone_num_id = ad.phone_num_id
+            LEFT JOIN saved_appos sa
+                ON sa.appo_id = ad.appo_id
         WHERE ad.appo_id = _appo_id;
 
     -- fetch AOSOs

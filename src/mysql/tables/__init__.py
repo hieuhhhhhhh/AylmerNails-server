@@ -12,6 +12,7 @@ def create_tables():
     exe_queries(__file__, "authentication/users_trackers.sql")
 
     exe_queries(__file__, "accounts/blacklist.sql")
+    exe_queries(__file__, "accounts/blacklist_trackers.sql")
     exe_queries(__file__, "accounts/business_links.sql")
     exe_queries(__file__, "accounts/colors.sql")
     exe_queries(__file__, "accounts/contacts.sql")

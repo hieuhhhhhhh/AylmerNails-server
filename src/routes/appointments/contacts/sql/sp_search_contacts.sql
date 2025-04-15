@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_search_contacts(
 )
 BEGIN
     -- return any contacts match the compared value
-    SELECT DISTINCT  p.value, c.phone_num_id, c.name, c.time 
+    SELECT DISTINCT p.value, c.phone_num_id, c.name, c.time 
         FROM phone_numbers p
             JOIN contacts c
                 ON c.phone_num_id = p.phone_num_id

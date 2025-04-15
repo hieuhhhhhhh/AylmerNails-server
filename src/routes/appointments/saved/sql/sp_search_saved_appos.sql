@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_search_saved_appos(
 )
 BEGIN    
     -- return saved appos with limit
-    SELECT ad.employee_id, e.alias, c.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, ct.name, ad.date, ad.start_time, ad.end_time
+    SELECT DISTINCT ad.appo_id, sa.time, ad.employee_id, e.alias, c.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, ct.name, ad.date, ad.start_time, ad.end_time
         FROM saved_appos sa
             LEFT JOIN appo_details ad
                 ON ad.appo_id = sa.appo_id
@@ -22,10 +22,11 @@ BEGIN
                 ON c.color_id = e.color_id
             LEFT JOIN contacts ct
                 ON ct.phone_num_id = ad.phone_num_id
-            LEFT JOIN contact_tokens to
-                ON to.phone_num_id = ad.phone_num_id
+            LEFT JOIN contact_tokens tk
+                ON tk.phone_num_id = ad.phone_num_id
         WHERE pn.value LIKE CONCAT('+1', _query , '%')
-            OR to.token LIKE CONCAT(_query , '%')
+            OR tk.token LIKE CONCAT(_query , '%')
+            OR ad.phone_num_id IS NULL
         ORDER BY sa.time DESC
         LIMIT _limit;
 END;

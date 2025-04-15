@@ -10,8 +10,8 @@ CREATE TABLE profiles (
 );
 
 -- index on first and last name
-CREATE INDEX idx_first_name ON contacts (first_name);
-CREATE INDEX idx_last_name ON contacts (last_name);
+CREATE INDEX idx_first_name ON profiles (first_name);
+CREATE INDEX idx_last_name ON profiles (last_name);
 
 
 -- some default phone numbers

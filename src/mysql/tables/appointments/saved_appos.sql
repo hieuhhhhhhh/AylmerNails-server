@@ -1,6 +1,6 @@
 CREATE TABLE saved_appos(
     appo_id INT UNSIGNED PRIMARY KEY,
-    time BIGINT DEFAULT UNIX_TIMESTAMP(),
+    time BIGINT DEFAULT (UNIX_TIMESTAMP()),
 
     FOREIGN KEY (appo_id) REFERENCES appo_details(appo_id)
         ON DELETE CASCADE

@@ -21,9 +21,11 @@ from src.routes.appointments.availability.sql import (
 from src.routes.appointments.contacts.sql import create_contacts_procs
 from src.routes.appointments.delete_appo.sql import create_delete_appo_procs
 from src.routes.appointments.notifications.sql import create_appo_notifications_procs
+from src.routes.appointments.saved.sql import create_saved_appos_procs
 
 from src.routes.users.my_profile.sql import create_my_profile_procs
 from src.routes.users.profiles.sql import create_profiles_procs
+from src.routes.users.blacklist.sql import create_blacklist_procs
 
 from src.routes.business_links.sql import create_business_links_procs
 
@@ -54,10 +56,12 @@ def create_procedures():
     create_contacts_procs()
     create_delete_appo_procs()
     create_appo_notifications_procs()
+    create_saved_appos_procs()
 
     # from users routes
     create_my_profile_procs()
     create_profiles_procs()
+    create_blacklist_procs()
 
     # from business links routes
     create_business_links_procs()
