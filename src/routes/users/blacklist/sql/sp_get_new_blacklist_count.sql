@@ -33,6 +33,6 @@ BEGIN
     -- return new appointment count
     SELECT COUNT(*) 
         FROM blacklist             
-        WHERE time >= last_tracked_;
+        WHERE time > last_tracked_;
 
 END;

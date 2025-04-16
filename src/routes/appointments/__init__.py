@@ -14,8 +14,8 @@ from .appos.add_appo_manually import add_appo_manually
 from .delete_appo.admin_remove_appo import admin_remove_appo
 from .delete_appo.cancel_appo import cancel_appo
 
-
 from .contacts.search_contacts import search_contacts
+from .contacts.update_contact import update_contact
 
 from .notifications.get_notifications import get_notifications
 from .notifications.get_canceled_appos import get_canceled_appos
@@ -202,6 +202,25 @@ def search_contacts_no_query():
     try:
         # process input and return result
         return search_contacts("")
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/update_contact", methods=["POST"])
+def update_contact_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        phone_num = data.get("phoneNum")
+        name = data.get("name")
+
+        # process input and return result
+        return update_contact(session, phone_num, name)
 
     # catch unexpected error
     except Exception as e:

@@ -33,6 +33,6 @@ BEGIN
     -- return new appointment count
     SELECT COUNT(*) 
         FROM appo_notifications             
-        WHERE time >= last_tracked_;
+        WHERE time > last_tracked_;
 
 END;
