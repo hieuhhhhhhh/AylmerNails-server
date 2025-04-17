@@ -9,6 +9,10 @@ from .profiles.get_user_details import get_user_details
 from .profiles.search_users import search_users
 from .profiles.get_users_last_tracked import get_users_last_tracked
 
+from .blacklist.get_blacklist_last_tracked import get_blacklist_last_tracked
+from .blacklist.search_blacklist import search_blacklist
+
+from .blacklist.ban_unban_phone_num import ban_unban_phone_num
 
 # create blueprint (group of routes)
 users = Blueprint("users", __name__)
@@ -95,6 +99,55 @@ def get_last_tracked():
 
         # process input and return result
         return get_users_last_tracked(session)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@users.route("/search_blacklist", methods=["POST"])
+def search_blacklist_():
+    try:
+        # read json from request
+        data = request.get_json()
+        query = data.get("query")
+        limit = data.get("limit")
+
+        # process input and return result
+        return search_blacklist(query, limit)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@users.route("/get_blacklist_last_tracked", methods=["GET"])
+def get_blacklist_last_tracked_():
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_blacklist_last_tracked(session)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@users.route("/ban_unban_phone_number", methods=["POST"])
+def ban_unban_phone_number():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        phone_num = data.get("phone_num")
+        boolean = data.get("boolean")
+
+        # process input and return result
+        return ban_unban_phone_num(session, phone_num, boolean)
 
     # catch unexpected error
     except Exception as e:

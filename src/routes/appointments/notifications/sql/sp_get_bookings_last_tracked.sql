@@ -18,9 +18,9 @@ BEGIN
         FROM appos_trackers
         WHERE user_id = user_id_;
 
-    -- -- update user's last track
-    -- UPDATE users_trackers
-    --     SET time = now_
-    --     WHERE user_id = user_id_;
+    -- update user's last track
+    UPDATE appos_trackers
+        SET time = UNIX_TIMESTAMP()
+        WHERE user_id = user_id_;
 
 END;

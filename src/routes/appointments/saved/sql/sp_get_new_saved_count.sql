@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_get_new_appo_count;
+DROP PROCEDURE IF EXISTS sp_get_new_saved_count;
 
-CREATE PROCEDURE sp_get_new_appo_count(
+CREATE PROCEDURE sp_get_new_saved_count(
     IN _session JSON
 )
 BEGIN    
@@ -18,21 +18,21 @@ BEGIN
     -- fetch last tracked time of user
     SELECT time
         INTO last_tracked_
-        FROM appos_trackers
+        FROM saved_trackers
         WHERE user_id = user_id_;
 
     -- check null
     IF last_tracked_ IS NULL
     THEN 
         SET last_tracked_ = now_;
-        INSERT INTO appos_trackers (user_id, time)
+        INSERT INTO saved_trackers (user_id, time)
             VALUES (user_id_, now_);
 
     END IF;
 
     -- return new appointment count
     SELECT COUNT(*) 
-        FROM appo_notifications             
+        FROM saved_appos             
         WHERE time > last_tracked_;
 
 END;

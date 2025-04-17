@@ -33,6 +33,6 @@ BEGIN
     -- return new appointment count
     SELECT COUNT(*) 
         FROM authentication             
-        WHERE created_at >= last_tracked_;
+        WHERE created_at > last_tracked_;
 
 END;

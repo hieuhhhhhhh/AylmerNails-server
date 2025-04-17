@@ -10,7 +10,7 @@ def search_contacts(query):
         jsonify(
             {
                 "contacts": contacts,
-                "contacts_def": "[[phoneNum, contactId, name, time], ]",
+                "contacts_def": "[[phoneNum, contactId, name, time, firstName, lastName], ]",
             }
         ),
         200,

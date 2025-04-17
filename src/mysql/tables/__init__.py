@@ -11,6 +11,8 @@ def create_tables():
     exe_queries(__file__, "authentication/unconfirmed_salts.sql")
     exe_queries(__file__, "authentication/users_trackers.sql")
 
+    exe_queries(__file__, "accounts/blacklist.sql")
+    exe_queries(__file__, "accounts/blacklist_trackers.sql")
     exe_queries(__file__, "accounts/business_links.sql")
     exe_queries(__file__, "accounts/colors.sql")
     exe_queries(__file__, "accounts/contacts.sql")
@@ -32,6 +34,8 @@ def create_tables():
     exe_queries(__file__, "appointments/appos_trackers.sql")
     exe_queries(__file__, "appointments/canceled_appos.sql")
     exe_queries(__file__, "appointments/canceled_trackers.sql")
+    exe_queries(__file__, "appointments/saved_appos.sql")
+    exe_queries(__file__, "appointments/saved_trackers.sql")
 
     exe_queries(__file__, "services/add_ons/add_on_services.sql")
     exe_queries(__file__, "services/add_ons/AOS_options.sql")

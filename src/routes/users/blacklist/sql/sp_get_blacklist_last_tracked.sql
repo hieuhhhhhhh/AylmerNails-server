@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_get_canceled_last_tracked;
+DROP PROCEDURE IF EXISTS sp_get_blacklist_last_tracked;
 
-CREATE PROCEDURE sp_get_canceled_last_tracked(
+CREATE PROCEDURE sp_get_blacklist_last_tracked(
     IN _session JSON
 )
 BEGIN    
@@ -15,12 +15,11 @@ BEGIN
 
     -- return user's last track 
     SELECT time
-        FROM canceled_trackers
+        FROM blacklist_trackers
         WHERE user_id = user_id_;
 
     -- update user's last track
-    UPDATE canceled_trackers
+    UPDATE blacklist_trackers
         SET time = UNIX_TIMESTAMP()
         WHERE user_id = user_id_;
-
 END;

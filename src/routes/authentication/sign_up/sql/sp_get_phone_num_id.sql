@@ -1,10 +1,16 @@
 DROP PROCEDURE IF EXISTS sp_get_phone_num_id;
 
 CREATE PROCEDURE sp_get_phone_num_id(
-    IN _phone_num VARCHAR(15),
+    IN _phone_num VARCHAR(30),
     OUT _phone_num_id INT UNSIGNED
-) 
-BEGIN
+)
+sp:BEGIN
+    -- validate
+    IF _phone_num IS NULL OR LENGTH(_phone_num) < 5
+    THEN
+        LEAVE sp;
+    END IF;
+
     -- add or ingore phone number
     INSERT IGNORE INTO phone_numbers (value)
         VALUES (_phone_num);
