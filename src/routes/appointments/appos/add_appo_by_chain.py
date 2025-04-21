@@ -22,6 +22,7 @@ def add_appo_by_chain(session, slots, date):
         AOSOs = json.dumps(slot.get("AOSOs"))
         start = slot.get("start")
         selected_emps = json.dumps(slot.get("empIds"))
+        message = slot.get("message")
 
         # create, append param list
         params = [
@@ -33,6 +34,7 @@ def add_appo_by_chain(session, slots, date):
             day_of_week,
             start,
             selected_emps,
+            message,
         ]
         paramsList.append(params)
 

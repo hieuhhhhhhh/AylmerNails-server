@@ -10,6 +10,7 @@ CREATE TABLE appo_details (
     day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), -- start from monday = 1, end at sunday = 7
     start_time INT NOT NULL, -- clock time when the appointment starts on that day (in seconds)
     end_time INT NOT NULL,
+    message VARCHAR(500),
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE SET NULL,

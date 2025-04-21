@@ -8,7 +8,8 @@ CREATE PROCEDURE sp_add_appo_by_DELA(
     IN _date BIGINT,
     IN _day_of_week INT,
     IN _start_time INT,
-    IN _selected_emps JSON
+    IN _selected_emps JSON,
+    IN _message VARCHAR(500)
 )
 BEGIN
     -- placeholders
@@ -63,7 +64,8 @@ BEGIN
             date,
             day_of_week,
             start_time, 
-            end_time
+            end_time,
+            message
         )
         VALUES (
             _employee_id, 
@@ -73,7 +75,8 @@ BEGIN
             _date,
             _day_of_week,
             _start_time, 
-            _start_time + planned_length_
+            _start_time + planned_length_,
+            _message
         );
 
         -- save appointment's selected employees

@@ -16,6 +16,7 @@ def update_appo(
     start,
     end,
     selected_emps,
+    message,
     note,
 ):
     # locking tables
@@ -55,6 +56,7 @@ def update_appo(
         start,
         end,
         selected_emps,
+        message,
         note,
     )
 

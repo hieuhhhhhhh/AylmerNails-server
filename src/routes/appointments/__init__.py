@@ -136,6 +136,7 @@ def update_appointment():
         date = data.get("date")
         start = data.get("start")
         end = data.get("end")
+        message = data.get("message")
         selected_emps = json.dumps(data.get("selected_emps"))
         note = data.get("note")
 
@@ -152,6 +153,7 @@ def update_appointment():
             start,
             end,
             selected_emps,
+            message,
             note,
         )
 
