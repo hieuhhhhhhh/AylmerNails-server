@@ -17,20 +17,22 @@ def add_appo_by_chain(session, slots, date):
     # parse slots to procedure params
     for slot in slots:
         # unpack every slot
-        start = slot.get("start")
         empId = slot.get("empId")
         serviceId = slot.get("serviceId")
-        AOSOs = slot.get("AOSOs")
+        AOSOs = json.dumps(slot.get("AOSOs"))
+        start = slot.get("start")
+        selected_emps = json.dumps(slot.get("empIds"))
 
         # create, append param list
         params = [
             session,
             empId,
             serviceId,
-            json.dumps(AOSOs),
+            AOSOs,
             date,
             day_of_week,
             start,
+            selected_emps,
         ]
         paramsList.append(params)
 
@@ -46,6 +48,7 @@ def add_appo_by_chain(session, slots, date):
         "DELAs",
         "DELA_slots",
         "appo_details",
+        "appo_employees",
         "appo_notifications",
     ]
 

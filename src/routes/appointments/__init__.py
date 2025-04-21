@@ -136,6 +136,7 @@ def update_appointment():
         date = data.get("date")
         start = data.get("start")
         end = data.get("end")
+        selected_emps = json.dumps(data.get("selected_emps"))
         note = data.get("note")
 
         # process input and return result
@@ -150,6 +151,7 @@ def update_appointment():
             date,
             start,
             end,
+            selected_emps,
             note,
         )
 

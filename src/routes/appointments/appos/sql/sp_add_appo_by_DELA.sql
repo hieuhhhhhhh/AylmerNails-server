@@ -7,7 +7,8 @@ CREATE PROCEDURE sp_add_appo_by_DELA(
     IN _selected_AOSO JSON,
     IN _date BIGINT,
     IN _day_of_week INT,
-    IN _start_time INT
+    IN _start_time INT,
+    IN _selected_emps JSON
 )
 BEGIN
     -- placeholders
@@ -74,6 +75,9 @@ BEGIN
             _start_time, 
             _start_time + planned_length_
         );
+
+        -- save appointment's selected employees
+        CALL sp_save_appo_employees(LAST_INSERT_ID(), _selected_emps);
 
         -- Return the ID of the newly inserted appointment
         SELECT LAST_INSERT_ID() AS new_appo_id;

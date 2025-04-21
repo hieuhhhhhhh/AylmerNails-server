@@ -1,4 +1,4 @@
-CREATE TABLE appo_emp_list(
+CREATE TABLE appo_employees(
     appo_id INT UNSIGNED,
     employee_id INT UNSIGNED,
 

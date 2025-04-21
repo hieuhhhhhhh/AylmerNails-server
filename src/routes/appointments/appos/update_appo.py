@@ -5,7 +5,18 @@ from src.routes.helpers.tokenize_name import tokenize_name
 
 
 def update_appo(
-    session, appo_id, phone_num, name, emp_id, service_id, AOSOs, date, start, end, note
+    session,
+    appo_id,
+    phone_num,
+    name,
+    emp_id,
+    service_id,
+    AOSOs,
+    date,
+    start,
+    end,
+    selected_emps,
+    note,
 ):
     # locking tables
     tables = [
@@ -16,6 +27,7 @@ def update_appo(
         "unconfirmed_salts",
         "authentication a",
         "appo_details",
+        "appo_employees",
         "opening_hours oh",
         "schedules s",
     ]
@@ -42,6 +54,7 @@ def update_appo(
         day_of_week,
         start,
         end,
+        selected_emps,
         note,
     )
 

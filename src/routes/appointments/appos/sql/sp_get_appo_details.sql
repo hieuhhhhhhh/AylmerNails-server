@@ -17,7 +17,7 @@ sp:BEGIN
     -- validate session token
     CALL sp_validate_admin(_session);
 
-    -- 1st table
+    -- 1st table: appo info
     SELECT ad.appo_id, ad.employee_id, ad.service_id, ad.selected_AOSO, ad.date, ad.start_time, ad.end_time, an.note, c.code, e.alias, s.name, ca.name, ad.phone_num_id, p.value, co.name, at.user_id, sa.time
         FROM appo_details ad
             LEFT JOIN appo_notes an
@@ -39,6 +39,13 @@ sp:BEGIN
             LEFT JOIN saved_appos sa
                 ON sa.appo_id = ad.appo_id
         WHERE ad.appo_id = _appo_id;
+
+    -- 2nd table: selected appo
+    SELECT e.employee_id, e.alias
+        FROM appo_employees ae
+            JOIN employees e
+                ON e.employee_id = ae.employee_id
+        WHERE ae.appo_id = _appo_id;
 
     -- fetch AOSOs
     SELECT selected_AOSO

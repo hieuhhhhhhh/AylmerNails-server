@@ -13,6 +13,7 @@ CREATE PROCEDURE sp_update_appo(
     IN _day_of_week INT,
     IN _start INT,
     IN _end INT,
+    IN _selected_emps JSON,
     IN _note VARCHAR(500)
 )
 sp:BEGIN
@@ -82,6 +83,9 @@ sp:BEGIN
     -- create new appointment if all validations passed
     INSERT INTO appo_details (employee_id, service_id, phone_num_id, selected_AOSO, date, day_of_week, start_time, end_time)
         VALUES (_emp_id, _service_id, phone_num_id_, _AOSOs, _date, _day_of_week, _start, _end);
+
+    -- save appointment's selected employees
+    CALL sp_save_appo_employees(LAST_INSERT_ID(), _selected_emps);
 
     -- return created appo_id
     SELECT LAST_INSERT_ID();
