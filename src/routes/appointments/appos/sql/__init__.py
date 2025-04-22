@@ -10,5 +10,6 @@ def create_appointments_appos_sps():
     exe_queries(__file__, "sp_get_daily_appos.sql")
     exe_queries(__file__, "sp_save_appo_employees.sql")
     exe_queries(__file__, "sp_update_appo.sql")
+    exe_queries(__file__, "sp_write_appo_note.sql")
 
     print()

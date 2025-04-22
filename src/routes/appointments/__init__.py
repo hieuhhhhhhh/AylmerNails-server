@@ -2,7 +2,9 @@ import json
 from flask import Blueprint, request
 from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
+
 from .availability.get_availability_list import get_availability_list
+from .availability.write_daily_note import write_daily_note
 
 from .appos.add_appo_by_chain import add_appo_by_chain
 from .appos.get_daily_appos import get_daily_appos
@@ -10,6 +12,7 @@ from .appos.get_appo_length import get_appo_length
 from .appos.get_appo_details import get_appo_details
 from .appos.update_appo import update_appo
 from .appos.add_appo_manually import add_appo_manually
+from .appos.write_appo_note import write_appo_note
 
 from .delete_appo.admin_remove_appo import admin_remove_appo
 from .delete_appo.cancel_appo import cancel_appo
@@ -412,6 +415,44 @@ def unsave_all_appointments():
 
         # process input and return result
         return unsave_all_appos(session)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/write_appointment_note", methods=["POST"])
+def write_appointment_note():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        appo_id = data.get("appo_id")
+        note = data.get("note")
+
+        # process input and return result
+        return write_appo_note(session, appo_id, note)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/write_daily_note", methods=["POST"])
+def write_daily_note_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        date = data.get("date")
+        note = data.get("note")
+
+        # process input and return result
+        return write_daily_note(session, date, note)
 
     # catch unexpected error
     except Exception as e:

@@ -34,6 +34,7 @@ def create_tables():
     exe_queries(__file__, "appointments/appos_trackers.sql")
     exe_queries(__file__, "appointments/canceled_appos.sql")
     exe_queries(__file__, "appointments/canceled_trackers.sql")
+    exe_queries(__file__, "appointments/daily_notes.sql")
     exe_queries(__file__, "appointments/saved_appos.sql")
     exe_queries(__file__, "appointments/saved_trackers.sql")
     exe_queries(__file__, "employees/appo_employees.sql")
