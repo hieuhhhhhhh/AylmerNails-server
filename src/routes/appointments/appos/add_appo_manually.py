@@ -18,6 +18,7 @@ def add_appo_manually(
         "appo_details",
         "opening_hours oh",
         "schedules s",
+        "appo_notes",
     ]
 
     # tokenize client's name

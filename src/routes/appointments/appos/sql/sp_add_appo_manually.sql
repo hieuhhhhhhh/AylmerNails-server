@@ -75,5 +75,9 @@ sp:BEGIN
 
     -- return created appo_id
     SELECT LAST_INSERT_ID();
+
+    -- store appointment's note
+    INSERT INTO appo_notes (appo_id, note)
+        VALUES (LAST_INSERT_ID(), _note);
 END;
 
