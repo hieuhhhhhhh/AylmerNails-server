@@ -5,6 +5,7 @@ from src.routes.authentication.session.read_token import read_token
 
 from .availability.get_availability_list import get_availability_list
 from .availability.write_daily_note import write_daily_note
+from .availability.get_daily_note import get_daily_note
 
 from .appos.add_appo_by_chain import add_appo_by_chain
 from .appos.get_daily_appos import get_daily_appos
@@ -453,6 +454,20 @@ def write_daily_note_():
 
         # process input and return result
         return write_daily_note(session, date, note)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_daily_note/<date>", methods=["GET"])
+def get_daily_note_(date):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_daily_note(session, date)
 
     # catch unexpected error
     except Exception as e:
