@@ -1,10 +1,14 @@
 DROP PROCEDURE IF EXISTS sp_search_canceled_appos;
 
 CREATE PROCEDURE sp_search_canceled_appos(
+    IN _session JSON,
     IN _query VARCHAR(200),
     IN _limit INT
 )
 BEGIN    
+    -- validate admin
+    CALL sp_validate_admin(_session);
+
     -- return appointment notifications with limit
     SELECT c.canceled_id, c.user_id, c.details, c.time, p.first_name, p.last_name, pn.value
         FROM canceled_appos c

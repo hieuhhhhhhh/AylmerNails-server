@@ -197,8 +197,11 @@ def add_appointment_manually_():
 @appointments.route("/search_contacts/<query>", methods=["GET"])
 def search_contacts_(query):
     try:
+        # read token
+        session = read_token()
+
         # process input and return result
-        return search_contacts(query)
+        return search_contacts(session, query)
 
     # catch unexpected error
     except Exception as e:
@@ -208,8 +211,11 @@ def search_contacts_(query):
 @appointments.route("/search_contacts", methods=["GET"])
 def search_contacts_no_query():
     try:
+        # read token
+        session = read_token()
+
         # process input and return result
-        return search_contacts("")
+        return search_contacts(session, "")
 
     # catch unexpected error
     except Exception as e:
@@ -302,13 +308,16 @@ def get_canceled_appointments(limit):
 @appointments.route("/search_bookings", methods=["POST"])
 def search_bookings_():
     try:
+        # read token
+        session = read_token()
+
         # read json
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_bookings(query, limit)
+        return search_bookings(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -332,13 +341,16 @@ def get_last_tracked():
 @appointments.route("/search_canceled_appointments", methods=["POST"])
 def search_canceled_appointments():
     try:
+        # read token
+        session = read_token()
+
         # read json
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_canceled_appos(query, limit)
+        return search_canceled_appos(session, query, limit)
 
     # catch unexpected error
     except Exception as e:

@@ -93,7 +93,10 @@ def get_employee_services_(emp_id, date):
 @employees.route("/get_employee_details/<int:emp_id>", methods=["GET"])
 def get_employee_details_(emp_id):
     try:
-        return get_employee_details(emp_id)
+        # read token
+        session = read_token()
+
+        return get_employee_details(session, emp_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

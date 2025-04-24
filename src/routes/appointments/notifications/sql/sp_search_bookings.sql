@@ -1,10 +1,14 @@
 DROP PROCEDURE IF EXISTS sp_search_bookings;
 
 CREATE PROCEDURE sp_search_bookings(
+    IN _session JSON,
     IN _query VARCHAR(200),
     IN _limit INT
 )
 BEGIN    
+    -- validate admin
+    CALL sp_validate_admin(_session);
+
     -- return appointment notifications with limit
     SELECT an.appo_id, an.time, ad.employee_id, e.alias, c.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, p.first_name, p.last_name, ad.date, ad.start_time, ad.end_time
         FROM appo_notifications an

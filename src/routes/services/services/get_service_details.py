@@ -2,9 +2,9 @@ from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
 
 
-def get_service_details(service_id):
+def get_service_details(session, service_id):
     # call mysql proc to process data
-    res = call_3D_proc("sp_get_service_details", service_id)
+    res = call_3D_proc("sp_get_service_details", session, service_id)
 
     # parse and return data
     info = res[0][0]

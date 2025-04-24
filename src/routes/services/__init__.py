@@ -131,7 +131,10 @@ def search_services_(query):
 @services.route("/get_service_details/<int:service_id>", methods=["GET"])
 def get_service_details_(service_id):
     try:
-        return get_service_details(service_id)
+        # read token
+        session = read_token()
+
+        return get_service_details(session, service_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

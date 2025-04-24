@@ -2,9 +2,9 @@ from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
 
 
-def search_canceled_appos(query, limit):
+def search_canceled_appos(session, query, limit):
     # call mysql proc to process data
-    appos = call_3D_proc("sp_search_canceled_appos", query, limit)[0]
+    appos = call_3D_proc("sp_search_canceled_appos", session, query, limit)[0]
 
     return (
         jsonify(

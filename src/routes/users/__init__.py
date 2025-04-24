@@ -78,13 +78,16 @@ def get_users_(limit):
 @users.route("/search_users", methods=["POST"])
 def search_users_():
     try:
+        # read token
+        session = read_token()
+
         # read json from request
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_users(query, limit)
+        return search_users(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -108,13 +111,16 @@ def get_last_tracked():
 @users.route("/search_blacklist", methods=["POST"])
 def search_blacklist_():
     try:
+        # read token
+        session = read_token()
+
         # read json from request
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_blacklist(query, limit)
+        return search_blacklist(session, query, limit)
 
     # catch unexpected error
     except Exception as e:

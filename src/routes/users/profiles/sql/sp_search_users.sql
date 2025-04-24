@@ -1,10 +1,14 @@
 DROP PROCEDURE IF EXISTS sp_search_users;
 
 CREATE PROCEDURE sp_search_users(
+    IN _session JSON,
     IN _query VARCHAR(200),
     IN _limit INT
 )
 BEGIN    
+    -- validate admin
+    CALL sp_validate_admin(_session);
+
     -- return users match the query
     SELECT a.user_id, a.phone_num_id, pn.value, a.role, p.first_name, p.last_name, a.created_at, c.name     
         FROM authentication a

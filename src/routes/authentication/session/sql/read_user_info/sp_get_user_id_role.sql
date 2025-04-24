@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_get_user_id_role(
     OUT _user_id INT UNSIGNED,
     OUT _role VARCHAR(20)
 )
-BEGIN
+sp:BEGIN
     -- placeholders
     DECLARE session_id_ INT UNSIGNED;
     DECLARE session_salt_ INT;
@@ -13,10 +13,14 @@ BEGIN
     DECLARE expiry_ INT;      
     DECLARE created_at_ BIGINT;
 
+    -- if session not exists
+    IF JSON_UNQUOTE(JSON_EXTRACT(_session, '$.id')) = 'null' THEN
+        LEAVE sp;
+    END IF;
+
     -- fetch id and salt from session
     SET session_id_ = JSON_UNQUOTE(JSON_EXTRACT(_session, '$.id'));
     SET session_salt_ = JSON_UNQUOTE(JSON_EXTRACT(_session, '$.salt'));
-
 
     -- fetch role and user_id by session id and salt
     SELECT us.expiry, us.created_at, a.role, a.user_id

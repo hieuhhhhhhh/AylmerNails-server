@@ -1,10 +1,15 @@
 DROP PROCEDURE IF EXISTS sp_search_blacklist;
 
 CREATE PROCEDURE sp_search_blacklist(
+    IN _session JSON,
     IN _query VARCHAR(200),
     IN _limit INT
 )
 BEGIN    
+    -- validate admin
+    CALL sp_validate_admin(_session);
+
+
     -- return saved appos with limit
     SELECT DISTINCT pn.value, bl.time, p.first_name, p.last_name, ct.name
         FROM blacklist bl
