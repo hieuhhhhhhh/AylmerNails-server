@@ -18,7 +18,7 @@ BEGIN
                 ON a.user_id = c.user_id
             LEFT JOIN phone_numbers pn
                 ON pn.phone_num_id = a.phone_num_id
-        WHERE pn.value LIKE CONCAT('+1', _query , '%')
+        WHERE pn.value LIKE CONCAT('%', _query , '%')
             OR p.first_name LIKE CONCAT(_query , '%')
             OR p.last_name LIKE CONCAT(_query , '%')        
         ORDER BY c.time DESC

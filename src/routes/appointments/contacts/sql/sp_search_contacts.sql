@@ -19,7 +19,7 @@ BEGIN
                 ON au.phone_num_id = p.phone_num_id
             LEFT JOIN profiles pr
                 ON pr.user_id = au.user_id
-        WHERE p.value LIKE CONCAT('+1', _query , '%')
+        WHERE p.value LIKE CONCAT('%', _query , '%')
             OR ct.token LIKE CONCAT(_query , '%')
         ORDER BY c.time DESC
         LIMIT 30;

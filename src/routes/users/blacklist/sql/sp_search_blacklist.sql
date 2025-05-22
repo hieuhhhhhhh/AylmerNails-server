@@ -23,7 +23,7 @@ BEGIN
                 ON tk.phone_num_id = bl.phone_num_id
             LEFT JOIN phone_numbers pn
                 ON pn.phone_num_id = bl.phone_num_id
-        WHERE pn.value LIKE CONCAT('+1', _query , '%')
+        WHERE pn.value LIKE CONCAT('%', _query , '%')
             OR tk.token LIKE CONCAT(_query , '%')
             OR p.first_name LIKE CONCAT(_query , '%')
             OR p.last_name LIKE CONCAT(_query , '%')        

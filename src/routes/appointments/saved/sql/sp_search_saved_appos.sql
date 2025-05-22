@@ -24,7 +24,7 @@ BEGIN
                 ON ct.phone_num_id = ad.phone_num_id
             LEFT JOIN contact_tokens tk
                 ON tk.phone_num_id = ad.phone_num_id
-        WHERE pn.value LIKE CONCAT('+1', _query , '%')
+        WHERE pn.value LIKE CONCAT('%', _query , '%')
             OR tk.token LIKE CONCAT(_query , '%')
             OR ad.phone_num_id IS NULL
         ORDER BY sa.time DESC
