@@ -3,6 +3,7 @@ from src.routes.authentication.sms_verification.sql import (
 )
 from src.routes.authentication.sign_up.sql import create_authentication_signup_sps
 from src.routes.authentication.login.sql import create_authentication_login_sps
+from src.routes.authentication.logout.sql import create_authentication_logout_sps
 from src.routes.authentication.session.sql import create_authentication_session_sps
 
 from src.routes.services.categories.sql import create_services_categories_sps
@@ -37,6 +38,7 @@ def create_procedures():
     create_authentication_sms_verification_sps()
     create_authentication_signup_sps()
     create_authentication_login_sps()
+    create_authentication_logout_sps()
     create_authentication_session_sps()
 
     # from services routes

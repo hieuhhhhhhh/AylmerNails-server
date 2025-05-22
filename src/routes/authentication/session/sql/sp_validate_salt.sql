@@ -48,5 +48,5 @@ sp:BEGIN
     -- after 2 comparisions, the provided salt not match any, 
     -- this can be a security risk, as this or the confirmed salt is exposed to an intruder
     -- log out all sessions of this user
-    CALL sp_log_out_all(user_id_);
+    CALL sp_log_out_everywhere(user_id_);
 END;

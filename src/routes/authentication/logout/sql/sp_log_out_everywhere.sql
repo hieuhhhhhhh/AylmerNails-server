@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_log_out_all;
+DROP PROCEDURE IF EXISTS sp_log_out_everywhere;
 
-CREATE PROCEDURE sp_log_out_all(
+CREATE PROCEDURE sp_log_out_everywhere(
     IN _user_id INT UNSIGNED
 )
 BEGIN
