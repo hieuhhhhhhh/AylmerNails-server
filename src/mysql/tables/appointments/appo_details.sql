@@ -11,12 +11,15 @@ CREATE TABLE appo_details (
     start_time INT NOT NULL, -- clock time when the appointment starts on that day (in seconds)
     end_time INT NOT NULL,
     message VARCHAR(500),
+    booker_id INT UNSIGNED,
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE SET NULL,
     FOREIGN KEY (service_id) REFERENCES services(service_id) 
         ON DELETE SET NULL,
     FOREIGN KEY (phone_num_id) REFERENCES phone_numbers(phone_num_id) 
+        ON DELETE SET NULL,
+    FOREIGN KEY (booker_id) REFERENCES authentication(user_id) 
         ON DELETE SET NULL
 );
 
