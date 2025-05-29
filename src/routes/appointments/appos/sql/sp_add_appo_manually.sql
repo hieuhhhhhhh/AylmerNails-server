@@ -23,7 +23,7 @@ sp:BEGIN
     DECLARE day_start_ INT;
     DECLARE day_end_ INT;
     DECLARE phone_num_id_ INT UNSIGNED;
-    DECLARE booker_id_ INT UNSINGED;
+    DECLARE booker_id_ INT UNSIGNED;
 
     -- validate session token
     CALL sp_validate_admin(_session);

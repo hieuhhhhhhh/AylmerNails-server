@@ -6,7 +6,7 @@ def create_tables():
 
     exe_queries(__file__, "authentication/phone_numbers.sql")
     exe_queries(__file__, "authentication/authentication.sql")
-    exe_queries(__file__, "authentication/sms_verify_codes.sql")
+    exe_queries(__file__, "authentication/otp_codes.sql")
     exe_queries(__file__, "authentication/user_sessions.sql")
     exe_queries(__file__, "authentication/unconfirmed_salts.sql")
     exe_queries(__file__, "authentication/users_trackers.sql")

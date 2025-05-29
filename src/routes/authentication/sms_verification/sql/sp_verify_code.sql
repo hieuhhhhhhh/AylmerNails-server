@@ -1,69 +1,14 @@
 DROP PROCEDURE IF EXISTS sp_verify_code;
 
 CREATE PROCEDURE sp_verify_code(
-    IN _phone_number VARCHAR(15),
-    IN _code VARCHAR(4)
+    IN _code_id INT UNSIGNED,
+    IN _value VARCHAR(4)
 )
 sp:BEGIN
-    -- Placeholders for data from table
-    DECLARE code_ VARCHAR(4);
-    DECLARE attempts_left_ INT;
-    DECLARE created_at_ BIGINT;
-    DECLARE expiry_ INT;
-    DECLARE new_password_ VARCHAR(60);
-    DECLARE phone_num_id_ INT UNSIGNED;
-    
-    -- get phone number id
-    CALL sp_get_phone_num_id (_phone_number, phone_num_id_);
-
-    -- Decrement the attempts left
-    UPDATE sms_verify_codes
-        SET attempts_left = attempts_left - 1
-        WHERE phone_num_id = phone_num_id_;
-
-    -- Get the current timestamp and record details
-    SELECT new_password, code, attempts_left, created_at, expiry
-        INTO new_password_, code_, attempts_left_, created_at_, expiry_
-        FROM sms_verify_codes
-        WHERE phone_num_id = phone_num_id_
-        LIMIT 1;
-
-    -- If the phone number doesn't exist or other failure conditions
-    IF code_ IS NULL THEN
-        -- Return the failure result set
-        SELECT FALSE AS success, 'Code not found, please try again' AS msg;
-        LEAVE sp;
-    END IF;
-
-    -- Check if the code has expired 
-    IF UNIX_TIMESTAMP() > (created_at_ + expiry_) THEN
-        -- Return the failure result set
-        SELECT FALSE AS success, 'Code has expired, please request a new code' AS msg;
-        LEAVE sp;
-    END IF;
-
-    -- Check if there are no remaining attempts
-    IF attempts_left_ < 0 THEN
-        -- Return the failure result set
-        SELECT FALSE AS success, 'No attempts left, please request a new code' AS msg;
-        LEAVE sp;
-    END IF;
-
-    -- Check if the code is correct
-    IF code_ != _code THEN
-        -- Return the failure result set
-        SELECT FALSE AS success, 'Incorrect code, please try again' AS msg;
-        LEAVE sp;
-    END IF;
-
-    -- Update the password if new_password column is not null
-    IF new_password_ IS NOT NULL THEN
-        CALL sp_add_user(_phone_number, new_password_);
-    END IF;
-
-    -- If everything is valid, return success and delete the record
-    SELECT TRUE AS success, 'Verification successful.' AS msg;
-    
-    -- After the return, remove the verification code from database (1 time use)
-    DELETE FROM sms_verify_codes WHERE phone_num_id = phone_num_id_;
+    SELECT phone_num_id
+        FROM otp_codes 
+        WHERE code_id = _code_id 
+            AND created_at + duration >= UNIX_TIMESTAMP()
+            AND attempts_left > 0
+            AND value = _value;
 END;
