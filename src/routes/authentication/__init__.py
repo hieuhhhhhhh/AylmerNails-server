@@ -1,6 +1,6 @@
 from flask import Blueprint, request
-from .sign_up.request_signup import request_signup
-from .sign_up.verify_signup import verify_signup
+from .sign_up.request_sign_up import request_sign_up
+from .sign_up.sign_up import sign_up
 from .login.request_login import request_login
 from .login.continue_session import continue_session
 from .logout.logout import logout
@@ -12,14 +12,29 @@ authentication = Blueprint("authentication", __name__)
 
 
 @authentication.route("/request_sign_up", methods=["POST"])
-def request_sign_up():
+def request_sign_up_():
     try:
         # read json from request
         data = request.get_json()
         phone_num = data.get("phone_num")
+
+        return request_sign_up(phone_num)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@authentication.route("/sign_up", methods=["POST"])
+def sign_up_():
+    try:
+        # read json from request
+        data = request.get_json()
+        code_id = data.get("code_id")
+        code = data.get("code")
         password = data.get("password")
 
-        return request_signup(phone_num, password)
+        return sign_up(code_id, code, password)
 
     # catch unexpected error
     except Exception as e:
@@ -33,21 +48,6 @@ def log_out():
         session = read_token()
 
         return logout(session)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@authentication.route("/verify_sign_up", methods=["POST"])
-def verify_sign_up():
-    try:
-        # read json from request
-        data = request.get_json()
-        phone_num = data.get("phone_num")
-        code = data.get("code")
-
-        return verify_signup(phone_num, code)
 
     # catch unexpected error
     except Exception as e:

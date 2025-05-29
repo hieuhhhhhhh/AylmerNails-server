@@ -16,17 +16,10 @@ sp:BEGIN
             AND created_at + duration >= UNIX_TIMESTAMP() -- not expired
             AND attempts_left > 0; -- still available
 
-    -- check results
-    IF code_ IS NOT NULL THEN
-        -- one time code
-        DELETE FROM otp_codes
-            WHERE code_id = _code_id;
-    ELSE
-        -- decrease the attempts
-        UPDATE otp_codes
-            SET attempts_left = attempts_left - 1
-            WHERE code_id = _code_id;
-    END IF;
+    -- decrease the attempts
+    UPDATE otp_codes
+        SET attempts_left = attempts_left - 1
+        WHERE code_id = _code_id;
     
     -- return details
     SELECT code_, phone_num_;
