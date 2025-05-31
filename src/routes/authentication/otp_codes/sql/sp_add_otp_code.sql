@@ -12,15 +12,13 @@ BEGIN
         phone_num,
         value,
         attempts_left,
-        created_at,
-        expiry
+        duration
     )
         VALUES (
             _phone_num,
             _code,
             _attempts_left,
-            UNIX_TIMESTAMP(),
-            _expiry
+            _duration
         );
 
     -- return id

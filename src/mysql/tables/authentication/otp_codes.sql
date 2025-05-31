@@ -1,10 +1,10 @@
 CREATE TABLE otp_codes (
-    code_id INT UNSIGNED PRIMARY KEY,
+    code_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     value VARCHAR(4) NOT NULL,
     phone_num VARCHAR(30) NOT NULL,
     attempts_left INT NOT NULL,
-    created_at BIGINT NOT NULL,
-    duration INT NOT NULL,   -- in secs
+    created_at BIGINT NOT NULL DEFAULT (UNIX_TIMESTAMP()),
+    duration INT NOT NULL   -- in secs
 );
 
 -- index on birth

@@ -14,7 +14,9 @@ def sign_up(code_id, code, password):
     true_code, phone_num = call_3D_proc(
         "sp_get_otp_code",
         code_id,
-    )
+    )[
+        0
+    ][0]
 
     # validate code
     if true_code is None:
