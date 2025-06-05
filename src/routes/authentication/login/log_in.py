@@ -10,12 +10,15 @@ SESSION_EXPIRY = 60 * 60
 
 # return a tuple: user_id, password
 def get_stored_pw(phone_number):
-    res = call_3D_proc("sp_get_stored_pw", phone_number)
-    return (res[0][0][0], res[0][0][1]) if res[0] else (None, None)
+    res = call_3D_proc("sp_get_stored_pw", phone_number)[0]
+    if not res:
+        return None, None
+    user_id, hashed = res[0]
+    return user_id, hashed
 
 
 # handle credentials from client side:
-def request_login(phone_number, password):
+def log_in(phone_number, password):
     # fetch salt from env
     TOKEN_SALT = current_app.config["TOKEN_SALT"]
 
