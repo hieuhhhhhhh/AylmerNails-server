@@ -36,7 +36,7 @@ def default_error_response(exception):
             {
                 "error": str(exception),
                 "details": traceback.format_exc(),
-                "message": "Access denied, an unknown error occurred",
+                "message": "Request denied, an unknown error occurred",
             }
         ),
         500,  # internal server error status

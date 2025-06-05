@@ -8,7 +8,7 @@ def request_sign_up(phone_num):
     phone_is_avail = call_3D_proc("sp_is_phonenum_avail", phone_num)[0][0][0]
 
     if not phone_is_avail:
-        return (jsonify({"message": "Number already registered"}), 400)
+        return jsonify({"message": "Number already registered"}), 400
 
     # if valid, proceed
     return request_otp_code(phone_num)
