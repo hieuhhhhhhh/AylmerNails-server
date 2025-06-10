@@ -11,6 +11,11 @@ def send_otp_code(code, phone_num):
     # init
     client = Client(TWILIO_SID, TWILIO_TOKEN)
 
+    # format code
+    if len(code) > 4:
+        middle = len(code) // 2  # Slightly favors the first half if odd
+        code = code[:middle] + " " + code[middle:]
+
     # write message
     msg_body = f"Aylmer Nails & Spa (no-reply inbox):\nYour verification code: {code} "
 

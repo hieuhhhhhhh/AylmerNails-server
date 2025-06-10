@@ -1,3 +1,6 @@
+from src.routes.authentication.forgot_password.sql import (
+    create_authentication_otp_codes_sps,
+)
 from src.routes.authentication.otp_codes.sql import create_authentication_otp_codes_sps
 from src.routes.authentication.sign_up.sql import create_authentication_signup_sps
 from src.routes.authentication.login.sql import create_authentication_login_sps

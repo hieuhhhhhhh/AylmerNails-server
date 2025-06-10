@@ -1,7 +1,6 @@
 import random
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
-from .send_otp_code import send_otp_code
 from .is_otp_ready import is_otp_ready
 
 
@@ -16,8 +15,11 @@ def request_otp_code(phone_num):
             400,
         )
 
+    # fetch otp required length (if exists)
+    code_length = call_3D_proc("sp_get_otp_length", phone_num)[0][0][0]
+
     # generate code
-    code = random.randint(1000, 9999)
+    code = random.randint(10 ** (code_length - 1), 10**code_length - 1)
 
     # try:
     #     # send otp code by sms

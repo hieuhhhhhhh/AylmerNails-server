@@ -3,7 +3,6 @@ import traceback
 
 
 def default_error_response(exception):
-    print(traceback.format_exc())
     if hasattr(exception, "msg"):
         status = exception.msg[:3]
 

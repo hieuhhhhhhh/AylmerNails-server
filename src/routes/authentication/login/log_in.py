@@ -19,6 +19,16 @@ def get_stored_pw(phone_number):
 
 # handle credentials from client side:
 def log_in(phone_number, password):
+    # validate login count
+    count = call_3D_proc("sp_count_login_attempts", phone_number)[0][0][0]
+    if count > 5:
+        return (
+            jsonify(
+                {"message": "Maximum login attempts reached, please renew password"}
+            ),
+            401,
+        )
+
     # fetch salt from env
     TOKEN_SALT = current_app.config["TOKEN_SALT"]
 

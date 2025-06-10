@@ -14,6 +14,10 @@ BEGIN
     INSERT INTO user_sessions ( session_salt, user_id, created_at, expiry )
         VALUES (session_salt_, _user_id, UNIX_TIMESTAMP(), _expiry);
     
+    -- remove login attempts
+    DELETE FROM login_attempts
+        WHERE user_id = _user_id;
+
     -- Select the last inserted id and the generated session_salt
     SELECT LAST_INSERT_ID() AS session_id, session_salt_ AS session_salt;
 END;
