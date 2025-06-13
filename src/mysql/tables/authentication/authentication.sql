@@ -5,7 +5,7 @@ CREATE TABLE authentication (
     hashed_password VARCHAR(60) NOT NULL,
     created_at BIGINT NOT NULL DEFAULT (UNIX_TIMESTAMP()),
     role 
-        ENUM('client', 'employee', 'admin', 'developer') 
+        ENUM('client', 'employee', 'admin', 'owner') 
         NOT NULL 
         DEFAULT 'client',
 
@@ -21,5 +21,5 @@ CREATE INDEX idx_created_at ON authentication (created_at);
 -- some default users
 INSERT INTO aylmer_nails.authentication (phone_num_id,hashed_password,created_at,`role`) 
     VALUES 
-        (1,'$2b$12$YKgGgFRGCqaccjM7f5cG0O2sEjlMWwo6fdIqCL0N6rERSozoUXWIq',1734817348,'developer'),
-        (2,'$2b$12$YKgGgFRGCqaccjM7f5cG0O2sEjlMWwo6fdIqCL0N6rERSozoUXWIq',1736992767,'developer');
+        (1,'$2b$12$YKgGgFRGCqaccjM7f5cG0O2sEjlMWwo6fdIqCL0N6rERSozoUXWIq',1734817348,'owner'),
+        (2,'$2b$12$YKgGgFRGCqaccjM7f5cG0O2sEjlMWwo6fdIqCL0N6rERSozoUXWIq',1736992767,'owner');

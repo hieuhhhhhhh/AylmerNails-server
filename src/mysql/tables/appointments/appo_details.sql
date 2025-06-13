@@ -12,6 +12,8 @@ CREATE TABLE appo_details (
     end_time INT NOT NULL,
     message VARCHAR(500),
     booker_id INT UNSIGNED,
+    price DECIMAL(10,2),
+    client_can_book BOOLEAN DEFAULT TRUE,
 
     FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
         ON DELETE SET NULL,

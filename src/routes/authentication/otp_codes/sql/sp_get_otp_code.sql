@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_get_otp_code(
 )
 sp:BEGIN
     -- variables
-    DECLARE code_ VARCHAR(4);
+    DECLARE code_ VARCHAR(20);
     DECLARE phone_num_ VARCHAR(30);
 
     -- fetch the associated phone num

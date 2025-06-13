@@ -14,5 +14,6 @@ def create_authentication_session_sps():
     exe_queries(__file__, "read_user_info/sp_session_to_phone_num.sql")
     exe_queries(__file__, "sp_validate_admin.sql")
     exe_queries(__file__, "sp_validate_client.sql")
+    exe_queries(__file__, "sp_validate_owner.sql")
 
     print()

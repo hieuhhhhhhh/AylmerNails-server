@@ -1,6 +1,6 @@
 CREATE TABLE otp_codes (
     code_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    value VARCHAR(4) NOT NULL,
+    value VARCHAR(20) NOT NULL,
     phone_num VARCHAR(30) NOT NULL,
     attempts_left INT NOT NULL,
     created_at BIGINT NOT NULL DEFAULT (UNIX_TIMESTAMP()),

@@ -1,6 +1,7 @@
 CREATE TABLE login_attempts (
-    user_id INT UNSIGNED PRIMARY KEY,
-    created_at BIGINT DEFAULT UNIX_TIMESTAMP(),
+    attempt_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    created_at BIGINT DEFAULT (UNIX_TIMESTAMP()),
 
     FOREIGN KEY (user_id) 
         REFERENCES authentication(user_id)

@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_validate_client;
+DROP PROCEDURE IF EXISTS sp_validate_admin;
 
-CREATE PROCEDURE sp_validate_client(
+CREATE PROCEDURE sp_validate_admin(
     IN _session JSON
 )
 BEGIN
@@ -13,11 +13,9 @@ BEGIN
 
     -- IF role is not valid, leave procedure
     IF role_ IS NULL
-        OR role_ NOT IN ('client', 'employee', 'admin', 'owner')
+        OR role_ NOT IN ('owner')
     THEN 
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = '401, Unauthorized';
     END IF;
-
-
 END;

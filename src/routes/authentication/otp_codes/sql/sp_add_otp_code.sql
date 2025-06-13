@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS sp_add_otp_code;
 
 CREATE PROCEDURE sp_add_otp_code (
     IN _phone_num VARCHAR(30),
-    IN _code VARCHAR(4),
+    IN _code VARCHAR(20),
     IN _attempts_left INT,
     IN _duration INT
 )
