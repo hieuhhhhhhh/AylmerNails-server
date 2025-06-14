@@ -7,12 +7,12 @@ from .availability.get_availability_list import get_availability_list
 from .availability.write_daily_note import write_daily_note
 from .availability.get_daily_note import get_daily_note
 
-from .appos.add_appo_by_chain import add_appo_by_chain
+from .appos.client_add_appo import client_add_appo
 from .appos.get_daily_appos import get_daily_appos
 from .appos.get_appo_length import get_appo_length
 from .appos.get_appo_details import get_appo_details
 from .appos.update_appo import update_appo
-from .appos.add_appo_manually import add_appo_manually
+from .appos.admin_add_appo import admin_add_appo
 from .appos.write_appo_note import write_appo_note
 
 from .delete_appo.admin_remove_appo import admin_remove_appo
@@ -37,23 +37,8 @@ from .saved.unsave_all_appos import unsave_all_appos
 appointments = Blueprint("appointments", __name__)
 
 
-@appointments.route("/get_availability_list", methods=["POST"])
-def get_availability():
-    try:
-        # read json from request
-        data = request.get_json()
-        DELAs_requests = data.get("DELAs_requests")
-
-        # process input and return result
-        return get_availability_list(DELAs_requests)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/add_appo_by_chain", methods=["POST"])
-def add_appo_by_chain_():
+@appointments.route("/client_add_appo", methods=["POST"])
+def client_add_appo_():
     try:
         # read token
         session = read_token()
@@ -64,7 +49,50 @@ def add_appo_by_chain_():
         date = data.get("date")
 
         # process input and return result
-        return add_appo_by_chain(session, slots, date)
+        return client_add_appo(session, slots, date)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/admin_add_appo", methods=["POST"])
+def admin_add_appo_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        phone_num = data.get("phone_num")
+        name = data.get("name")
+        emp_id = data.get("emp_id")
+        service_id = data.get("service_id")
+        AOSOs = json.dumps(data.get("AOSOs"))
+        date = data.get("date")
+        start = data.get("start")
+        end = data.get("end")
+        note = data.get("note")
+
+        # process input and return result
+        return admin_add_appo(
+            session, phone_num, name, emp_id, service_id, AOSOs, date, start, end, note
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_availability_list", methods=["POST"])
+def get_availability():
+    try:
+        # read json from request
+        data = request.get_json()
+        DELAs_requests = data.get("DELAs_requests")
+
+        # process input and return result
+        return get_availability_list(DELAs_requests)
 
     # catch unexpected error
     except Exception as e:
@@ -159,34 +187,6 @@ def update_appointment():
             selected_emps,
             message,
             note,
-        )
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/add_appointment_manually", methods=["POST"])
-def add_appointment_manually_():
-    try:
-        # read token
-        session = read_token()
-
-        # read json
-        data = request.get_json()
-        phone_num = data.get("phone_num")
-        name = data.get("name")
-        emp_id = data.get("emp_id")
-        service_id = data.get("service_id")
-        AOSOs = json.dumps(data.get("AOSOs"))
-        date = data.get("date")
-        start = data.get("start")
-        end = data.get("end")
-        note = data.get("note")
-
-        # process input and return result
-        return add_appo_manually(
-            session, phone_num, name, emp_id, service_id, AOSOs, date, start, end, note
         )
 
     # catch unexpected error

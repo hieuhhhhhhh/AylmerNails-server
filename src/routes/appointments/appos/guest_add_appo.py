@@ -5,7 +5,7 @@ from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
 from src.socketio import emit_booking
 
 
-def add_appo_by_chain(session, slots, date):
+def guest_add_appo(session, slots, date):
     # params holder
     paramsList = []
     # result holder

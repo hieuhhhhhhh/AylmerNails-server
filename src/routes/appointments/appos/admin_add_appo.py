@@ -4,7 +4,7 @@ from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
 from src.routes.helpers.tokenize_name import tokenize_name
 
 
-def add_appo_manually(
+def admin_add_appo(
     session, phone_num, name, employee_id, service_id, AOSOs, date, start, end, note
 ):
     # locking tables

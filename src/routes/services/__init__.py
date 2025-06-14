@@ -11,6 +11,8 @@ from .services.get_SEs import get_service_employees
 from .services.update_SEs import update_service_employees
 from .services.get_service_preview import get_service_preview
 from .services.get_AOSs import get_AOSs
+from .services.delete_service import delete_service
+
 from .durations.update_durations import update_durations
 
 from .categories.get_categories import get_categories
@@ -225,6 +227,21 @@ def get_duration_conflicts_(service_id):
 def get_service_ld_conflicts_(service_id):
     try:
         return get_last_date_conflicts(service_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/delete_service", methods=["POST"])
+def delete_service_():
+    try:
+        # read token:
+        session = read_token()
+        # read json from request
+        data = request.get_json()
+        service_id = data.get("service_id")
+
+        return delete_service(session, service_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)
