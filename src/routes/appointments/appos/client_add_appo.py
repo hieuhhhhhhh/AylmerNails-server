@@ -1,5 +1,6 @@
 import json
 from flask import jsonify
+from src.mysql.procedures.call_3D_proc import call_3D_proc
 from src.mysql.procedures.multi_call_3D_proc import multi_call_3D_proc
 from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
 from src.socketio import emit_booking
@@ -14,6 +15,9 @@ def client_add_appo(session, slots, date):
     # fetch day of week
     day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
 
+    # validate session and get contacts
+    booker_id, phone_num_id = call_3D_proc("sp_validate_client_booking", session)[0][0]
+
     # parse slots to procedure params
     for slot in slots:
         # unpack every slot
@@ -26,7 +30,8 @@ def client_add_appo(session, slots, date):
 
         # create, append param list
         params = [
-            session,
+            phone_num_id,
+            booker_id,
             empId,
             serviceId,
             AOSOs,
@@ -40,9 +45,6 @@ def client_add_appo(session, slots, date):
 
     # list of locking tables
     tables = [
-        "user_sessions us",
-        "unconfirmed_salts",
-        "authentication a",
         "durations",
         "services",
         "AOS_options ao",

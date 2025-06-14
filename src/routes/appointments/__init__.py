@@ -8,11 +8,12 @@ from .availability.write_daily_note import write_daily_note
 from .availability.get_daily_note import get_daily_note
 
 from .appos.client_add_appo import client_add_appo
+from .appos.guest_add_appo import guest_add_appo
+from .appos.admin_add_appo import admin_add_appo
 from .appos.get_daily_appos import get_daily_appos
 from .appos.get_appo_length import get_appo_length
 from .appos.get_appo_details import get_appo_details
 from .appos.update_appo import update_appo
-from .appos.admin_add_appo import admin_add_appo
 from .appos.write_appo_note import write_appo_note
 
 from .delete_appo.admin_remove_appo import admin_remove_appo
@@ -50,6 +51,24 @@ def client_add_appo_():
 
         # process input and return result
         return client_add_appo(session, slots, date)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/guest_add_appo", methods=["POST"])
+def guest_add_appo_():
+    try:
+        # read json from request
+        data = request.get_json()
+        code_id = data.get("code_id")
+        code = data.get("code")
+        slots = data.get("slots")
+        date = data.get("date")
+
+        # process input and return result
+        return guest_add_appo(code_id, code, slots, date)
 
     # catch unexpected error
     except Exception as e:

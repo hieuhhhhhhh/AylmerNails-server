@@ -1,8 +1,8 @@
 DROP PROCEDURE IF EXISTS sp_add_appo_by_DELA;
 
 CREATE PROCEDURE sp_add_appo_by_DELA(
-    IN _session JSON,
-    IN _phone_num VARCHAR(30),
+    IN _phone_num_id VARCHAR(30),
+    IN _booker_id INT UNSIGNED,
     IN _employee_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
     IN _selected_AOSO JSON,
@@ -14,25 +14,8 @@ CREATE PROCEDURE sp_add_appo_by_DELA(
 )
 BEGIN
     -- placeholders
-    DECLARE service_length_id_ INT UNSIGNED;
     DECLARE planned_length_ INT;
     DECLARE DELA_id_ INT UNSIGNED;
-    DECLARE phone_num_id_ INT UNSIGNED;
-    DECLARE booker_id_ INT UNSIGNED;
-
-    -- validate session token
-    CALL sp_validate_client(_session);
-
-    -- fetch booker_id from session
-    IF _session IS NOT NULL THEN
-        SET booker_id_ = fn_session_to_user_id(_session);    
-    END IF;
-
-    -- fetch phone number id
-    SELECT phone_num_id
-        INTO phone_num_id_
-        FROM phone_numbers 
-        WHERE value = _phone_num;
 
     -- calculate length from the given description
     SET planned_length_ = fn_calculate_duration(
@@ -78,14 +61,14 @@ BEGIN
         VALUES (
             _employee_id, 
             _service_id,
-            phone_num_id_,
+            _phone_num_id,
             _selected_AOSO,
             _date,
             _day_of_week,
             _start_time, 
             _start_time + planned_length_,
             _message,
-            booker_id_
+            _booker_id
         );
 
         -- save appointment's selected employees
