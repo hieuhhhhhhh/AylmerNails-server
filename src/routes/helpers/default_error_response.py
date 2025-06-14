@@ -29,6 +29,7 @@ def default_error_response(exception):
                 ),
                 status,
             )
+    print(exception)
 
     return (
         jsonify(

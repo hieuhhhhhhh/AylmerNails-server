@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS sp_validate_client_booking;
 
 CREATE PROCEDURE sp_validate_client_booking(
-    IN _session JSON,
+    IN _session JSON
 )
 BEGIN
     -- validate session token

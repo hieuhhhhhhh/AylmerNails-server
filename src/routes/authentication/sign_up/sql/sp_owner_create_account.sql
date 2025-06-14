@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_admin_create_account;
+DROP PROCEDURE IF EXISTS sp_owner_create_account;
 
-CREATE PROCEDURE sp_admin_create_account(
+CREATE PROCEDURE sp_owner_create_account(
     IN _session JSON,
     IN _phone_num VARCHAR(15),
     IN _hashed_password VARCHAR(60),
@@ -13,5 +13,5 @@ BEGIN
     CALL sp_validate_owner(_session);
 
     -- add user
-    CALL sp_add_user(_phone_num, _hashed_password, _first_name, _last_name, _name_tokens)
+    CALL sp_add_user(_phone_num, _hashed_password, _first_name, _last_name, _name_tokens);
 END;
