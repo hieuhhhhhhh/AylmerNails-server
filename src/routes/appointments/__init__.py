@@ -34,6 +34,7 @@ from .saved.get_saved_last_tracked import get_saved_last_tracked
 from .saved.save_unsave_appo import save_unsave_appo
 from .saved.unsave_all_appos import unsave_all_appos
 
+
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
 
@@ -62,13 +63,13 @@ def guest_add_appo_():
     try:
         # read json from request
         data = request.get_json()
-        code_id = data.get("code_id")
-        code = data.get("code")
+        otp_id = data.get("otp_id")
+        otp = data.get("otp")
         slots = data.get("slots")
         date = data.get("date")
 
         # process input and return result
-        return guest_add_appo(code_id, code, slots, date)
+        return guest_add_appo(otp_id, otp, slots, date)
 
     # catch unexpected error
     except Exception as e:

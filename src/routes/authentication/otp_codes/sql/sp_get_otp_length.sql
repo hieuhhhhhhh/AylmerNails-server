@@ -17,6 +17,11 @@ sp:BEGIN
         WHERE p.value = _phone_num;
 
     -- update length
+    IF role_ IN ('owner','admin') THEN 
+        SET length_ = 8;
+    END IF;
+
+    -- update length
     IF role_ IN ('client') THEN 
         SET length_ = 6;
     END IF;

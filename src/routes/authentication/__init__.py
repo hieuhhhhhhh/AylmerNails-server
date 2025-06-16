@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from .sign_up.request_sign_up import request_sign_up
 from .sign_up.sign_up import sign_up
+from .sign_up.owner_create_account import create_account
 from .login.log_in import log_in
 from .login.continue_session import continue_session
 from .logout.logout import logout
@@ -8,9 +9,24 @@ from .forgot_password.renew_password import renew_password
 from .forgot_password.request_forgot_password import request_forgot_password
 from src.routes.authentication.session.read_token import read_token
 from ..helpers.default_error_response import default_error_response
+from .otp_codes.request_code import request_otp_code
 
 # create blueprint (group of routes)
 authentication = Blueprint("authentication", __name__)
+
+
+@authentication.route("/request_otp", methods=["POST"])
+def request_otp():
+    try:
+        # read json from request
+        data = request.get_json()
+        phone_num = data.get("phone_num")
+
+        return request_otp_code(phone_num)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
 
 
 @authentication.route("/request_sign_up", methods=["POST"])
@@ -116,6 +132,28 @@ def renew_password_():
         return renew_password(
             code_id,
             code,
+            password,
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@authentication.route("/create_user", methods=["POST"])
+def create_user():
+    try:
+        # read json from request
+        data = request.get_json()
+        password = data.get("password")
+        phone_num = data.get("phone_num")
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+
+        return create_account(
+            first_name,
+            last_name,
+            phone_num,
             password,
         )
 

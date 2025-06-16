@@ -6,7 +6,7 @@ from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
 from src.socketio import emit_booking
 
 
-def guest_add_appo(code_id, code, slots, date):
+def guest_add_appo(otp_id, otp, slots, date):
     # params holder
     paramsList = []
 
@@ -17,7 +17,7 @@ def guest_add_appo(code_id, code, slots, date):
     day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
 
     # validate session and get contacts
-    phone_num_id = call_3D_proc("sp_validate_guest_booking", code_id, code)[0][0][0]
+    phone_num_id = call_3D_proc("sp_validate_guest_booking", otp_id, otp)[0][0][0]
     booker_id = None
 
     # parse slots to procedure params
