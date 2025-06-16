@@ -8,6 +8,7 @@ def is_otp_ready():
         raw_ip = request.headers.getlist("X-Forwarded-For")[0]
     else:
         raw_ip = request.remote_addr
+    print(raw_ip)
 
     # fetch wait values
     locked_tables = [
@@ -17,9 +18,6 @@ def is_otp_ready():
     wait_until, next_wait_until, now = call_3D_proc_with_lock(
         "sp_get_otp_rate_limit", locked_tables, raw_ip
     )[0][0]
-
-    print(wait_until)
-    print(now)
 
     # if it is ready, return true
     if wait_until > now:

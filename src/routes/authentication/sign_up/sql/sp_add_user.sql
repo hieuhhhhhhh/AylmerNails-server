@@ -34,4 +34,6 @@ BEGIN
     -- store tokens for new contact
     CALL sp_store_contact_tokens (phone_num_id_, _name_tokens);
 
+    -- return added user id
+    SELECT LAST_INSERT_ID();
 END;

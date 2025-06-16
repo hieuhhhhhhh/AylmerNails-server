@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_validate_admin;
+DROP PROCEDURE IF EXISTS sp_validate_owner;
 
-CREATE PROCEDURE sp_validate_admin(
+CREATE PROCEDURE sp_validate_owner(
     IN _session JSON
 )
 BEGIN

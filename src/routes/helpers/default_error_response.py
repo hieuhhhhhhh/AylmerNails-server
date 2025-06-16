@@ -12,7 +12,7 @@ def default_error_response(exception):
                     {
                         "error": str(exception),
                         "details": traceback.format_exc(),
-                        "message": "Access denied, please check your account privileges or log in again.",
+                        "message": "Request denied, please check your account privileges or log in again.",
                     }
                 ),
                 status,

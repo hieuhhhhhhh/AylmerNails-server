@@ -143,6 +143,9 @@ def renew_password_():
 @authentication.route("/create_user", methods=["POST"])
 def create_user():
     try:
+        # read token
+        session = read_token()
+
         # read json from request
         data = request.get_json()
         password = data.get("password")
@@ -151,10 +154,11 @@ def create_user():
         last_name = data.get("last_name")
 
         return create_account(
-            first_name,
-            last_name,
+            session,
             phone_num,
             password,
+            first_name,
+            last_name,
         )
 
     # catch unexpected error
