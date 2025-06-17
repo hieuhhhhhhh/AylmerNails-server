@@ -9,7 +9,10 @@ BEGIN
     CALL sp_validate_admin(_session);    
     
     -- delete record
-    DELETE employees
+    DELETE FROM employees
         WHERE employee_id = _employee_id
             AND last_date <= UNIX_TIMESTAMP();
+
+    -- return result
+    SELECT ROW_COUNT();
 END;
