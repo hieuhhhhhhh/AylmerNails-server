@@ -19,6 +19,16 @@ BEGIN
     IF _boolean THEN
         INSERT INTO blacklist (phone_num_id)    
             VALUES (phone_num_id_);
+        
+        -- log out everywhere
+        DELETE u
+            FROM user_sessions u
+                JOIN authentication a
+                    ON a.user_id = u.user_id
+                JOIN phone_numbers p
+                    ON p.phone_num_id = a.phone_num_id
+            WHERE p.value = _phone_num;
+
     ELSE
         DELETE FROM blacklist
             WHERE phone_num_id = phone_num_id_;

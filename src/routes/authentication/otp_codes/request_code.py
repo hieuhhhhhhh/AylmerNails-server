@@ -28,7 +28,10 @@ def request_otp_code(phone_num):
     #     return jsonify({"message": "Invalid phone number"}), 400
 
     # add code to db
-    code_id = call_3D_proc("sp_add_otp_code", phone_num, code, 3, 60 * 5)[0][0][0]
+    try:
+        code_id = call_3D_proc("sp_add_otp_code", phone_num, code, 3, 60 * 5)[0][0][0]
+    except Exception:
+        return jsonify({"message": "Restricted phone number"}), 403
 
     # return code id
     return jsonify({"code_id": code_id, "wait_time": wait_time}), 200

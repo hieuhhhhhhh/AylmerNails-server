@@ -49,7 +49,10 @@ def log_in(phone_number, password):
         token = hashids.encode(session_id, session_salt)
 
         # fetch log-in information
-        user_role = call_3D_proc("sp_get_login_info", user_id)[0][0][0]
+        try:
+            user_role = call_3D_proc("sp_get_login_info", user_id)[0][0][0]
+        except Exception:
+            return jsonify({"message": "Restricted phone number"}), 403
 
         return response_with_token(
             jsonify({"token": token, "user_role": user_role}), 200, token
