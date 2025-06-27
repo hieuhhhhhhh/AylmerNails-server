@@ -83,10 +83,11 @@ def log_in_():
         data = request.get_json()
         phone_num = data.get("phone_num")
         password = data.get("password")
+        remember_me = data.get("remember_me")
 
         print(phone_num)
 
-        return log_in(phone_num, password)
+        return log_in(phone_num, password, remember_me)
 
     # catch unexpected error
     except Exception as e:

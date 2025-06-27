@@ -18,7 +18,7 @@ def get_stored_pw(phone_number):
 
 
 # handle credentials from client side:
-def log_in(phone_number, password):
+def log_in(phone_number, password, remember_me):
     # validate login count
     count = call_3D_proc("sp_count_login_attempts", phone_number)[0][0][0]
     if count > 5:
@@ -42,7 +42,7 @@ def log_in(phone_number, password):
     if hashed and bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8")):
         # Generate session ID and salt
         session_id, session_salt = call_3D_proc(
-            "sp_add_session", user_id, SESSION_EXPIRY
+            "sp_add_session", user_id, SESSION_EXPIRY, remember_me
         )[0][0]
 
         # Encode session ID and salt to generate token
