@@ -17,7 +17,7 @@ BEGIN
 
     -- insert or delete row
     IF _boolean THEN
-        INSERT INTO blacklist (phone_num_id)    
+        INSERT IGNORE INTO blacklist (phone_num_id)    
             VALUES (phone_num_id_);
         
         -- log out everywhere
