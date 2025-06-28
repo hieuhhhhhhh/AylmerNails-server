@@ -12,7 +12,7 @@ BEGIN
     CALL sp_validate_admin(_session);
 
     -- return table: service details
-    SELECT s.service_id, s.name, s.description, s.first_date, s.last_date, s.duration, s.category_id, c.name
+    SELECT s.service_id, s.name, s.description, s.first_date, s.last_date, s.duration, s.category_id, c.name, s.price, s.client_can_book
         FROM services s 
             LEFT JOIN categories c
                 ON s.category_id = c.category_id

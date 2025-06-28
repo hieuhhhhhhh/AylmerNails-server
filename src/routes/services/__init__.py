@@ -61,6 +61,8 @@ def add_service_():
         duration = data.get("duration")
         AOSs = json.dumps(data.get("AOSs"))  # convert python list to json
         employee_ids = json.dumps(data.get("employee_ids"))
+        price = data.get("price")
+        client_can_book = data.get("client_can_book")
 
         return add_service(
             session,
@@ -71,6 +73,8 @@ def add_service_():
             duration,
             AOSs,
             employee_ids,
+            price,
+            client_can_book,
         )
 
     # catch unexpected error
@@ -91,9 +95,18 @@ def update_service_info_():
         description = data.get("description")
         category_id = data.get("category_id")
         last_date = data.get("last_date")
+        price = data.get("price")
+        client_can_book = data.get("client_can_book")
 
         return update_service_info(
-            session, service_id, name, description, category_id, last_date
+            session,
+            service_id,
+            name,
+            description,
+            category_id,
+            last_date,
+            price,
+            client_can_book,
         )
 
     # catch unexpected error
@@ -142,10 +155,10 @@ def get_service_details_(service_id):
         return default_error_response(e)
 
 
-@services.route("/get_service_preview/<int:service_id>/<int:date>", methods=["GET"])
-def get_service_preview_(service_id, date):
+@services.route("/get_service_preview/<int:service_id>", methods=["GET"])
+def get_service_preview_(service_id):
     try:
-        return get_service_preview(service_id, date)
+        return get_service_preview(service_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

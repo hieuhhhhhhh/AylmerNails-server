@@ -17,7 +17,7 @@ def get_service_details(session, service_id):
         jsonify(
             {
                 "info": info,
-                "info_def": "[service_id, name, description, first_date, last_date, duration, cate_id, cate_name]",
+                "info_def": "[service_id, name, description, first_date, last_date, duration, cate_id, cate_name, price, client_can_book]",
                 "durations": durations,
                 "durations_def": "[[emp_id, alias, duration],]",
                 "AOSs": AOSs,

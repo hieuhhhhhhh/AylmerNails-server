@@ -4,7 +4,16 @@ from src.routes.helpers.tokenize_name import tokenize_name
 
 
 def add_service(
-    session, name, category_id, description, date, duration, AOSs, employee_ids
+    session,
+    name,
+    category_id,
+    description,
+    date,
+    duration,
+    AOSs,
+    employee_ids,
+    price,
+    client_can_book,
 ):
     # tokenize the name of the new service
     sn_tokens = tokenize_name(name)
@@ -21,6 +30,8 @@ def add_service(
         duration,
         AOSs,
         employee_ids,
+        price,
+        client_can_book,
     )[0][0][0]
 
     return jsonify({"added_service_id": service_id}), 200

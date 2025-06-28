@@ -9,7 +9,9 @@ CREATE PROCEDURE sp_add_service(
     IN _date BIGINT,
     IN _duration INT,
     IN _AOSs JSON, -- JSON array of all AOSs (add-on services) for this service
-    IN _employee_ids JSON
+    IN _employee_ids JSON,
+    IN _price DECIMAL(10, 2),
+    IN _client_can_book BOOLEAN
 )
 sp:BEGIN
     -- iterator
@@ -23,9 +25,9 @@ sp:BEGIN
     -- validate session token
     CALL sp_validate_admin(_session);
 
-    -- create new service with duration_id
-    INSERT INTO services (name, description, category_id, first_date, duration)
-        VALUES (_name, _description, _category_id, _date, _duration);
+    -- add new service 
+    INSERT INTO services (name, description, category_id, first_date, duration, price, client_can_book)
+        VALUES (_name, _description, _category_id, _date, _duration, _price, _client_can_book);
 
     -- fetch id of new service
     SET service_id_ = LAST_INSERT_ID();
