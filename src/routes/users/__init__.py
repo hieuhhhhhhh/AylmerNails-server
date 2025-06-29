@@ -8,6 +8,7 @@ from .my_profile.get_my_profile import get_my_profile
 from .profiles.get_user_details import get_user_details
 from .profiles.search_users import search_users
 from .profiles.get_users_last_tracked import get_users_last_tracked
+from .profiles.update_user_role import update_user_role
 
 from .blacklist.get_blacklist_last_tracked import get_blacklist_last_tracked
 from .blacklist.search_blacklist import search_blacklist
@@ -154,6 +155,25 @@ def ban_unban_phone_number():
 
         # process input and return result
         return ban_unban_phone_num(session, phone_num, boolean)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@users.route("/update_user_role", methods=["POST"])
+def update_user_role_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        user_id = data.get("user_id")
+        role = data.get("role")
+
+        # process input and return result
+        return update_user_role(session, user_id, role)
 
     # catch unexpected error
     except Exception as e:
