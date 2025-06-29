@@ -5,6 +5,7 @@ from .sign_up.owner_create_account import create_account
 from .login.log_in import log_in
 from .login.continue_session import continue_session
 from .logout.logout import logout
+from .logout.logout_everywhere import logout_everywhere
 from .forgot_password.renew_password import renew_password
 from .forgot_password.request_forgot_password import request_forgot_password
 from .change_password.change_password import change_password
@@ -71,6 +72,19 @@ def log_out():
         session = read_token()
 
         return logout(session)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@authentication.route("/log_out_everywhere", methods=["GET"])
+def log_out_everywhere_():
+    try:
+        # read token
+        session = read_token()
+
+        return logout_everywhere(session)
 
     # catch unexpected error
     except Exception as e:
