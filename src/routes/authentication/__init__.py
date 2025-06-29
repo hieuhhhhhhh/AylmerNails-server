@@ -7,6 +7,7 @@ from .login.continue_session import continue_session
 from .logout.logout import logout
 from .forgot_password.renew_password import renew_password
 from .forgot_password.request_forgot_password import request_forgot_password
+from .change_password.change_password import change_password
 from src.routes.authentication.session.read_token import read_token
 from ..helpers.default_error_response import default_error_response
 from .otp_codes.request_code import request_otp_code
@@ -161,6 +162,24 @@ def create_user():
             first_name,
             last_name,
         )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@authentication.route("/change_password", methods=["POST"])
+def change_password_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        password = data.get("password")
+        new_password = data.get("new_password")
+
+        return change_password(session, password, new_password)
 
     # catch unexpected error
     except Exception as e:

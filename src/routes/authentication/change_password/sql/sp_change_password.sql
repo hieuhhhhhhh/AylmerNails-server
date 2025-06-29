@@ -1,21 +1,17 @@
-DROP PROCEDURE IF EXISTS sp_renew_password;
+DROP PROCEDURE IF EXISTS sp_change_password;
 
-CREATE PROCEDURE sp_renew_password(
-    IN _phone_num VARCHAR(30),
-    IN _password VARCHAR(60)
+CREATE PROCEDURE sp_change_password(
+    IN _session JSON,
+    IN _new_password VARCHAR(60)
 )
 BEGIN
-    UPDATE authentication a
-        JOIN phone_numbers p
-            ON a.phone_num_id = p.phone_num_id
-        SET a.hashed_password = _password
-        WHERE p.value = _phone_num;
+    -- update password by user id
+    UPDATE authentication 
+        SET hashed_password = _new_password
+        WHERE user_id = fn_session_to_user_id(_session);
 
-    DELETE l
-        FROM login_attempts l
-            JOIN authentication a
-                ON l.user_id = a.user_id
-            JOIN phone_numbers p
-                ON a.phone_num_id = p.phone_num_id
-        WHERE p.value = _phone_num;
+    IF ROW_COUNT() = 0 THEN        
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '400, Invalid session token';
+    END IF;
 END;
