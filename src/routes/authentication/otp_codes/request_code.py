@@ -11,7 +11,7 @@ def request_otp_code(phone_num):
     # if not ready, return 400
     if is_ready != True:
         return (
-            jsonify({"message": f"Please wait {wait_time} seconds to resend code"}),
+            jsonify({"message": f"Please wait {wait_time} seconds to request code"}),
             400,
         )
 

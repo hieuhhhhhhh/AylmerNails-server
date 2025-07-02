@@ -1,23 +1,31 @@
 DROP PROCEDURE IF EXISTS sp_validate_guest_booking;
 
 CREATE PROCEDURE sp_validate_guest_booking(
-    IN _code_id INT UNSIGNED,
-    IN _code VARCHAR(20)
+    IN _code_id INT UNSIGNED
 )
 BEGIN
-    -- return phone_num_id from otp
-    SELECT phone_num_id
-        FROM otp_codes o
-            JOIN phone_numbers p
-                ON p.value = o.phone_num
-        WHERE o.code_id = _code_id 
-            AND o.created_at + o.duration >= UNIX_TIMESTAMP() -- not expired
-            AND o.attempts_left > 0 -- still available
-            AND o.value = _code; -- correct code
+    -- variables
+    DECLARE code_ VARCHAR(20);
+    DECLARE phone_num_ VARCHAR(30);
+    DECLARE phone_num_id_ INT UNSIGNED;
+    
+    -- fetch the associated phone num
+    SELECT phone_num, value
+        INTO phone_num_, code_
+        FROM otp_codes 
+        WHERE code_id = _code_id 
+            AND created_at + duration >= UNIX_TIMESTAMP() -- not expired
+            AND attempts_left > 0; -- still available
+    
+    -- fetch phone num id
+    CALL sp_get_phone_num_id (phone_num_, phone_num_id_);
 
     -- decrease the attempts
     UPDATE otp_codes
         SET attempts_left = attempts_left - 1
         WHERE code_id = _code_id;
+
+    -- return details
+    SELECT code_, phone_num_id_;
 END;
 

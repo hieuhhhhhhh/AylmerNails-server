@@ -17,10 +17,15 @@ def guest_add_appo(otp_id, otp, slots, date):
     day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
 
     # validate session and get contacts
-    phone_num_id = call_3D_proc("sp_validate_guest_booking", otp_id, otp)[0][0][0]
-    booker_id = None
+    res = call_3D_proc("sp_validate_guest_booking", otp_id)
+    true_otp, phone_num_id = res[0][0]
+    if true_otp is None:
+        return jsonify({"message": "Code has expired, please request a new one"}), 400
+    if true_otp != otp:
+        return jsonify({"message": "Incorrect code, please try again"}), 400
 
     # parse slots to procedure params
+    booker_id = None
     for slot in slots:
         # unpack every slot
         empId = slot.get("empId")
