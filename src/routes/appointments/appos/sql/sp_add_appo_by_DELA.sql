@@ -58,9 +58,10 @@ BEGIN
                 AND slot = _start_time
     ) 
     THEN 
-        -- remove the used DELA (after a write that DELAs will be invalid)
-        DELETE FROM DELAs
-            WHERE DELA_id = DELA_id_;
+        -- remove the used DELA (a DELA is for one time use)
+        DELETE FROM DELA_slots
+            WHERE DELA_id = DELA_id_
+                AND slot = _start_time;
 
         -- if the start time matches a DELA slot, add the new appointment
         INSERT INTO appo_details (
@@ -92,7 +93,7 @@ BEGIN
         CALL sp_save_appo_employees(LAST_INSERT_ID(), _selected_emps);
 
         -- Return the ID of the newly inserted appointment
-        SELECT LAST_INSERT_ID() AS new_appo_id;
+        SELECT LAST_INSERT_ID() AS new_appo_id, DELA_id_;
 
         -- create new notification
         INSERT INTO appo_notifications (appo_id)
