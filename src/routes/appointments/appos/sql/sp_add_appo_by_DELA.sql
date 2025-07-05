@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS sp_add_appo_by_DELA;
 
 CREATE PROCEDURE sp_add_appo_by_DELA(
-    IN _phone_num_id VARCHAR(30),
+    IN _phone_num_id INT UNSIGNED,
     IN _booker_id INT UNSIGNED,
     IN _employee_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
@@ -16,6 +16,23 @@ BEGIN
     -- placeholders
     DECLARE planned_length_ INT;
     DECLARE DELA_id_ INT UNSIGNED;
+
+    -- validate add appo rate limit
+    IF (
+        SELECT COUNT(*) 
+            FROM appo_notifications 
+                JOIN appo_details 
+                    ON appo_notifications.appo_id = appo_details.appo_id
+                LEFT JOIN authentication
+                    ON authentication.phone_num_id = appo_details.phone_num_id
+            WHERE (role NOT IN ('admin', 'owner') OR role IS NULL)
+                AND appo_details.phone_num_id = _phone_num_id
+                AND appo_notifications.time >= UNIX_TIMESTAMP() - 24*60*60
+    ) > 3
+    THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Maximun appointments reached today. Please try again next time';
+    END IF;
 
     -- calculate length from the given description
     SET planned_length_ = fn_calculate_duration(
@@ -84,7 +101,7 @@ BEGIN
     ELSE
         -- if description not matches any DELA slot, return exception
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = '400, not in DELA';
+            SET MESSAGE_TEXT = 'The selected time is no longer available, please refresh page and try again';
     END IF;
 
 END;

@@ -4,6 +4,7 @@ from src.mysql.procedures.call_3D_proc import call_3D_proc
 from src.mysql.procedures.multi_call_3D_proc import multi_call_3D_proc
 from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
 from src.socketio import emit_booking
+from mysql.connector import Error
 
 
 def guest_add_appo(otp_id, otp, slots, date):
@@ -61,15 +62,29 @@ def guest_add_appo(otp_id, otp, slots, date):
         "appo_details",
         "appo_employees",
         "appo_notifications",
+        "authentication",
     ]
 
     # start calling procedure
-    res = multi_call_3D_proc("sp_add_appo_by_DELA", tables, paramsList)
+    try:
+        res = multi_call_3D_proc("sp_add_appo_by_DELA", tables, paramsList)
+    except Error as e:
+        if e.errno == 1644:
+            return (
+                jsonify({"message": e.msg}),
+                400,
+            )
 
     # read result
     for table in res:
         appo_id = table[0][0][0]
         appo_ids.append(appo_id)
+
+    # clean up otp code
+    call_3D_proc(
+        "sp_remove_otp_code",
+        otp_id,
+    )
 
     # push notification to some clients
     emit_booking()

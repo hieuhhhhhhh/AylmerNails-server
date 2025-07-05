@@ -1,6 +1,6 @@
 import re
 from flask import jsonify
-from ..otp_codes.request_code import request_otp_code
+from ..otp_codes.request_otp_code import request_otp_code
 from src.mysql.procedures.call_3D_proc import call_3D_proc
 
 

@@ -11,7 +11,7 @@ from .forgot_password.request_forgot_password import request_forgot_password
 from .change_password.change_password import change_password
 from src.routes.authentication.session.read_token import read_token
 from ..helpers.default_error_response import default_error_response
-from .otp_codes.request_code import request_otp_code
+from .otp_codes.request_otp_code import request_otp_code
 
 # create blueprint (group of routes)
 authentication = Blueprint("authentication", __name__)

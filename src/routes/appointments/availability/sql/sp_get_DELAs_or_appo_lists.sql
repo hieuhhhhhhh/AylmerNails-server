@@ -54,8 +54,7 @@ BEGIN
             DELETE FROM DELAs
                 WHERE date = _date
                     AND employee_id = employee_id_
-                    AND planned_length = planned_length_
-                LIMIT 1;
+                    AND planned_length = planned_length_;
 
             -- create new DELA_id from this employee_id & date & length
             INSERT INTO DELAs(date, employee_id, planned_length)
@@ -74,26 +73,25 @@ BEGIN
                         FROM appo_details 
                         WHERE date = _date 
                             AND employee_id = employee_id_
-                        ORDER BY start_time
             )
-                SELECT 
+            SELECT 
                     NULL AS c1,
                     NULL AS c2,
                     fn_get_stored_intervals(employee_id_) AS c3,                    
                     fn_get_interval_percent(employee_id_) AS c4,
                     planned_length_ AS c5,
                     DELA_id_ AS c6
-            UNION ALL
-                SELECT 
-                    opening_time_ AS c1,
-                    closing_time_ AS c2,
-                    NULL AS c3,
-                    NULL AS c4,
-                    NULL AS c5,
-                    NULL AS c6
-            UNION ALL
-                SELECT * FROM sorted_appos;
-           
+                UNION ALL
+                    SELECT 
+                        opening_time_ AS c1,
+                        closing_time_ AS c2,
+                        NULL AS c3,
+                        NULL AS c4,
+                        NULL AS c5,
+                        NULL AS c6
+                UNION ALL
+                    SELECT * FROM sorted_appos
+                        ORDER BY c1;
         END IF;
 
         -- clean up temporary table
