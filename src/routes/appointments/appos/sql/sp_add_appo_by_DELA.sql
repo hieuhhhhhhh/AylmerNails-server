@@ -56,8 +56,14 @@ BEGIN
             FROM DELA_slots
             WHERE DELA_id = DELA_id_
                 AND slot = _start_time
-    ) 
-    THEN 
+    ) OR EXISTS (
+        SELECT 1
+            FROM appo_details
+            WHERE date = _date
+                AND employee_id = _employee_id
+                AND end_time = _start_time
+    )
+    THEN
         -- remove the used DELA (a DELA is for one time use)
         DELETE FROM DELA_slots
             WHERE DELA_id = DELA_id_
