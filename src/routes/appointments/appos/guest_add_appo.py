@@ -9,11 +9,10 @@ from mysql.connector import Error
 
 def guest_add_appo(otp_id, otp, slots, date):
     # params holder
-    paramsList = []
+    param_list = []
 
     # result holder
     appo_ids = []
-    DELA_ids = []
 
     # fetch day of week
     day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
@@ -50,7 +49,7 @@ def guest_add_appo(otp_id, otp, slots, date):
             selected_emps,
             message,
         ]
-        paramsList.append(params)
+        param_list.append(params)
 
     # list of locking tables
     tables = [
@@ -68,7 +67,7 @@ def guest_add_appo(otp_id, otp, slots, date):
 
     # start calling procedure
     try:
-        res = multi_call_3D_proc("sp_add_appo_by_DELA", tables, paramsList)
+        res = multi_call_3D_proc("sp_add_appo_by_DELA", tables, param_list)
     except Error as e:
         if e.errno == 1644:
             return (
@@ -79,13 +78,16 @@ def guest_add_appo(otp_id, otp, slots, date):
     # read result
     for table in res:
         appo_id = table[0][0][0]
-        DELA_id = table[0][0][1]
 
         appo_ids.append(appo_id)
-        DELA_ids.append(DELA_id)
 
     # remove used DELAs
-    multi_call_3D_proc("sp_remove_used_DELA", ["DELAs", "DELA_slots"], DELA_ids)
+    # remove used DELAs
+    multi_call_3D_proc(
+        "sp_remove_expired_DELAs",
+        ["appo_details ad", "DELAs d", "DELA_slots"],
+        [[id] for id in appo_ids],
+    )
 
     # clean up otp code
     call_3D_proc(

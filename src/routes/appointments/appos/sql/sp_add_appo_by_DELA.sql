@@ -93,7 +93,7 @@ BEGIN
         CALL sp_save_appo_employees(LAST_INSERT_ID(), _selected_emps);
 
         -- Return the ID of the newly inserted appointment
-        SELECT LAST_INSERT_ID() AS new_appo_id, DELA_id_;
+        SELECT LAST_INSERT_ID() AS new_appo_id;
 
         -- create new notification
         INSERT INTO appo_notifications (appo_id)

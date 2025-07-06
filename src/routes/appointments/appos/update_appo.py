@@ -31,6 +31,9 @@ def update_appo(
         "appo_employees",
         "opening_hours oh",
         "schedules s",
+        "DELAs d",
+        "appo_details ad",
+        "DELA_slots",
     ]
 
     # tokenize client's name

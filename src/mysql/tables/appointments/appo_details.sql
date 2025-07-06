@@ -40,3 +40,7 @@ CREATE INDEX idx_date_employee_id_start_time ON appo_details(date, employee_id, 
 -- index on date -> employee_id -> end_time
 CREATE INDEX idx_date_employee_id_end_time ON appo_details(date, employee_id, end_time);
 
+-- TRIGGERS
+
+
+

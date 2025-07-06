@@ -19,6 +19,9 @@ def admin_add_appo(
         "opening_hours oh",
         "schedules s",
         "appo_notes",
+        "DELAs d",
+        "appo_details ad",
+        "DELA_slots",
     ]
 
     # tokenize client's name
@@ -77,5 +80,7 @@ def admin_add_appo(
             400,
         )
 
+    # if succeeded
+    # return appo id
     appo_id = res[2][0]
     return jsonify({"appo_id": appo_id}), 200

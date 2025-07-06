@@ -77,11 +77,14 @@ sp:BEGIN
     INSERT INTO appo_details (employee_id, service_id, phone_num_id, selected_AOSO, date, day_of_week, start_time, end_time, booker_id)
         VALUES (_emp_id, _service_id, phone_num_id_, _AOSOs, _date, _day_of_week, _start, _end, booker_id_);
 
-    -- return created appo_id
-    SELECT LAST_INSERT_ID();
-
     -- store appointment's note
     INSERT INTO appo_notes (appo_id, note)
         VALUES (LAST_INSERT_ID(), _note);
+
+    -- reset DELAs
+    CALL sp_remove_expired_DELAs(LAST_INSERT_ID());
+
+    -- return created appo_id
+    SELECT LAST_INSERT_ID();
 END;
 

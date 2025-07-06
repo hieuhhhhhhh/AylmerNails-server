@@ -9,10 +9,10 @@ from mysql.connector import Error
 
 def client_add_appo(session, slots, date):
     # params holder
-    paramsList = []
+    param_list = []
+
     # result holder
     appo_ids = []
-    DELA_ids = []
 
     # fetch day of week
     day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
@@ -43,7 +43,7 @@ def client_add_appo(session, slots, date):
             selected_emps,
             message,
         ]
-        paramsList.append(params)
+        param_list.append(params)
 
     # list of locking tables
     tables = [
@@ -61,7 +61,7 @@ def client_add_appo(session, slots, date):
 
     # start calling procedure
     try:
-        res = multi_call_3D_proc("sp_add_appo_by_DELA", tables, paramsList)
+        res = multi_call_3D_proc("sp_add_appo_by_DELA", tables, param_list)
     except Error as e:
         if e.errno == 1644:
             return (
@@ -71,13 +71,15 @@ def client_add_appo(session, slots, date):
     # read result
     for table in res:
         appo_id = table[0][0][0]
-        DELA_id = table[0][0][1]
 
         appo_ids.append(appo_id)
-        DELA_ids.append([DELA_id])
 
     # remove used DELAs
-    multi_call_3D_proc("sp_remove_used_DELA", ["DELAs", "DELA_slots"], DELA_ids)
+    multi_call_3D_proc(
+        "sp_remove_expired_DELAs",
+        ["appo_details ad", "DELAs d", "DELA_slots"],
+        [[id] for id in appo_ids],
+    )
 
     # push notification to some clients
     emit_booking()

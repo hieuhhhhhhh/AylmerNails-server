@@ -6,7 +6,12 @@ CREATE PROCEDURE sp_update_contact(
     IN _name_tokens JSON,
     OUT _phone_num_id INT UNSIGNED
 )
-BEGIN
+sp:BEGIN
+    IF _phone_num IS NULL OR _phone_num = '' THEN
+        LEAVE sp;
+    END IF;
+
+
     -- get phone number id
     CALL sp_get_phone_num_id (_phone_num, _phone_num_id);
 

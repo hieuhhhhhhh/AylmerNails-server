@@ -8,7 +8,6 @@ def create_appointments_appos_sps():
     exe_queries(__file__, "sp_add_appo_manually.sql")
     exe_queries(__file__, "sp_get_appo_details.sql")
     exe_queries(__file__, "sp_get_daily_appos.sql")
-    exe_queries(__file__, "sp_remove_used_DELA.sql")
     exe_queries(__file__, "sp_save_appo_employees.sql")
     exe_queries(__file__, "sp_update_appo.sql")
     exe_queries(__file__, "sp_validate_client_booking.sql")

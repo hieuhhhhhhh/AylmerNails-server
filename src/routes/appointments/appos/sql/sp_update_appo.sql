@@ -36,6 +36,9 @@ sp:BEGIN
     -- update contact 
     CALL sp_update_contact (_phone_num, _name, _name_tokens, phone_num_id_);
 
+    -- reset DELAs
+    CALL sp_remove_expired_DELAs(_appo_id);
+
     -- remove last appointment
     DELETE FROM appo_details
         WHERE appo_id = _appo_id;
@@ -87,6 +90,9 @@ sp:BEGIN
 
     -- save appointment's selected employees
     CALL sp_save_appo_employees(LAST_INSERT_ID(), _selected_emps);
+
+    -- reset DELAs
+    CALL sp_remove_expired_DELAs(LAST_INSERT_ID());
 
     -- return created appo_id
     SELECT LAST_INSERT_ID();
