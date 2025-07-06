@@ -74,13 +74,6 @@ def client_add_appo(session, slots, date):
 
         appo_ids.append(appo_id)
 
-    # remove used DELAs
-    multi_call_3D_proc(
-        "sp_remove_expired_DELAs",
-        ["appo_details ad", "DELAs d", "DELA_slots"],
-        [[id] for id in appo_ids],
-    )
-
     # push notification to some clients
     emit_booking()
 

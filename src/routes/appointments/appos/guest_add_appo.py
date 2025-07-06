@@ -81,14 +81,6 @@ def guest_add_appo(otp_id, otp, slots, date):
 
         appo_ids.append(appo_id)
 
-    # remove used DELAs
-    # remove used DELAs
-    multi_call_3D_proc(
-        "sp_remove_expired_DELAs",
-        ["appo_details ad", "DELAs d", "DELA_slots"],
-        [[id] for id in appo_ids],
-    )
-
     # clean up otp code
     call_3D_proc(
         "sp_remove_otp_code",

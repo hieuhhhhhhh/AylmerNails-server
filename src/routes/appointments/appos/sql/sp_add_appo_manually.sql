@@ -81,8 +81,6 @@ sp:BEGIN
     INSERT INTO appo_notes (appo_id, note)
         VALUES (LAST_INSERT_ID(), _note);
 
-    -- reset DELAs
-    CALL sp_remove_expired_DELAs(LAST_INSERT_ID());
 
     -- return created appo_id
     SELECT LAST_INSERT_ID();

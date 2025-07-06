@@ -19,9 +19,6 @@ def admin_add_appo(
         "opening_hours oh",
         "schedules s",
         "appo_notes",
-        "DELAs d",
-        "appo_details ad",
-        "DELA_slots",
     ]
 
     # tokenize client's name
