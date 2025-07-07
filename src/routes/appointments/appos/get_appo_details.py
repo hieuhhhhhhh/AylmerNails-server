@@ -14,7 +14,7 @@ def get_appo_details(session, appo_id):
         jsonify(
             {
                 "appo_details": appo_details,
-                "list_def": "appoId, empId, serviceId, AOSOs, date, day_of_week, start, end, message, note, color, empAlias, serviceName, cateName, userId, savedOn",
+                "list_def": "appoId, empId, serviceId, AOSOs, date, start, end, message, note, color, empName, serviceName, catename, phoneNumId, phoneNum, userId, contactName, savedOn, bookerId, bookerName",
                 "appo_emps": appo_emps,
                 "appo_emps_def": "[[empId, empAlias],]",
                 "AOSOs": AOSOs,

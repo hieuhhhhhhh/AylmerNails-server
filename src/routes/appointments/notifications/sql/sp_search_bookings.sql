@@ -10,7 +10,7 @@ BEGIN
     CALL sp_validate_admin(_session);
 
     -- return appointment notifications with limit
-    SELECT an.appo_id, an.time, ad.employee_id, e.alias, c.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, p.first_name, p.last_name, ad.date, ad.start_time, ad.end_time
+    SELECT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, ad.date, ad.start_time, ad.end_time
         FROM appo_notifications an
             LEFT JOIN appo_details ad
                 ON ad.appo_id = an.appo_id
@@ -22,15 +22,14 @@ BEGIN
                 ON ca.category_id = s.category_id
             LEFT JOIN employees e
                 ON e.employee_id = ad.employee_id
-            LEFT JOIN colors c
-                ON c.color_id = e.color_id
-            LEFT JOIN authentication a
-                ON a.phone_num_id = ad.phone_num_id
-            LEFT JOIN profiles p
-                ON p.user_id = a.user_id
+            LEFT JOIN colors cl
+                ON cl.color_id = e.color_id
+            LEFT JOIN contacts c
+                ON c.phone_num_id = ad.phone_num_id
+            LEFT JOIN contact_tokens ct
+                ON ct.phone_num_id = ad.phone_num_id
         WHERE pn.value LIKE CONCAT('%', _query , '%')
-            OR p.first_name LIKE CONCAT(_query , '%')
-            OR p.last_name LIKE CONCAT(_query , '%')        
+            OR ct.token LIKE CONCAT(_query , '%')
         ORDER BY time DESC
         LIMIT _limit;
 END;

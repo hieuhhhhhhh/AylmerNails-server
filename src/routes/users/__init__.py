@@ -3,7 +3,6 @@ from flask import Blueprint, request
 from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
 from .my_profile.update_my_profile import update_my_profile
-from src.routes.appointments.notifications.get_users import get_users
 from .my_profile.get_my_profile import get_my_profile
 from .profiles.get_user_details import get_user_details
 from .profiles.search_users import search_users
@@ -57,20 +56,6 @@ def update_my_profile_():
 
         # return service list
         return update_my_profile(session, first_name, last_name)
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@users.route("/get_users/<limit>", methods=["GET"])
-def get_users_(limit):
-    try:
-        # read token
-        session = read_token()
-
-        # process input and return result
-        return get_users(session, limit)
-
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

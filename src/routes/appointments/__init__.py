@@ -22,8 +22,6 @@ from .delete_appo.cancel_appo import cancel_appo
 from .contacts.search_contacts import search_contacts
 from .contacts.update_contact import update_contact
 
-from .notifications.get_notifications import get_notifications
-from .notifications.get_canceled_appos import get_canceled_appos
 from .notifications.search_bookings import search_bookings
 from .notifications.get_bookings_last_tracked import get_bookings_last_tracked
 from .notifications.search_canceled_appos import search_canceled_appos
@@ -67,9 +65,10 @@ def guest_add_appo_():
         otp = data.get("otp")
         slots = data.get("slots")
         date = data.get("date")
+        name = data.get("name")
 
         # process input and return result
-        return guest_add_appo(otp_id, otp, slots, date)
+        return guest_add_appo(otp_id, otp, slots, date, name)
 
     # catch unexpected error
     except Exception as e:
@@ -291,34 +290,6 @@ def cancel_appointment():
 
         # process input and return result
         return cancel_appo(session, appo_id)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/get_notifications/<limit>", methods=["GET"])
-def get_notifications_(limit):
-    try:
-        # read token
-        session = read_token()
-
-        # process input and return result
-        return get_notifications(session, limit)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/get_canceled_appointments/<limit>", methods=["GET"])
-def get_canceled_appointments(limit):
-    try:
-        # read token
-        session = read_token()
-
-        # process input and return result
-        return get_canceled_appos(session, limit)
 
     # catch unexpected error
     except Exception as e:
