@@ -5,6 +5,8 @@ def create_tables():
     print("\033[94m" + "create_tables" + "\033[0m")
 
     exe_queries(__file__, "authentication/phone_numbers.sql")
+    exe_queries(__file__, "authentication/sp_add_phone_num_tokens.sql")
+    exe_queries(__file__, "authentication/phone_num_tokens.sql")
     exe_queries(__file__, "authentication/authentication.sql")
     exe_queries(__file__, "authentication/login_attempts.sql")
     exe_queries(__file__, "authentication/otp_codes.sql")
