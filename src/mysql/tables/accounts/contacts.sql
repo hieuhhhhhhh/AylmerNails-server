@@ -9,8 +9,21 @@ CREATE TABLE contacts (
 -- index on time
 CREATE INDEX idx_time ON contacts (time);
 
--- some default phone numbers
-INSERT INTO aylmer_nails.contacts (phone_num_id, name)
-    VALUES
-        (1,'Henry Duong');
-        
+
+-- TRIGGERS
+CREATE TRIGGER after_contacts_insert
+    AFTER INSERT ON contacts
+    FOR EACH ROW
+    BEGIN
+        CALL sp_update_name_tokens(NEW.phone_num_id);
+    END;
+
+
+CREATE TRIGGER after_contacts_update
+    AFTER UPDATE ON contacts
+    FOR EACH ROW
+    BEGIN
+        CALL sp_update_name_tokens(NEW.phone_num_id);
+    END;
+
+

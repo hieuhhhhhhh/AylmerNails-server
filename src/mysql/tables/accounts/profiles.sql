@@ -14,9 +14,40 @@ CREATE INDEX idx_first_name ON profiles (first_name);
 CREATE INDEX idx_last_name ON profiles (last_name);
 
 
--- some default phone numbers
-INSERT INTO aylmer_nails.profiles (user_id, first_name, last_name)
-    VALUES
-        (1,'Henry', 'Duong');
-        
+-- TRIGGERS
+CREATE TRIGGER after_profiles_insert
+    AFTER INSERT ON profiles
+    FOR EACH ROW
+    BEGIN
+        -- variables 
+        DECLARE phone_num_id_ INT UNSIGNED;
+    
+        -- fetch phone num id
+        SELECT phone_num_id
+            INTO phone_num_id_
+            FROM authentication a
+            WHERE a.user_id = NEW.user_id;
+
+        -- recreate tokens
+        CALL sp_update_name_tokens(phone_num_id_);
+    END;
+
+
+CREATE TRIGGER after_profiles_update
+    AFTER UPDATE ON profiles
+    FOR EACH ROW
+    BEGIN
+        -- variables 
+        DECLARE phone_num_id_ INT UNSIGNED;
+    
+        -- fetch phone num id
+        SELECT phone_num_id
+            INTO phone_num_id_
+            FROM authentication a
+            WHERE a.user_id = NEW.user_id;
+
+        -- recreate tokens
+        CALL sp_update_name_tokens(phone_num_id_);
+    END;
+
 
