@@ -3,8 +3,7 @@ CREATE TABLE phone_numbers (
     value VARCHAR(30) UNIQUE NOT NULL
 );
 
--- unique index on value
-CREATE INDEX idx_phone_num ON phone_numbers (value);
+-- unique index on value (already has)
 
 -- TRIGGERS
 CREATE TRIGGER after_phone_nums_insert
