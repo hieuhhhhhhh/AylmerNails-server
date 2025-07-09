@@ -4,7 +4,7 @@ from src.routes.helpers.normalize_and_define_query import normalize_and_define_q
 
 
 def search_bookings(session, query, limit):
-    # sanitize
+    # normalize
     type, query = normalize_and_define_query(query)
 
     # call mysql proc to process data

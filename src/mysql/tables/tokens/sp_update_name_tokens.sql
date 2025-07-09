@@ -44,7 +44,7 @@ sp:BEGIN
     -- tokenize
     WHILE CHAR_LENGTH(right_) > 0 DO 
         -- fetch token
-        SET i = LOCATE(' ', _name);
+        SET i = LOCATE(' ', right_);
         
         -- if no space i is last index
         IF i = 0 THEN

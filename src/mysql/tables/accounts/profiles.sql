@@ -9,11 +9,6 @@ CREATE TABLE profiles (
         ON DELETE CASCADE
 );
 
--- index on first and last name
-CREATE INDEX idx_first_name ON profiles (first_name);
-CREATE INDEX idx_last_name ON profiles (last_name);
-
-
 -- TRIGGERS
 CREATE TRIGGER after_profiles_insert
     AFTER INSERT ON profiles

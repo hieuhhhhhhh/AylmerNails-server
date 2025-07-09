@@ -365,13 +365,16 @@ def get_canceled_last_tracked_():
 @appointments.route("/search_saved_appointments", methods=["POST"])
 def search_saved_appointments():
     try:
+        # read token
+        session = read_token()
+
         # read json
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_saved_appos(query, limit)
+        return search_saved_appos(session, query, limit)
 
     # catch unexpected error
     except Exception as e:

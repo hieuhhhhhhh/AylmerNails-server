@@ -14,6 +14,30 @@ BEGIN
     CALL sp_validate_admin(_session);
 
     -- return appointment notifications with limit
+    IF _type = "empty" THEN
+        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, ad.date, ad.start_time, ad.end_time
+            FROM appo_notifications an
+                LEFT JOIN appo_details ad
+                    ON ad.appo_id = an.appo_id
+                LEFT JOIN phone_numbers pn
+                    ON pn.phone_num_id = ad.phone_num_id
+                LEFT JOIN phone_num_tokens pt
+                    ON pt.phone_num_id = ad.phone_num_id
+                LEFT JOIN services s
+                    ON s.service_id = ad.service_id
+                LEFT JOIN categories ca
+                    ON ca.category_id = s.category_id
+                LEFT JOIN employees e
+                    ON e.employee_id = ad.employee_id
+                LEFT JOIN colors cl
+                    ON cl.color_id = e.color_id
+                LEFT JOIN contacts c
+                    ON c.phone_num_id = ad.phone_num_id
+            ORDER BY an.time DESC
+            LIMIT _limit;
+    END IF;
+
+    -- return appointment notifications with limit
     IF _type = "phone number" THEN
         SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, ad.date, ad.start_time, ad.end_time
             FROM appo_notifications an
