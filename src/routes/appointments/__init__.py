@@ -213,28 +213,19 @@ def update_appointment():
         return default_error_response(e)
 
 
-@appointments.route("/search_contacts/<query>", methods=["GET"])
-def search_contacts_(query):
+@appointments.route("/search_contacts", methods=["POST"])
+def search_contacts_():
     try:
         # read token
         session = read_token()
 
-        # process input and return result
-        return search_contacts(session, query)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/search_contacts", methods=["GET"])
-def search_contacts_no_query():
-    try:
-        # read token
-        session = read_token()
+        # read json
+        data = request.get_json()
+        query = data.get("query")
+        limit = data.get("limit")
 
         # process input and return result
-        return search_contacts(session, "")
+        return search_contacts(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
