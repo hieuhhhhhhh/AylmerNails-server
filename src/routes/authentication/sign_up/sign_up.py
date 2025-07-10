@@ -2,7 +2,6 @@ import re
 from flask import jsonify
 import bcrypt  # Import bcrypt for password hashing
 from src.mysql.procedures.call_3D_proc import call_3D_proc
-from src.routes.helpers.tokenize_name import tokenize_name
 from src.socketio import emit_signing_up
 
 
@@ -47,11 +46,8 @@ def sign_up(code_id, code, password, first_name, last_name):
     # encrypt password
     hashed = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
-    # tokenize name
-    name_tokens = tokenize_name(first_name + " " + last_name)
-
     #  create new account
-    call_3D_proc("sp_add_user", phone_num, hashed, first_name, last_name, name_tokens)
+    call_3D_proc("sp_add_user", phone_num, hashed, first_name, last_name)
 
     # push notification
     emit_signing_up()

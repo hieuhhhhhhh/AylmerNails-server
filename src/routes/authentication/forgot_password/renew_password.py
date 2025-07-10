@@ -2,7 +2,6 @@ import re
 from flask import jsonify
 import bcrypt  # Import bcrypt for password hashing
 from src.mysql.procedures.call_3D_proc import call_3D_proc
-from src.routes.helpers.tokenize_name import tokenize_name
 
 
 def renew_password(code_id, code, password):

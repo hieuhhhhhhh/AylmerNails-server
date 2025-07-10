@@ -5,7 +5,6 @@ from src.mysql.procedures.multi_call_3D_proc import multi_call_3D_proc
 from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
 from src.socketio import emit_booking
 from mysql.connector import Error
-from src.routes.helpers.tokenize_name import tokenize_name
 
 
 def guest_add_appo(otp_id, otp, slots, date, name):
@@ -18,11 +17,8 @@ def guest_add_appo(otp_id, otp, slots, date, name):
     # fetch day of week
     day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
 
-    # tokenize names
-    tokens = tokenize_name(name)
-
     # validate session and get contacts
-    res = call_3D_proc("sp_validate_guest_booking", otp_id, name, tokens)
+    res = call_3D_proc("sp_validate_guest_booking", otp_id, name)
     true_otp, phone_num_id = res[0][0]
     if true_otp is None:
         return jsonify({"message": "Code has expired, please request a new one"}), 400

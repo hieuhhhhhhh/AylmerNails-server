@@ -13,7 +13,6 @@ def create_services_services_sps():
     exe_queries(__file__, "sp_get_service_details.sql")
     exe_queries(__file__, "sp_get_service_preview.sql")
     exe_queries(__file__, "sp_set_service_employees.sql")
-    exe_queries(__file__, "sp_store_name_tokens.sql")
     exe_queries(__file__, "sp_update_service_info.sql")
     exe_queries(__file__, "sp_update_SEs.sql")
 

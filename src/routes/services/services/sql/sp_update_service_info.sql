@@ -4,7 +4,6 @@ CREATE PROCEDURE sp_update_service_info(
     IN _session JSON,
     IN _service_id INT UNSIGNED, 
     IN _name VARCHAR(50),
-    IN _service_name_tokens JSON, -- array of tokens of service's name
     IN _description VARCHAR(500),
     IN _category_id INT UNSIGNED,
     IN _last_date BIGINT,
@@ -30,8 +29,6 @@ BEGIN
             client_can_book = _client_can_book
         WHERE service_id = _service_id;
         
-    -- extract and store name tokens
-    CALL sp_store_name_tokens(_service_id, _service_name_tokens);
 
     -- update last_date
     UPDATE services

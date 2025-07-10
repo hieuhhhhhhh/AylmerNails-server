@@ -1,14 +1,11 @@
 import json
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
-from src.routes.helpers.tokenize_name import tokenize_name
 
 
 def add_employee(
     session, alias, key_intervals, interval_percent, color_id, service_ids
 ):
-    # tokenize alias
-    alias_tokens = tokenize_name(alias)
 
     # generate stored intervals
     stored_intervals = generate_stored_intervals(key_intervals, 24 * 60 * 60)
@@ -18,7 +15,6 @@ def add_employee(
         "sp_add_employee",
         session,
         alias,
-        alias_tokens,
         stored_intervals,
         interval_percent,
         color_id,

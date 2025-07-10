@@ -1,6 +1,5 @@
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
-from src.routes.helpers.tokenize_name import tokenize_name
 
 
 def add_service(
@@ -15,15 +14,11 @@ def add_service(
     price,
     client_can_book,
 ):
-    # tokenize the name of the new service
-    sn_tokens = tokenize_name(name)
-
     # call mysql proc to process data
     service_id = call_3D_proc(
         "sp_add_service",
         session,
         name,
-        sn_tokens,
         category_id,
         description,
         date,
