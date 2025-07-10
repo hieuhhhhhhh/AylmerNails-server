@@ -22,7 +22,6 @@ def update_appo(
     # locking tables
     tables = [
         "phone_numbers",
-        "contact_tokens",
         "contacts",
         "user_sessions us",
         "unconfirmed_salts",

@@ -31,8 +31,6 @@ BEGIN
                     ON c.color_id = e.color_id
                 LEFT JOIN contacts ct
                     ON ct.phone_num_id = ad.phone_num_id
-                LEFT JOIN contact_tokens tk
-                    ON tk.phone_num_id = ad.phone_num_id
                 LEFT JOIN authentication a
                     ON a.phone_num_id = ad.phone_num_id
                 LEFT JOIN profiles p

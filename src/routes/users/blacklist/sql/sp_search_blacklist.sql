@@ -24,8 +24,6 @@ BEGIN
                     ON p.user_id = a.user_id
                 LEFT JOIN contacts ct
                     ON ct.phone_num_id = bl.phone_num_id
-                LEFT JOIN contact_tokens tk
-                    ON tk.phone_num_id = bl.phone_num_id
                 LEFT JOIN phone_numbers pn
                     ON pn.phone_num_id = bl.phone_num_id
             ORDER BY bl.time DESC
@@ -43,8 +41,6 @@ BEGIN
                     ON p.user_id = a.user_id
                 LEFT JOIN contacts ct
                     ON ct.phone_num_id = bl.phone_num_id
-                LEFT JOIN contact_tokens tk
-                    ON tk.phone_num_id = bl.phone_num_id
                 LEFT JOIN phone_numbers pn
                     ON pn.phone_num_id = bl.phone_num_id
                 LEFT JOIN phone_num_tokens pt
@@ -65,8 +61,6 @@ BEGIN
                     ON p.user_id = a.user_id
                 LEFT JOIN contacts ct
                     ON ct.phone_num_id = bl.phone_num_id
-                LEFT JOIN contact_tokens tk
-                    ON tk.phone_num_id = bl.phone_num_id
                 LEFT JOIN phone_numbers pn
                     ON pn.phone_num_id = bl.phone_num_id
                 LEFT JOIN name_tokens nt
@@ -89,8 +83,6 @@ BEGIN
                     ON p.user_id = a.user_id
                 LEFT JOIN contacts ct
                     ON ct.phone_num_id = bl.phone_num_id
-                LEFT JOIN contact_tokens tk
-                    ON tk.phone_num_id = bl.phone_num_id
                 LEFT JOIN phone_numbers pn
                     ON pn.phone_num_id = bl.phone_num_id
                 LEFT JOIN name_tokens nt

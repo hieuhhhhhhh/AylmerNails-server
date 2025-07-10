@@ -19,8 +19,6 @@ BEGIN
         FROM phone_numbers p
             JOIN contacts c
                 ON c.phone_num_id = p.phone_num_id
-            JOIN contact_tokens ct
-                ON ct.phone_num_id = p.phone_num_id
             LEFT JOIN authentication au
                 ON au.phone_num_id = p.phone_num_id
             LEFT JOIN profiles pr
@@ -35,8 +33,6 @@ BEGIN
             FROM phone_numbers p
                 JOIN contacts c
                     ON c.phone_num_id = p.phone_num_id
-                JOIN contact_tokens ct
-                    ON ct.phone_num_id = p.phone_num_id
                 LEFT JOIN authentication au
                     ON au.phone_num_id = p.phone_num_id
                 LEFT JOIN profiles pr
@@ -55,8 +51,7 @@ BEGIN
             FROM phone_numbers p
                 JOIN contacts c
                     ON c.phone_num_id = p.phone_num_id
-                JOIN contact_tokens ct
-                    ON ct.phone_num_id = p.phone_num_id
+
                 LEFT JOIN authentication au
                     ON au.phone_num_id = p.phone_num_id
                 LEFT JOIN profiles pr
@@ -77,8 +72,7 @@ BEGIN
             FROM phone_numbers p
                 JOIN contacts c
                     ON c.phone_num_id = p.phone_num_id
-                JOIN contact_tokens ct
-                    ON ct.phone_num_id = p.phone_num_id
+
                 LEFT JOIN authentication au
                     ON au.phone_num_id = p.phone_num_id
                 LEFT JOIN profiles pr
