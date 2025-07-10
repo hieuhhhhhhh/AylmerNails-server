@@ -4,7 +4,6 @@ CREATE PROCEDURE sp_add_appo_manually(
     IN _session JSON,
     IN _phone_num VARCHAR(15),
     IN _name VARCHAR(200),
-    IN _name_tokens JSON,
     IN _emp_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
     IN _AOSOs JSON,
@@ -29,7 +28,7 @@ sp:BEGIN
     CALL sp_validate_admin(_session);
 
     -- overwrite new contact and fetch phone_num_id
-    CALL sp_update_contact (_phone_num, _name, _name_tokens, phone_num_id_);
+    CALL sp_update_contact (_phone_num, _name, phone_num_id_);
 
     -- fetch booker_id from session
     SET booker_id_ = fn_session_to_user_id(_session);    

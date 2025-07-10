@@ -2,8 +2,7 @@ DROP PROCEDURE IF EXISTS sp_validate_guest_booking;
 
 CREATE PROCEDURE sp_validate_guest_booking(
     IN _code_id INT UNSIGNED,
-    IN _name VARCHAR(200),
-    in _name_tokens JSON
+    IN _name VARCHAR(200)
 )
 BEGIN
     -- variables

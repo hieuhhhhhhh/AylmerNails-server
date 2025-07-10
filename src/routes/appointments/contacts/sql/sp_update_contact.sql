@@ -3,7 +3,6 @@ DROP PROCEDURE IF EXISTS sp_update_contact;
 CREATE PROCEDURE sp_update_contact(    
     IN _phone_num VARCHAR(15),
     IN _name VARCHAR(200),
-    IN _name_tokens JSON,
     OUT _phone_num_id INT UNSIGNED
 )
 sp:BEGIN

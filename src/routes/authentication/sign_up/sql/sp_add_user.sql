@@ -4,8 +4,7 @@ CREATE PROCEDURE sp_add_user(
     IN _phone_num VARCHAR(15),
     IN _hashed_password VARCHAR(60),
     IN _first_name VARCHAR(30),
-    IN _last_name VARCHAR(30),
-    IN _name_tokens JSON
+    IN _last_name VARCHAR(30)
 ) 
 BEGIN
     -- variables
