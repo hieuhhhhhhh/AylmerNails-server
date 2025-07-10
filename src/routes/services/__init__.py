@@ -4,7 +4,6 @@ from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
 from .services.add_service import add_service
 from .services.get_services import get_services
-from .services.search_services import search_services
 from .services.get_service_details import get_service_details
 from .services.update_service_info import update_service_info
 from .services.get_SEs import get_service_employees
@@ -127,16 +126,6 @@ def update_durations_():
         durations = json.dumps(data.get("durations"))  # convert python list to json
 
         return update_durations(session, service_id, default_duration, durations)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@services.route("/search_services/<query>", methods=["GET"])
-def search_services_(query):
-    try:
-        return search_services(query)
 
     # catch unexpected error
     except Exception as e:

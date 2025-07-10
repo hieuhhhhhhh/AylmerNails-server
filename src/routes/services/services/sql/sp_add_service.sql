@@ -3,7 +3,6 @@ DROP PROCEDURE IF EXISTS sp_add_service;
 CREATE PROCEDURE sp_add_service(
     IN _session JSON,
     IN _name VARCHAR(50),
-    IN _service_name_tokens JSON, -- array of tokens of service's name
     IN _category_id INT UNSIGNED,
     IN _description VARCHAR(500),
     IN _date BIGINT,
@@ -47,9 +46,6 @@ sp:BEGIN
 
         -- end loop
     END WHILE;
-
-    -- extract and store name tokens
-    CALL sp_store_name_tokens(service_id_, _service_name_tokens);
 
     -- set service list for the new employee
     CALL sp_set_service_employees(service_id_, _employee_ids);
