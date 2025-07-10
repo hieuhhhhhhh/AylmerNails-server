@@ -14,7 +14,7 @@ def search_canceled_appos(session, query, limit):
         jsonify(
             {
                 "appos": appos,
-                "def": "[[cancelId, userId, details, time, firstName, lastName, phoneNum], ]",
+                "def": "[[cancelId, userId, details, time, contactName, profileName, phoneNum], ]",
             }
         ),
         200,

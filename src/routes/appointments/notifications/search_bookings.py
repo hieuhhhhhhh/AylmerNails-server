@@ -14,7 +14,7 @@ def search_bookings(session, query, limit):
         jsonify(
             {
                 "appos": appos,
-                "def": "[[appoId, bookedTime, empId, empAlias, color, serviceId, serviceName, category, phoneNumId, phoneNum, contactName, date, start, end], ]",
+                "def": "[[appoId, bookedTime, empId, empAlias, color, serviceId, serviceName, category, phoneNumId, phoneNum, contactName, profileName, date, start, end], ]",
             }
         ),
         200,

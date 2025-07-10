@@ -14,7 +14,7 @@ def search_saved_appos(session, query, limit):
         jsonify(
             {
                 "appos": appos,
-                "def": "[[appoId, savedOn, empId, empAlias, color, serviceId, serviceName, category, phoneNumId, phoneNum, contactName, date, start, end], ]",
+                "def": "[[appoId, savedOn, empId, empAlias, color, serviceId, serviceName, category, phoneNumId, phoneNum, contactName, profileName, date, start, end], ]",
             }
         ),
         200,

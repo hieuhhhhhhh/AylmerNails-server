@@ -15,7 +15,7 @@ BEGIN
 
     -- return appointment notifications with limit
     IF _type = "empty" THEN
-        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, ad.date, ad.start_time, ad.end_time
+        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, CONCAT(p.first_name, ' ', p.last_name), ad.date, ad.start_time, ad.end_time
             FROM appo_notifications an
                 LEFT JOIN appo_details ad
                     ON ad.appo_id = an.appo_id
@@ -33,13 +33,17 @@ BEGIN
                     ON cl.color_id = e.color_id
                 LEFT JOIN contacts c
                     ON c.phone_num_id = ad.phone_num_id
+                LEFT JOIN authentication a
+                    ON a.phone_num_id = ad.phone_num_id
+                LEFT JOIN profiles p
+                    ON p.user_id = a.user_id
             ORDER BY an.time DESC
             LIMIT _limit;
     END IF;
 
     -- return appointment notifications with limit
     IF _type = "phone number" THEN
-        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, ad.date, ad.start_time, ad.end_time
+        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, CONCAT(p.first_name, ' ', p.last_name),  ad.date, ad.start_time, ad.end_time
             FROM appo_notifications an
                 LEFT JOIN appo_details ad
                     ON ad.appo_id = an.appo_id
@@ -57,7 +61,10 @@ BEGIN
                     ON cl.color_id = e.color_id
                 LEFT JOIN contacts c
                     ON c.phone_num_id = ad.phone_num_id
-
+                LEFT JOIN authentication a
+                    ON a.phone_num_id = ad.phone_num_id
+                LEFT JOIN profiles p
+                    ON p.user_id = a.user_id
             WHERE pt.token LIKE CONCAT(_query , '%')
             ORDER BY an.time DESC
             LIMIT _limit;
@@ -66,7 +73,7 @@ BEGIN
 
     -- return appointment notifications with limit
     IF _type = "name" THEN
-        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, ad.date, ad.start_time, ad.end_time
+        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, CONCAT(p.first_name, ' ', p.last_name), ad.date, ad.start_time, ad.end_time
             FROM appo_notifications an
                 LEFT JOIN appo_details ad
                     ON ad.appo_id = an.appo_id
@@ -84,6 +91,10 @@ BEGIN
                     ON c.phone_num_id = ad.phone_num_id
                 LEFT JOIN name_tokens nt
                     ON nt.phone_num_id = ad.phone_num_id
+                LEFT JOIN authentication a
+                    ON a.phone_num_id = ad.phone_num_id
+                LEFT JOIN profiles p
+                    ON p.user_id = a.user_id
             WHERE nt.token LIKE CONCAT(_query , '%')
             ORDER BY an.time DESC
             LIMIT _limit;
@@ -94,7 +105,7 @@ BEGIN
     SET token_  =  SUBSTRING_INDEX(_query, ' ', 1);
 
     IF _type = "name with spaces" THEN
-        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, ad.date, ad.start_time, ad.end_time
+        SELECT DISTINCT an.appo_id, an.time, ad.employee_id, e.alias, cl.code, ad.service_id, s.name, ca.name, ad.phone_num_id, pn.value, c.name, CONCAT(p.first_name, ' ', p.last_name), ad.date, ad.start_time, ad.end_time
             FROM appo_notifications an
                 LEFT JOIN appo_details ad
                     ON ad.appo_id = an.appo_id
