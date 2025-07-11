@@ -13,6 +13,8 @@ def client_add_appo(session, slots, date):
 
     # result holder
     appo_ids = []
+    phone_num = ""
+    client_name = ""
 
     # fetch day of week
     day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
@@ -55,6 +57,8 @@ def client_add_appo(session, slots, date):
         "DELA_slots",
         "appo_details",
         "appo_employees",
+        "contacts c",
+        "phone_numbers p",
         "appo_notifications",
         "authentication",
     ]
@@ -71,6 +75,8 @@ def client_add_appo(session, slots, date):
     # read result
     for table in res:
         appo_id = table[0][0][0]
+        client_name = table[0][0][1]
+        phone_num = table[0][0][2]
 
         appo_ids.append(appo_id)
 
@@ -78,4 +84,13 @@ def client_add_appo(session, slots, date):
     emit_booking()
 
     # return result
-    return jsonify({"added_appo_ids": appo_ids}), 200
+    return (
+        jsonify(
+            {
+                "added_appo_ids": appo_ids,
+                "phone_num": phone_num,
+                "client_name": client_name,
+            }
+        ),
+        200,
+    )

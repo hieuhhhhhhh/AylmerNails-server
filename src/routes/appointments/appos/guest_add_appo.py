@@ -13,6 +13,8 @@ def guest_add_appo(otp_id, otp, slots, date, name):
 
     # result holder
     appo_ids = []
+    phone_num = ""
+    client_name = ""
 
     # fetch day of week
     day_of_week = get_day_of_week_toronto(date + 12 * 60 * 60)
@@ -61,6 +63,8 @@ def guest_add_appo(otp_id, otp, slots, date, name):
         "DELA_slots",
         "appo_details",
         "appo_employees",
+        "contacts c",
+        "phone_numbers p",
         "appo_notifications",
         "authentication",
     ]
@@ -78,9 +82,10 @@ def guest_add_appo(otp_id, otp, slots, date, name):
     # read result
     for table in res:
         appo_id = table[0][0][0]
+        client_name = table[0][0][1]
+        phone_num = table[0][0][2]
 
         appo_ids.append(appo_id)
-
     # clean up otp code
     call_3D_proc(
         "sp_remove_otp_code",
@@ -91,4 +96,13 @@ def guest_add_appo(otp_id, otp, slots, date, name):
     emit_booking()
 
     # return result
-    return jsonify({"added_appo_ids": appo_ids}), 200
+    return (
+        jsonify(
+            {
+                "added_appo_ids": appo_ids,
+                "phone_num": phone_num,
+                "client_name": client_name,
+            }
+        ),
+        200,
+    )
