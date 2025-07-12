@@ -3,11 +3,11 @@ from flask import Blueprint, request
 from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
 from .my_profile.update_my_profile import update_my_profile
-from src.routes.appointments.notifications.get_users import get_users
 from .my_profile.get_my_profile import get_my_profile
 from .profiles.get_user_details import get_user_details
 from .profiles.search_users import search_users
 from .profiles.get_users_last_tracked import get_users_last_tracked
+from .profiles.update_user_role import update_user_role
 
 from .blacklist.get_blacklist_last_tracked import get_blacklist_last_tracked
 from .blacklist.search_blacklist import search_blacklist
@@ -61,30 +61,19 @@ def update_my_profile_():
         return default_error_response(e)
 
 
-@users.route("/get_users/<limit>", methods=["GET"])
-def get_users_(limit):
+@users.route("/search_users", methods=["POST"])
+def search_users_():
     try:
         # read token
         session = read_token()
 
-        # process input and return result
-        return get_users(session, limit)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@users.route("/search_users", methods=["POST"])
-def search_users_():
-    try:
         # read json from request
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_users(query, limit)
+        return search_users(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -108,13 +97,16 @@ def get_last_tracked():
 @users.route("/search_blacklist", methods=["POST"])
 def search_blacklist_():
     try:
+        # read token
+        session = read_token()
+
         # read json from request
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_blacklist(query, limit)
+        return search_blacklist(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -148,6 +140,25 @@ def ban_unban_phone_number():
 
         # process input and return result
         return ban_unban_phone_num(session, phone_num, boolean)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@users.route("/update_user_role", methods=["POST"])
+def update_user_role_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        user_id = data.get("user_id")
+        role = data.get("role")
+
+        # process input and return result
+        return update_user_role(session, user_id, role)
 
     # catch unexpected error
     except Exception as e:

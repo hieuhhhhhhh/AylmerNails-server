@@ -7,4 +7,6 @@ def create_authentication_signup_sps():
     exe_queries(__file__, "sp_add_user.sql")
     exe_queries(__file__, "sp_get_phone_num_id.sql")
     exe_queries(__file__, "sp_is_phonenum_avail.sql")
+    exe_queries(__file__, "sp_owner_create_account.sql")
+
     print()

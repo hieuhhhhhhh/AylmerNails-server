@@ -2,12 +2,15 @@ import json
 from flask import Blueprint, request
 from src.routes.authentication.session.read_token import read_token
 from ..helpers.default_error_response import default_error_response
-from src.routes.employees.employees.add_employee import add_employee
 from src.routes.employees.schedules.add_schedule import add_schedule
+
+from src.routes.employees.employees.add_employee import add_employee
 from src.routes.employees.employees.get_employees import get_employees
 from src.routes.employees.employees.get_ESs import get_employee_services
 from src.routes.employees.employees.get_employee_details import get_employee_details
 from src.routes.employees.employees.update_employee_info import update_service_info
+from src.routes.employees.employees.delete_employee import delete_employee
+
 from src.routes.employees.schedules.get_employee_schedules import get_employee_schedules
 from src.routes.employees.employees.get_colors import get_colors
 from src.routes.employees.conflicts.get_last_date_conflicts import (
@@ -93,7 +96,10 @@ def get_employee_services_(emp_id, date):
 @employees.route("/get_employee_details/<int:emp_id>", methods=["GET"])
 def get_employee_details_(emp_id):
     try:
-        return get_employee_details(emp_id)
+        # read token
+        session = read_token()
+
+        return get_employee_details(session, emp_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)
@@ -159,6 +165,21 @@ def get_schedule_conflicts_(emp_id):
 def get_employee_ld_conflicts(emp_id):
     try:
         return get_last_date_conflicts(emp_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@employees.route("/delete_employee", methods=["POST"])
+def delete_employee_():
+    try:
+        # read token:
+        session = read_token()
+        # read json from request
+        data = request.get_json()
+        emp_id = data.get("emp_id")
+
+        return delete_employee(session, emp_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

@@ -5,8 +5,12 @@ def create_tables():
     print("\033[94m" + "create_tables" + "\033[0m")
 
     exe_queries(__file__, "authentication/phone_numbers.sql")
+    exe_queries(__file__, "authentication/sp_add_phone_num_tokens.sql")
+    exe_queries(__file__, "authentication/phone_num_tokens.sql")
     exe_queries(__file__, "authentication/authentication.sql")
-    exe_queries(__file__, "authentication/sms_verify_codes.sql")
+    exe_queries(__file__, "authentication/login_attempts.sql")
+    exe_queries(__file__, "authentication/otp_codes.sql")
+    exe_queries(__file__, "authentication/otp_rate_limits.sql")
     exe_queries(__file__, "authentication/user_sessions.sql")
     exe_queries(__file__, "authentication/unconfirmed_salts.sql")
     exe_queries(__file__, "authentication/users_trackers.sql")
@@ -34,8 +38,10 @@ def create_tables():
     exe_queries(__file__, "appointments/appos_trackers.sql")
     exe_queries(__file__, "appointments/canceled_appos.sql")
     exe_queries(__file__, "appointments/canceled_trackers.sql")
+    exe_queries(__file__, "appointments/daily_notes.sql")
     exe_queries(__file__, "appointments/saved_appos.sql")
     exe_queries(__file__, "appointments/saved_trackers.sql")
+    exe_queries(__file__, "employees/appo_employees.sql")
 
     exe_queries(__file__, "services/add_ons/add_on_services.sql")
     exe_queries(__file__, "services/add_ons/AOS_options.sql")
@@ -49,6 +55,5 @@ def create_tables():
     exe_queries(__file__, "services/SLD_conflicts.sql")
 
     # tokens
-    exe_queries(__file__, "tokens/contact_tokens.sql")
-    exe_queries(__file__, "tokens/employee_alias_tokens.sql")
-    exe_queries(__file__, "tokens/service_name_tokens.sql")
+    exe_queries(__file__, "tokens/sp_update_name_tokens.sql")
+    exe_queries(__file__, "tokens/name_tokens.sql")

@@ -12,7 +12,8 @@ BEGIN
             (last_date IS NULL OR last_date >= _date)
             AND _date >= first_date
         ),
-        category_id
+        category_id,
+        price
             FROM services ;
 
     SELECT category_id, name 

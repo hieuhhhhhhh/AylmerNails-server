@@ -2,14 +2,19 @@ import json
 from flask import Blueprint, request
 from ..helpers.default_error_response import default_error_response
 from src.routes.authentication.session.read_token import read_token
-from .availability.get_availability_list import get_availability_list
 
-from .appos.add_appo_by_chain import add_appo_by_chain
+from .availability.get_availability_list import get_availability_list
+from .availability.write_daily_note import write_daily_note
+from .availability.get_daily_note import get_daily_note
+
+from .appos.client_add_appo import client_add_appo
+from .appos.guest_add_appo import guest_add_appo
+from .appos.admin_add_appo import admin_add_appo
 from .appos.get_daily_appos import get_daily_appos
 from .appos.get_appo_length import get_appo_length
 from .appos.get_appo_details import get_appo_details
 from .appos.update_appo import update_appo
-from .appos.add_appo_manually import add_appo_manually
+from .appos.write_appo_note import write_appo_note
 
 from .delete_appo.admin_remove_appo import admin_remove_appo
 from .delete_appo.cancel_appo import cancel_appo
@@ -17,8 +22,6 @@ from .delete_appo.cancel_appo import cancel_appo
 from .contacts.search_contacts import search_contacts
 from .contacts.update_contact import update_contact
 
-from .notifications.get_notifications import get_notifications
-from .notifications.get_canceled_appos import get_canceled_appos
 from .notifications.search_bookings import search_bookings
 from .notifications.get_bookings_last_tracked import get_bookings_last_tracked
 from .notifications.search_canceled_appos import search_canceled_appos
@@ -29,8 +32,75 @@ from .saved.get_saved_last_tracked import get_saved_last_tracked
 from .saved.save_unsave_appo import save_unsave_appo
 from .saved.unsave_all_appos import unsave_all_appos
 
+
 # create blueprint (group of routes)
 appointments = Blueprint("appointments", __name__)
+
+
+@appointments.route("/client_add_appo", methods=["POST"])
+def client_add_appo_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        slots = data.get("slots")
+        date = data.get("date")
+
+        # process input and return result
+        return client_add_appo(session, slots, date)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/guest_add_appo", methods=["POST"])
+def guest_add_appo_():
+    try:
+        # read json from request
+        data = request.get_json()
+        otp_id = data.get("otp_id")
+        otp = data.get("otp")
+        slots = data.get("slots")
+        date = data.get("date")
+        name = data.get("name")
+
+        # process input and return result
+        return guest_add_appo(otp_id, otp, slots, date, name)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/admin_add_appo", methods=["POST"])
+def admin_add_appo_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json
+        data = request.get_json()
+        phone_num = data.get("phone_num")
+        name = data.get("name")
+        emp_id = data.get("emp_id")
+        service_id = data.get("service_id")
+        AOSOs = json.dumps(data.get("AOSOs"))
+        date = data.get("date")
+        start = data.get("start")
+        end = data.get("end")
+        note = data.get("note")
+
+        # process input and return result
+        return admin_add_appo(
+            session, phone_num, name, emp_id, service_id, AOSOs, date, start, end, note
+        )
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
 
 
 @appointments.route("/get_availability_list", methods=["POST"])
@@ -42,25 +112,6 @@ def get_availability():
 
         # process input and return result
         return get_availability_list(DELAs_requests)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/add_appo_by_chain", methods=["POST"])
-def add_appo_by_chain_():
-    try:
-        # read token
-        session = read_token()
-
-        # read json from request
-        data = request.get_json()
-        slots = data.get("slots")
-        date = data.get("date")
-
-        # process input and return result
-        return add_appo_by_chain(session, slots, date)
 
     # catch unexpected error
     except Exception as e:
@@ -136,6 +187,8 @@ def update_appointment():
         date = data.get("date")
         start = data.get("start")
         end = data.get("end")
+        message = data.get("message")
+        selected_emps = json.dumps(data.get("selected_emps"))
         note = data.get("note")
 
         # process input and return result
@@ -150,6 +203,8 @@ def update_appointment():
             date,
             start,
             end,
+            selected_emps,
+            message,
             note,
         )
 
@@ -158,50 +213,19 @@ def update_appointment():
         return default_error_response(e)
 
 
-@appointments.route("/add_appointment_manually", methods=["POST"])
-def add_appointment_manually_():
+@appointments.route("/search_contacts", methods=["POST"])
+def search_contacts_():
     try:
         # read token
         session = read_token()
 
         # read json
         data = request.get_json()
-        phone_num = data.get("phone_num")
-        name = data.get("name")
-        emp_id = data.get("emp_id")
-        service_id = data.get("service_id")
-        AOSOs = json.dumps(data.get("AOSOs"))
-        date = data.get("date")
-        start = data.get("start")
-        end = data.get("end")
-        note = data.get("note")
+        query = data.get("query")
+        limit = data.get("limit")
 
         # process input and return result
-        return add_appo_manually(
-            session, phone_num, name, emp_id, service_id, AOSOs, date, start, end, note
-        )
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/search_contacts/<query>", methods=["GET"])
-def search_contacts_(query):
-    try:
-        # process input and return result
-        return search_contacts(query)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/search_contacts", methods=["GET"])
-def search_contacts_no_query():
-    try:
-        # process input and return result
-        return search_contacts("")
+        return search_contacts(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -263,44 +287,19 @@ def cancel_appointment():
         return default_error_response(e)
 
 
-@appointments.route("/get_notifications/<limit>", methods=["GET"])
-def get_notifications_(limit):
-    try:
-        # read token
-        session = read_token()
-
-        # process input and return result
-        return get_notifications(session, limit)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
-@appointments.route("/get_canceled_appointments/<limit>", methods=["GET"])
-def get_canceled_appointments(limit):
-    try:
-        # read token
-        session = read_token()
-
-        # process input and return result
-        return get_canceled_appos(session, limit)
-
-    # catch unexpected error
-    except Exception as e:
-        return default_error_response(e)
-
-
 @appointments.route("/search_bookings", methods=["POST"])
 def search_bookings_():
     try:
+        # read token
+        session = read_token()
+
         # read json
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_bookings(query, limit)
+        return search_bookings(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -324,13 +323,16 @@ def get_last_tracked():
 @appointments.route("/search_canceled_appointments", methods=["POST"])
 def search_canceled_appointments():
     try:
+        # read token
+        session = read_token()
+
         # read json
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_canceled_appos(query, limit)
+        return search_canceled_appos(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -354,13 +356,16 @@ def get_canceled_last_tracked_():
 @appointments.route("/search_saved_appointments", methods=["POST"])
 def search_saved_appointments():
     try:
+        # read token
+        session = read_token()
+
         # read json
         data = request.get_json()
         query = data.get("query")
         limit = data.get("limit")
 
         # process input and return result
-        return search_saved_appos(query, limit)
+        return search_saved_appos(session, query, limit)
 
     # catch unexpected error
     except Exception as e:
@@ -408,6 +413,58 @@ def unsave_all_appointments():
 
         # process input and return result
         return unsave_all_appos(session)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/write_appointment_note", methods=["POST"])
+def write_appointment_note():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        appo_id = data.get("appo_id")
+        note = data.get("note")
+
+        # process input and return result
+        return write_appo_note(session, appo_id, note)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/write_daily_note", methods=["POST"])
+def write_daily_note_():
+    try:
+        # read token
+        session = read_token()
+
+        # read json from request
+        data = request.get_json()
+        date = data.get("date")
+        note = data.get("note")
+
+        # process input and return result
+        return write_daily_note(session, date, note)
+
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@appointments.route("/get_daily_note/<date>", methods=["GET"])
+def get_daily_note_(date):
+    try:
+        # read token
+        session = read_token()
+
+        # process input and return result
+        return get_daily_note(session, date)
 
     # catch unexpected error
     except Exception as e:

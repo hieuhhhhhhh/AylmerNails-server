@@ -1,9 +1,14 @@
-from src.routes.authentication.sms_verification.sql import (
-    create_authentication_sms_verification_sps,
+from src.routes.authentication.forgot_password.sql import (
+    create_authentication_forgot_password_sps,
 )
+from src.routes.authentication.otp_codes.sql import create_authentication_otp_codes_sps
 from src.routes.authentication.sign_up.sql import create_authentication_signup_sps
 from src.routes.authentication.login.sql import create_authentication_login_sps
+from src.routes.authentication.logout.sql import create_authentication_logout_sps
 from src.routes.authentication.session.sql import create_authentication_session_sps
+from src.routes.authentication.change_password.sql import (
+    create_authentication_change_password_sps,
+)
 
 from src.routes.services.categories.sql import create_services_categories_sps
 from src.routes.services.durations.sql import create_services_durations_procs
@@ -34,10 +39,13 @@ from src.routes.business_links.sql import create_business_links_procs
 def create_procedures():
 
     # from authentication routes
-    create_authentication_sms_verification_sps()
+    create_authentication_forgot_password_sps()
+    create_authentication_otp_codes_sps()
     create_authentication_signup_sps()
     create_authentication_login_sps()
+    create_authentication_logout_sps()
     create_authentication_session_sps()
+    create_authentication_change_password_sps()
 
     # from services routes
     create_services_categories_sps()

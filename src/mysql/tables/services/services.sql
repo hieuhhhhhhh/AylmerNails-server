@@ -6,6 +6,8 @@ CREATE TABLE services(
     first_date BIGINT NOT NULL,
     last_date BIGINT,
     duration INT NOT NULL,
+    client_can_book BOOLEAN DEFAULT TRUE,    
+    price DECIMAL(10, 2),
     
     FOREIGN KEY (category_id) 
         REFERENCES categories(category_id)    

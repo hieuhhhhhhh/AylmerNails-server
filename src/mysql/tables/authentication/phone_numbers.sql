@@ -3,10 +3,24 @@ CREATE TABLE phone_numbers (
     value VARCHAR(30) UNIQUE NOT NULL
 );
 
--- unique index on value
+-- unique index on value (already has)
 
--- some default phone numbers
-INSERT INTO aylmer_nails.phone_numbers (phone_num_id, value)
-    VALUES
-        (1,'+12269851917'),
-        (2,'+11');
+-- TRIGGERS
+CREATE TRIGGER after_phone_nums_insert
+    AFTER INSERT ON phone_numbers
+    FOR EACH ROW
+    BEGIN
+        CALL sp_add_phone_num_tokens(NEW.phone_num_id, NEW.value);
+    END;
+
+
+CREATE TRIGGER after_phone_nums_update
+    AFTER UPDATE ON phone_numbers
+    FOR EACH ROW
+    BEGIN
+        DELETE FROM phone_num_tokens
+            WHERE phone_num_id = OLD.phone_num_id;
+            
+        CALL sp_add_phone_num_tokens(NEW.phone_num_id, NEW.value);
+    END;
+

@@ -21,7 +21,7 @@ def exe_queries(__file__, fileName):
 
             # Attempt to use the specified database
             try:
-                cursor.execute(f"USE {CONFIG["database"]};")
+                cursor.execute(f"USE {CONFIG['database']};")
             except Error:
                 pass
 

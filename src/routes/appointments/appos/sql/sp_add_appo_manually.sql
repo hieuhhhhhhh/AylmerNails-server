@@ -4,7 +4,6 @@ CREATE PROCEDURE sp_add_appo_manually(
     IN _session JSON,
     IN _phone_num VARCHAR(15),
     IN _name VARCHAR(200),
-    IN _name_tokens JSON,
     IN _emp_id INT UNSIGNED,
     IN _service_id INT UNSIGNED,
     IN _AOSOs JSON,
@@ -23,12 +22,16 @@ sp:BEGIN
     DECLARE day_start_ INT;
     DECLARE day_end_ INT;
     DECLARE phone_num_id_ INT UNSIGNED;
+    DECLARE booker_id_ INT UNSIGNED;
 
     -- validate session token
     CALL sp_validate_admin(_session);
 
-    -- update contact 
-    CALL sp_update_contact (_phone_num, _name, _name_tokens, phone_num_id_);
+    -- overwrite new contact and fetch phone_num_id
+    CALL sp_update_contact (_phone_num, _name, phone_num_id_);
+
+    -- fetch booker_id from session
+    SET booker_id_ = fn_session_to_user_id(_session);    
 
     -- check overlaps 
     SELECT appo_id, start_time, end_time
@@ -70,8 +73,13 @@ sp:BEGIN
     END IF;
 
     -- create new appointment if all validations passed
-    INSERT INTO appo_details (employee_id, service_id, phone_num_id, selected_AOSO, date, day_of_week, start_time, end_time)
-        VALUES (_emp_id, _service_id, phone_num_id_, _AOSOs, _date, _day_of_week, _start, _end);
+    INSERT INTO appo_details (employee_id, service_id, phone_num_id, selected_AOSO, date, day_of_week, start_time, end_time, booker_id)
+        VALUES (_emp_id, _service_id, phone_num_id_, _AOSOs, _date, _day_of_week, _start, _end, booker_id_);
+
+    -- store appointment's note
+    INSERT INTO appo_notes (appo_id, note)
+        VALUES (LAST_INSERT_ID(), _note);
+
 
     -- return created appo_id
     SELECT LAST_INSERT_ID();

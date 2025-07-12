@@ -72,6 +72,10 @@ def create_socket(app):
     def disconnect():
         print("client gone")
 
+    @socketio.on("connect")
+    def connect():
+        print("client connected")
+
     return socketio
 
 

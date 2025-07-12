@@ -1,9 +1,13 @@
 DROP PROCEDURE IF EXISTS sp_get_employee_details;
 
 CREATE PROCEDURE sp_get_employee_details(
+    IN _session JSON,
     IN _employee_id INT UNSIGNED
 )
 BEGIN
+    -- validate admin
+    CALL sp_validate_admin(_session);
+
     -- return employee's information
     SELECT e.employee_id, e.alias, c.color_id, c.name, c.code, e.stored_intervals, e.interval_percent, e.last_date
         FROM employees e

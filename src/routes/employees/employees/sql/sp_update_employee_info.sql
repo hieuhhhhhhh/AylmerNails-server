@@ -4,7 +4,6 @@ CREATE PROCEDURE sp_update_employee_info(
     IN _session JSON,
     IN _employee_id INT UNSIGNED, 
     IN _alias VARCHAR(50),
-    IN _alias_tokens JSON,
     IN _interval_percent SMALLINT,
     IN _last_date BIGINT,
     IN _color_id INT UNSIGNED,
@@ -32,8 +31,6 @@ BEGIN
             color_id = _color_id
         WHERE employee_id = _employee_id;
 
-    -- update tokens of employee by new alias
-    CALL sp_store_alias_tokens(_employee_id, _alias_tokens);
 
     -- update employee's services
     DELETE FROM employee_services

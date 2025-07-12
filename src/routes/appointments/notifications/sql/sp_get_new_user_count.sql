@@ -27,7 +27,7 @@ BEGIN
         SET last_tracked_ = now_;
         INSERT INTO users_trackers (user_id, time)
             VALUES (user_id_, now_);
-
+            
     END IF;
 
     -- return new appointment count
