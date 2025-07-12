@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkfrontend"]=self["webpackChunkfrontend"]||[]).push([[652],{3652:function(e,n,r){r.r(n),r.d(n,{default:function(){return o}});var t=r(6768);function u(e,n,r,u,f,a){return(0,t.uX)(),(0,t.CE)("div")}var f={name:"Refresh-",created(){this.$router.go(-1)}},a=r(1241);const c=(0,a.A)(f,[["render",u]]);var o=c}}]);
+//# sourceMappingURL=652.36f8f5b8.js.map
