@@ -2,6 +2,7 @@ import random
 from flask import jsonify
 from src.mysql.procedures.call_3D_proc import call_3D_proc
 from .is_otp_ready import is_otp_ready
+from .send_otp_code import send_otp_code
 
 
 def request_otp_code(phone_num):
@@ -21,11 +22,11 @@ def request_otp_code(phone_num):
     # generate code
     code = random.randint(10 ** (code_length - 1), 10**code_length - 1)
 
-    # try:
-    #     # send otp code by sms
-    #     send_otp_code(code, phone_num)
-    # except:
-    #     return jsonify({"message": "Invalid phone number"}), 400
+    try:
+        # send otp code by sms
+        send_otp_code(code, phone_num)
+    except:
+        return jsonify({"message": "Invalid phone number"}), 400
 
     # add code to db
     try:

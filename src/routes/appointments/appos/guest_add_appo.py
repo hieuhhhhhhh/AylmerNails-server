@@ -5,6 +5,7 @@ from src.mysql.procedures.multi_call_3D_proc import multi_call_3D_proc
 from src.routes.helpers.get_day_of_week_toronto import get_day_of_week_toronto
 from src.socketio import emit_booking
 from mysql.connector import Error
+from .text_booking_confirmation import text_booking_confirmation
 
 
 def guest_add_appo(otp_id, otp, slots, date, name):
@@ -94,6 +95,12 @@ def guest_add_appo(otp_id, otp, slots, date, name):
 
     # push notification to some clients
     emit_booking()
+
+    # send appo details by text
+    try:
+        text_booking_confirmation(phone_num, appo_ids)
+    except Exception as e:
+        print(f"Error occurred: {e}")
 
     # return result
     return (

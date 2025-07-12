@@ -12,7 +12,7 @@ def send_otp_code(code, phone_num):
     client = Client(TWILIO_SID, TWILIO_TOKEN)
 
     # write message
-    msg_body = f"Aylmer Nails & Spa (no-reply inbox):\nYour verification code: {code} "
+    msg_body = f"Aylmer Nails & Spa (no-reply inbox),\nYour verification code: {code} "
 
     # call api
     client.messages.create(
