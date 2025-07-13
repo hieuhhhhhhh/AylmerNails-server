@@ -11,8 +11,6 @@ def response_with_token(body, status, token):
     # Make the current datetime UTC and timezone-aware
     expires = datetime.now(timezone.utc) + timedelta(seconds=COOKIE_AGE)
 
-    response.set_cookie(
-        "TOKEN", token, expires=expires, samesite="None", httponly=True, secure=True
-    )
+    response.set_cookie("TOKEN", token, expires=expires, samesite="Lax", httponly=True)
 
     return response

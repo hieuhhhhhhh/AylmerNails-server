@@ -8,6 +8,10 @@ def send_otp_code(code, phone_num):
     TWILIO_TOKEN = current_app.config["TWILIO_TOKEN"]
     BUSINESS_PHONE = current_app.config["BUSINESS_PHONE"]
 
+    print(f"TWILIO_SID:{TWILIO_SID}[]")
+    print(f"TWILIO_TOKEN:{TWILIO_TOKEN}[]")
+    print(f"BUSINESS_PHONE:{BUSINESS_PHONE}[]")
+
     # init
     client = Client(TWILIO_SID, TWILIO_TOKEN)
 

@@ -25,7 +25,8 @@ def request_otp_code(phone_num):
     try:
         # send otp code by sms
         send_otp_code(code, phone_num)
-    except:
+    except Exception as e:
+        print(f"Error sending OTP: {e}")
         return jsonify({"message": "Invalid phone number"}), 400
 
     # add code to db

@@ -34,7 +34,7 @@ BEGIN
     
     -- return last date conflicts count
     SELECT COUNT(*)
-        FROM sld_conflicts    
+        FROM SLD_conflicts    
         WHERE service_id = _service_id;
 
     -- return duration conflicts count

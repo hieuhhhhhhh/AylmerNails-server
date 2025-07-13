@@ -1,40 +1,6 @@
-import time
 import mysql.connector
 from src.mysql.db_config import DATABASE_CONFIG
-from .thread_pool import job_queue
-
-
-# commit and close connection:
-def commit_connection(connection):
-    if connection:
-        connection.commit()
-        connection.close()  # Closing the connection
-
-
-# rollback and close connection:
-def rollback_connection(connection):
-    if connection:
-        connection.rollback()
-        connection.close()
-
-
-# rollback and close connection:
-def timeout_connection(connection):
-    lifetime = 60
-
-    # check every second if the connection is still alive
-    for i in range(lifetime):
-        # if connection is closed, function end
-        time.sleep(1)
-        if not connection.is_connected():
-            return
-        else:
-            print("waiting.")
-
-    # If the connection is still alive after 60 seconds, force close
-    connection.rollback()
-    connection.close()
-    print("\nConnection rolled back and closed because time-out.")
+import eventlet
 
 
 def call_3D_proc(sp_name, *params):
@@ -45,26 +11,22 @@ def call_3D_proc(sp_name, *params):
     connection = None
 
     try:
-        # Connect to the database
         connection = mysql.connector.connect(**DATABASE_CONFIG)
         connection.autocommit = False
 
-        # Set time out so connection will always close
-        job_queue.put(lambda: timeout_connection(connection))
+        def work():
+            nonlocal matrix
+            with connection.cursor() as cursor:
+                cursor.callproc(sp_name, params)
+                for table in cursor.stored_results():
+                    matrix.append(table.fetchall())
+            connection.commit()
 
-        # Use a cursor within a context manager to handle its closing
-        with connection.cursor() as cursor:
-            # Call the stored procedure with dynamic parameters
-            cursor.callproc(sp_name, params)
+        # Run the DB work with a timeout (60 secs)
+        eventlet.with_timeout(60, work)
 
-            # Stack every table returned to matrix
-            for table in cursor.stored_results():
-                matrix.append(table.fetchall())  # each table is a 2D list
-
-        job_queue.put(lambda: commit_connection(connection))
-
-    except mysql.connector.Error as err:
-        job_queue.put(lambda: rollback_connection(connection))
+    except Exception as err:
+        connection.rollback()
         print(f"Error: {err}")
         raise
 
