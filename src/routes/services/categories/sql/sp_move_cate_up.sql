@@ -7,8 +7,6 @@ CREATE PROCEDURE sp_move_cate_up(
 BEGIN
     -- variables
     DECLARE 1st_order_ INT;
-    DECLARE 2nd_order_ INT;
-    DECLARE 2nd_id_ INT UNSIGNED;
 
     -- validate session token
     CALL sp_validate_admin(_session);
@@ -19,18 +17,17 @@ BEGIN
         FROM categories
         WHERE category_id = _1st_id;
 
-    -- fetch 2nd category order
-    SELECT sort_order, category_id
-        INTO 2nd_order_, 2nd_id_
-        FROM categories
-        WHERE sort_order = _1st_id - 1;
-
     -- swap sort order of those 2
-    UPDATE my_table
-        SET sort_order = CASE category_id
-            WHEN _1st_id THEN 2nd_order_
-            WHEN 2nd_id_ THEN 1st_order_
-        END
-        WHERE category_id IN (_1st_id, 2nd_id_);
+    UPDATE categories
+        SET sort_order = NULL
+        WHERE category_id = _1st_id;
+
+    UPDATE categories
+        SET sort_order = 1st_order_
+        WHERE sort_order = 1st_order_ - 1;
+
+    UPDATE categories
+        SET sort_order = 1st_order_ - 1
+        WHERE category_id = _1st_id;
 END; 
 
