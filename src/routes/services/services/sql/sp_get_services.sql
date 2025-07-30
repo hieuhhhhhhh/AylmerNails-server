@@ -16,6 +16,6 @@ BEGIN
         price
             FROM services ;
 
-    SELECT category_id, name 
+    SELECT category_id, name, sort_order 
         FROM categories;
 END;

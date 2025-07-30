@@ -16,6 +16,7 @@ from .durations.update_durations import update_durations
 
 from .categories.get_categories import get_categories
 from .categories.add_category import add_category
+from .categories.move_cate_up import move_cate_up
 from .categories.remove_category import remove_category
 
 from .conflicts.get_last_date_conflicts import get_last_date_conflicts
@@ -202,6 +203,21 @@ def remove_category_():
         cate_id = data.get("cate_id")
 
         return remove_category(session, cate_id)
+    # catch unexpected error
+    except Exception as e:
+        return default_error_response(e)
+
+
+@services.route("/move_category_up", methods=["POST"])
+def move_category_up():
+    try:
+        # read token:
+        session = read_token()
+        # read json from request
+        data = request.get_json()
+        cate_id = data.get("cate_id")
+
+        return move_cate_up(session, cate_id)
     # catch unexpected error
     except Exception as e:
         return default_error_response(e)

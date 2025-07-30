@@ -12,7 +12,7 @@ def get_services(date):
                 "services": services,
                 "services_def": "service_id, service_name, last_date, is_active, category_id, price",
                 "categories": categories,
-                "categories_def": "cate_id, cate_name",
+                "categories_def": "cate_id, cate_name, sort_order",
             }
         ),
         200,
