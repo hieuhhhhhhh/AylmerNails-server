@@ -1,5 +1,5 @@
 CREATE TABLE categories(
     category_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL,
+    sort_order INT UNIQUE
 );
-
